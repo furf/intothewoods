@@ -309,6 +309,7 @@ main { max-width: 560px; margin: 0 auto; padding: 8px 16px 24px; }
 .foot img { width: 40px; height: auto; flex: none; }
 .foot strong { color: #e8efe6; }
 .foot a { color: #bfe6c3; }
+.foot .unofficial { font-size: 12px; opacity: .75; }
 
 /* ---- Celebrate ---- */
 .celebrate {
