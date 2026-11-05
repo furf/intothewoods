@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Into the Woods</title>
+  <meta name="description" content="Overnight packing checklist for Westminster Woods school programs.">
+  <meta name="theme-color" content="#1f3a2b">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Into the Woods">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="48x48" href="icons/favicon-48.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="preload" href="fonts/gochi-hand.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/nunito.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <svg class="ridge" viewBox="0 0 400 60" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 60 L0 38 L18 22 L30 34 L46 10 L62 32 L74 20 L92 40 L110 16 L126 34 L140 24 L158 44 L176 14 L192 36 L206 26 L224 46 L240 18 L258 38 L270 28 L288 42 L304 12 L320 34 L334 24 L352 44 L368 20 L384 36 L400 26 L400 60 Z"/>
+    </svg>
+    <div class="hero-inner">
+      <img class="logo" src="img/logo.png" alt="Westminster Woods" width="919" height="163">
+      <h1>School Programs Packing List</h1>
+      <p class="sub">Overnight trip</p>
+
+      <div class="progress-card">
+        <div class="ring" role="img" aria-label="Packing progress">
+          <svg viewBox="0 0 120 120" aria-hidden="true">
+            <circle class="ring-track" cx="60" cy="60" r="52"/>
+            <circle class="ring-fill" cx="60" cy="60" r="52" pathLength="100"/>
+          </svg>
+          <img src="img/trees.png" alt="" width="121" height="161">
+        </div>
+        <div class="progress-text">
+          <div class="pct"><span id="pct">0</span>%</div>
+          <div id="progressLabel" class="progress-label">Let's get packing</div>
+          <label class="camper">
+            <span>Camper</span>
+            <input id="camper" type="text" placeholder="Name" autocomplete="off" maxlength="40">
+          </label>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <aside class="notice">
+      <strong>Screen-free campus.</strong>
+      We're nestled in a redwood forest &mdash; it can be cool even in warmer months.
+      Be ready to carry your own luggage to your cabin.
+    </aside>
+
+    <div class="toolbar">
+      <label class="toggle">
+        <input id="hidePacked" type="checkbox">
+        <span class="switch" aria-hidden="true"></span>
+        Hide packed items
+      </label>
+      <button id="resetBtn" class="btn ghost" type="button">Start over</button>
+    </div>
+
+    <div id="sections"></div>
+  </main>
+
+  <footer class="foot">
+    <img src="img/trees.png" alt="" width="40" height="53">
+    <div>
+      <strong>Westminster Woods</strong><br>
+      6510 Bohemian Highway, Occidental, CA 95465<br>
+      <a href="tel:+17078742426">(707) 874-2426</a> &middot;
+      <a href="https://www.westminsterwoods.org" rel="noopener">westminsterwoods.org</a>
+    </div>
+  </footer>
+
+  <div id="celebrate" class="celebrate" hidden>
+    <div class="celebrate-card">
+      <img src="img/trees.png" alt="" width="121" height="161">
+      <h2>All packed!</h2>
+      <p>See you under the redwoods.</p>
+      <button class="btn" type="button" id="celebrateClose">Yay!</button>
+    </div>
+  </div>
+
+  <template id="sectionTpl">
+    <section class="section">
+      <button class="section-head" type="button" aria-expanded="true">
+        <span class="section-icon" aria-hidden="true"></span>
+        <span class="section-title"></span>
+        <span class="section-count"></span>
+        <span class="chev" aria-hidden="true"></span>
+      </button>
+      <div class="section-body">
+        <p class="section-note" hidden></p>
+        <ul class="items"></ul>
+        <form class="add-item">
+          <input type="text" placeholder="Add your own item&hellip;" maxlength="80" aria-label="Add your own item">
+          <button class="btn small" type="submit">Add</button>
+        </form>
+      </div>
+    </section>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
