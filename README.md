@@ -48,7 +48,7 @@ git push origin HEAD:gh-pages
 ## Tech
 
 Vanilla ES modules + a tiny hash router: no framework and no build. The
-first load is about 300 KB including fonts and images, and every page is
+whole app, including fonts, images and icons, is about 500 KB. Every page is
 precached by the service worker, so the app runs fully offline.
 Self-hosted fonts: Gochi Hand & Nunito (SIL OFL).
 
