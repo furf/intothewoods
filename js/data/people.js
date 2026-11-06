@@ -1,8 +1,7 @@
 // Contacts. Fill in TBD phone numbers as they become available.
 
 export const EMERGENCY = [
-  { name: 'Emergency services', role: 'Police · Fire · Ambulance', phone: '911', note: 'Call first. Landline phones are in the Dining Hall and the Redwood Center. Then contact a Thornhill teacher and WW staff.' },
-  { name: 'Westminster Woods', role: 'Camp office (24-hr support via staff)', phone: '(707) 874-2426', note: 'Evening Coordinator is on site at night for chaperones.' },
+  { name: 'Emergency services', role: 'Police · Fire · Ambulance', phone: '911', note: 'Call first, then a Thornhill teacher and WW staff.' },
   { name: 'Poison Control', role: 'National hotline, 24/7', phone: '1-800-222-1222' },
 ];
 

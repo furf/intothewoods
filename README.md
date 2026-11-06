@@ -7,20 +7,18 @@ Live: https://furf.github.io/intothewoods/
 
 ## Pages
 
+Five tabs: **Home · Schedule · Packing · Chaperones · More**. Each fact lives in one place:
+
 | Route | What's there |
 | --- | --- |
-| `#/` Home | Countdown → live "Now / Next" during the trip, quick details, overview video, what students will experience, cabins & meals, food docs, FAQ |
-| `#/schedule` | Day-by-day timeline (Thornhill Week 12 schedule + details from the trip slides & handbook), live "now" marker, chaperone notes, add-to-calendar (.ics) |
-| `#/packing` | Student packing list + chaperone list, progress ring, custom items, app-icon badge |
-| `#/guide` | Chaperone roles & responsibilities, a day in your boots, Tools of the Trade cards, homesickness, bedtime, nighttime, rules, emergencies |
-| `#/travel` | Trip-day plan, address, Google/Apple/Waze links, embedded route map, driving tips |
-| `#/map` | Campus map from the handbook with pinch-zoom + key spots |
-| `#/contacts` | Emergency, camp, teachers, chaperones; tap to call/text/email, save as vCard, add your own (stored on device) |
-| `#/games` | Riddles (tap to reveal), easy-to-lead games with a random picker, conversation-starter deck |
-| `#/cabin` | Interactive cabin community guidelines (bring / leave behind + signatures) |
-| `#/field` | Redwood-forest field guide with "I spotted it!" tracking, Leave No Trace |
-| `#/compass` | Compass, GPS position, save a spot & arrow back to it, signal check |
-| `#/light` | Red/amber/white night light that keeps the screen awake |
+| `#/` Home | Countdown → live "Now / Next", trip at a glance (the one place for logistics), overview video, what students will experience, where they stay, FAQ with its documents |
+| `#/schedule` | Day-by-day timeline. Programs are prominent; routines and meals are compact rows you tap to expand. Chaperone notes toggle, "Now" button, add-to-calendar |
+| `#/packing` | Student and chaperone lists |
+| `#/guide` | Chaperones: shortcuts to schedule, emergencies and packing; handbook sections (role, tools of the trade, homesickness, bedtime & overnight, rules, good to know); cabin activities |
+| `#/map` | Getting there (address, maps apps, live route, driving tips) and the zoomable campus map |
+| `#/contacts` | Emergency numbers and the on-campus alarm, phones, radios and kits; camp, Thornhill, chaperones, your own contacts |
+| `#/games`, `#/cabin`, `#/field` | Games & riddles, cabin agreement, field guide |
+| `#/compass`, `#/light` | Compass with find-your-way-back; night light |
 
 ## Editing content
 

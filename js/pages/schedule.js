@@ -39,15 +39,26 @@ function itemHTML(day, it, i) {
   return `<li class="ev ev-${it.kind}" data-i="${i}">
     <div class="ev-time"><b>${fmtTime(it.t).replace(/ (am|pm)/, '<small>$1</small>')}</b>${it.approx ? '<em>approx</em>' : ''}</div>
     <div class="ev-dot" aria-hidden="true"></div>
-    <div class="ev-body">
+    ${COMPACT.has(it.kind) ? compactBody(it) : `<div class="ev-body">
       ${k ? `<span class="ev-kind">${k}</span>` : ''}
       <h3>${esc(it.title)}${it.with ? ` <span class="with">with ${esc(it.with)}</span>` : ''}</h3>
       ${it.end ? `<p class="ev-meta">${icon('clock')}${fmtTime(it.t)} – ${fmtTime(it.end)}</p>` : ''}
       ${it.where ? `<p class="ev-meta">${icon('pin')}${esc(it.where)}</p>` : ''}
       ${it.desc ? `<p>${esc(it.desc)}</p>` : ''}
       ${it.chap ? `<p class="chap-note"><b>Chaperones:</b> ${esc(it.chap)}</p>` : ''}
-    </div>
+    </div>`}
   </li>`;
+}
+
+// Daily routines and meals are quiet one-line rows; tap to see the details.
+const COMPACT = new Set(['routine', 'meal', 'chaperone']);
+function compactBody(it) {
+  const head = `<h3>${esc(it.title)}</h3>${it.where ? `<span class="ev-where">${esc(it.where)}</span>` : ''}`;
+  if (!it.desc && !it.chap) return `<div class="ev-body compact"><div class="ev-sum">${head}</div></div>`;
+  return `<details class="ev-body compact"><summary class="ev-sum">${head}<span class="chev" aria-hidden="true"></span></summary>
+    ${it.desc ? `<p>${esc(it.desc)}</p>` : ''}
+    ${it.chap ? `<p class="chap-note"><b>Chaperones:</b> ${esc(it.chap)}</p>` : ''}
+  </details>`;
 }
 
 export default {
@@ -58,6 +69,10 @@ export default {
         <div class="seg" role="tablist" aria-label="Trip day">
           ${SCHEDULE.map((d, i) => `<button role="tab" type="button" data-day="${i}"><b>${d.short}</b><small>${d.date.slice(5).replace('-', '/')}</small></button>`).join('')}
         </div>
+        <div class="toolbar">
+          <label class="toggle"><input type="checkbox" id="chapToggle"><span class="switch" aria-hidden="true"></span>Chaperone notes</label>
+          <button class="btn small" type="button" id="nowBtn" hidden>${icon('clock')} Now</button>
+        </div>
         <div id="dayView"></div>
         <div class="card actions-card">
           <button class="btn" type="button" id="icsBtn">${icon('calendar')} Add trip to my calendar</button>
@@ -66,7 +81,17 @@ export default {
       </div>`;
 
     const dayView = el.querySelector('#dayView');
-    const show = (i, scrollToNow) => {
+    const chap = el.querySelector('#chapToggle');
+    const setChap = (on) => { chap.checked = on; el.classList.toggle('no-chap', !on); store.set('itw:chapNotes', on); };
+    setChap(store.get('itw:chapNotes', true));
+    chap.addEventListener('change', () => setChap(chap.checked));
+    const nowBtn = el.querySelector('#nowBtn');
+    nowBtn.addEventListener('click', () => {
+      const t = SCHEDULE.findIndex((d) => d.date === today());
+      if (t >= 0 && t !== dayIdx) show(t);
+      dayView.querySelector('.ev.now')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+    const show = (i) => {
       dayIdx = i;
       store.set('itw:day', i);
       const day = SCHEDULE[i];
@@ -74,10 +99,10 @@ export default {
       dayView.innerHTML = `
         <h2 class="day-title">${esc(day.day)} <span>${esc(day.label)}</span></h2>
         <ol class="timeline">${day.items.map((it, j) => itemHTML(day, it, j)).join('')}</ol>`;
-      markNow(scrollToNow);
+      markNow();
     };
 
-    const markNow = (scroll) => {
+    const markNow = () => {
       const day = SCHEDULE[dayIdx];
       const now = new Date();
       let curI = -1;
@@ -88,7 +113,8 @@ export default {
         li.classList.toggle('past', curI >= 0 && (j < curI || dayOver));
         li.classList.toggle('now', j === curI && !dayOver);
       });
-      if (scroll) dayView.querySelector('.ev.now')?.scrollIntoView({ block: 'center' });
+      const tripDay = SCHEDULE.some((d) => d.date === today(now));
+      nowBtn.hidden = !tripDay;
     };
 
     el.querySelector('.seg').addEventListener('click', (e) => {
@@ -97,8 +123,8 @@ export default {
     });
     el.querySelector('#icsBtn').addEventListener('click', () => download('westminster-woods-trip.ics', ics(), 'text/calendar'));
 
-    show(dayIdx, true);
-    const t = setInterval(() => markNow(false), 60000);
+    show(dayIdx);
+    const t = setInterval(markNow, 60000);
     return () => clearInterval(t);
   },
 };

@@ -18,7 +18,7 @@ function card(c, opts = {}) {
   const i = registry.push(c) - 1;
   const canText = c.phone && !/^9-?1-?1$/.test(c.phone) && !/^1-800/.test(c.phone);
   return `<article class="contact ${opts.cls || ''}">
-    <div class="avatar" aria-hidden="true">${esc((c.name.match(/\b\w/g) || []).slice(0, 2).join(''))}</div>
+    <div class="avatar" aria-hidden="true">${opts.cls === 'urgent' ? icon('alert') : esc((c.name.match(/\b\w/g) || []).slice(0, 2).join(''))}</div>
     <div class="contact-main">
       <b>${esc(c.name)}</b>${c.aka ? ` <span class="muted small">(${esc(c.aka)})</span>` : ''}
       <small>${esc(c.role || '')}</small>
@@ -45,17 +45,17 @@ export default {
         <div class="page">
           <h2 class="group-title danger">${icon('alert')} Emergency</h2>
           ${EMERGENCY.map((c) => card(c, { cls: 'urgent', noSave: c.phone === '911' })).join('')}
-          <details class="acc">
-            <summary><span>On campus: alarm, phones, radios</span><span class="chev" aria-hidden="true"></span></summary>
-            <div class="acc-body"><dl class="pairs">${ON_SITE.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl></div>
-          </details>
+          <section class="card alert-card">
+            <h2>At camp</h2>
+            <dl class="pairs">${ON_SITE.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
+          </section>
 
-          <h2 class="group-title">Camp</h2>
-          ${card({ name: PLACES.camp.name, role: 'Camp office', phone: PLACES.camp.phone, address: PLACES.camp.address, org: 'Westminster Woods', note: PLACES.camp.address })}
+          <h2 class="group-title">Westminster Woods</h2>
+          ${card({ name: PLACES.camp.name, role: 'Camp office · Evening Coordinator on site at night', phone: PLACES.camp.phone, address: PLACES.camp.address, org: 'Westminster Woods' })}
 
-          <h2 class="group-title">Trip leaders</h2>
+          <h2 class="group-title">Thornhill</h2>
           ${TEACHERS.map((c) => card({ ...c, org: 'Thornhill School' })).join('')}
-          ${card({ ...SCHOOL, org: 'Thornhill School', note: SCHOOL.address })}
+          ${card({ ...SCHOOL, org: 'Thornhill School' })}
 
           <h2 class="group-title">Chaperones</h2>
           ${CHAPERONES.map((c) => card({ ...c, org: 'Thornhill School' })).join('')}

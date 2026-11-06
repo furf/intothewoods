@@ -1,5 +1,5 @@
 // Offline-first service worker. Bump VERSION whenever any file below changes.
-const VERSION = 'itw-v3';
+const VERSION = 'itw-v5';
 const SHELL = [
   './',
   'index.html',
@@ -34,7 +34,6 @@ const SHELL = [
   'js/pages/more.js',
   'js/pages/packing.js',
   'js/pages/schedule.js',
-  'js/pages/travel.js',
   'js/ui.js',
 ];
 

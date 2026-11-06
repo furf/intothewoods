@@ -51,10 +51,6 @@ export default {
           </div>
         </section>
 
-        <section class="card">
-          <h2>Signal check</h2>
-          <dl class="facts" id="net"></dl>
-        </section>
       </div>`;
 
     const dial = el.querySelector('#dial');
@@ -133,16 +129,6 @@ export default {
     });
     el.querySelector('#clear').addEventListener('click', () => { spot = null; store.set('itw:spot', null); showSaved(); back.hidden = true; });
 
-    const net = () => {
-      const c = navigator.connection;
-      el.querySelector('#net').innerHTML = `
-        <dt>Status</dt><dd>${navigator.onLine ? '🟢 Online' : '⚪ Offline (app still works)'}</dd>
-        ${c?.effectiveType ? `<dt>Connection</dt><dd>${c.effectiveType.toUpperCase()}${c.downlink ? ` · ~${c.downlink} Mbps` : ''}</dd>` : ''}
-        <dt>Saved offline</dt><dd>${navigator.serviceWorker?.controller ? '✅ Yes' : '⏳ Not yet'}</dd>`;
-    };
-    net();
-    window.addEventListener('online', net); window.addEventListener('offline', net);
-    offs.push(() => { window.removeEventListener('online', net); window.removeEventListener('offline', net); });
     offs.push(wakeLock());
 
     return () => { cancelAnimationFrame(raf); offs.forEach((f) => f()); };

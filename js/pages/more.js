@@ -2,9 +2,8 @@ import { icon, isStandalone, shareOrCopy, toast } from '../ui.js';
 
 const ITEMS = [
   ['Plan', [
-    ['#/travel', 'car', 'Getting There', 'Directions, carpool & arrival'],
-    ['#/map', 'map', 'Campus Map', 'Zoomable map of camp'],
-    ['#/contacts', 'phone', 'Contacts', 'Emergency, camp, teachers, chaperones'],
+    ['#/map', 'map', 'Map & Directions', 'Driving directions and the campus map'],
+    ['#/contacts', 'phone', 'Contacts & Emergencies', 'Alarm, 911, camp, teachers, chaperones'],
   ]],
   ['At camp', [
     ['#/games', 'puzzle', 'Games & Riddles', 'Trail games, riddles, question deck'],
@@ -44,11 +43,7 @@ export default {
             <button class="btn install-btn" type="button" id="installBtn">${icon('download')} Install</button>
             <button class="btn ghost-dark" type="button" id="shareBtn">${icon('share')} Share with parents</button>
           </div>
-          <ul class="bullets small">
-            <li>Works with no signal: open it once on Wi-Fi and every page is saved.</li>
-            <li>Your checklists and notes stay on this device only.</li>
-            <li>The green/grey dot up top shows if you're online.</li>
-          </ul>
+          <p class="small muted">Works without signal once opened. Checklists and notes stay on this device.</p>
         </div>
         <p class="footnote">Unofficial trip helper made by Thornhill parents. Not affiliated with Westminster Woods. Content adapted from the WW packing list, trip slides and Chaperone Handbook.</p>
       </div>`;

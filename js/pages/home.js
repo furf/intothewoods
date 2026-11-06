@@ -1,16 +1,6 @@
 import { esc, icon, at, fmtTime } from '../ui.js';
-import { TRIP, QUICK, EXPERIENCE, STAY, FAQ, LINKS, SCHEDULE } from '../data/trip.js';
+import { TRIP, QUICK, EXPERIENCE, STAY, FAQ, SCHEDULE } from '../data/trip.js';
 
-const TILES = [
-  ['#/schedule', 'calendar', 'Schedule'],
-  ['#/packing', 'pack', 'Packing'],
-  ['#/travel', 'car', 'Directions'],
-  ['#/map', 'map', 'Campus map'],
-  ['#/contacts', 'phone', 'Contacts'],
-  ['#/guide', 'book', 'Chaperones'],
-  ['#/games', 'puzzle', 'Games'],
-  ['#/compass', 'compass', 'Compass'],
-];
 
 // Find what's happening now / next during the trip.
 export function nowNext(now = new Date()) {
@@ -68,19 +58,19 @@ export default {
       </section>
 
       <div class="page">
-        <nav class="tiles" aria-label="Quick links">
-          ${TILES.map(([h, i, l]) => `<a href="${h}">${icon(i)}<span>${l}</span></a>`).join('')}
-        </nav>
-
         <section class="card">
-          <h2>The quick details</h2>
+          <h2>Trip at a glance</h2>
           <dl class="facts">${QUICK.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
+          <div class="btn-row">
+            <a class="btn small" href="#/schedule">${icon('calendar')} Full schedule</a>
+            <a class="btn small ghost-dark" href="#/map">${icon('car')} Directions</a>
+          </div>
         </section>
 
         <section class="card flush">
           <div class="video" id="video">
             <button class="video-facade" type="button" aria-label="Play the Westminster Woods overview video">
-              <img src="img/trees.webp" alt="" width="120" height="136">
+              <img src="img/trees.webp" alt="" width="120" height="158">
               <span class="play">${icon('play')}</span>
               <span class="video-label">Watch: Westminster Woods overview</span>
             </button>
@@ -89,24 +79,18 @@ export default {
         </section>
 
         <section class="card">
-          <h2>What we'll be experiencing</h2>
+          <h2>What students will experience</h2>
           <ul class="exp">${EXPERIENCE.map((e) => `<li><span class="exp-ic" aria-hidden="true">${e.icon}</span><div><b>${esc(e.title)}</b><p>${esc(e.text)}</p></div></li>`).join('')}</ul>
         </section>
 
         <section class="card">
-          <h2>Cabins, groups &amp; meals</h2>
-          <ul class="bullets">${STAY.map((s) => `<li>${esc(s)}</li>`).join('')}</ul>
-        </section>
-
-        <section class="card">
-          <h2>Food &amp; documents</h2>
-          <p class="muted small">These open in Google Drive and need a connection.</p>
-          <div class="linklist">${LINKS.map((l) => `<a href="${esc(l.href)}" target="_blank" rel="noopener">${esc(l.label)}${icon('external')}</a>`).join('')}</div>
+          <h2>Where students stay</h2>
+          <ul class="bullets">${STAY.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
         </section>
 
         <section class="card">
           <h2>Questions</h2>
-          ${FAQ.map(([q, a]) => `<details class="faq"><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}
+          ${FAQ.map((f) => `<details class="faq"><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p>${f.links ? `<div class="linklist">${f.links.map(([l, h]) => `<a href="${esc(h)}" target="_blank" rel="noopener">${esc(l)}${icon('external')}</a>`).join('')}</div>` : ''}</details>`).join('')}
         </section>
 
         <p class="footnote">Unofficial trip helper made by Thornhill parents. Not affiliated with Westminster Woods.</p>

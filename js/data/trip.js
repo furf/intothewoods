@@ -36,14 +36,13 @@ export const MAPS = {
   returnHome: `https://www.google.com/maps/dir/?api=1&origin=${enc(to)}&destination=${enc(from)}&travelmode=driving`,
 };
 
-export const LINKS = [
-  { label: 'Our specific itinerary', href: 'https://drive.google.com/file/d/1wyYW0prPxbsaYolV0_zZQMHcNdZmYTpC/view?usp=sharing' },
-  { label: 'Sample menu', href: 'https://docs.google.com/document/d/1F6kLN9EwWtXr--4m7ryxesP6cGObT8iT/edit?usp=sharing' },
-  { label: 'Dietary letter', href: 'https://drive.google.com/file/d/13-Ouqw3JRs9i4Se83sUJVMEHdsJ-hIFa/view?usp=sharing' },
-  { label: 'Allergen grid', href: 'https://drive.google.com/file/d/1QAfWqpTOVpphAm7yT0O9SoyTefpTnJIJ/view?usp=sharing' },
-  { label: 'Original packing list (PDF)', href: 'https://drive.google.com/file/d/1bm4k7TKDBFCD5Kb2DvaMVEY7l98xM8o2/view?usp=sharing' },
-  { label: 'Meet the Teacher Naturalists', href: 'https://www.westminsterwoods.org/meet-our-teacher-naturalists' },
-];
+const DOC = {
+  itinerary: 'https://drive.google.com/file/d/1wyYW0prPxbsaYolV0_zZQMHcNdZmYTpC/view?usp=sharing',
+  menu: 'https://docs.google.com/document/d/1F6kLN9EwWtXr--4m7ryxesP6cGObT8iT/edit?usp=sharing',
+  dietary: 'https://drive.google.com/file/d/13-Ouqw3JRs9i4Se83sUJVMEHdsJ-hIFa/view?usp=sharing',
+  allergens: 'https://drive.google.com/file/d/1QAfWqpTOVpphAm7yT0O9SoyTefpTnJIJ/view?usp=sharing',
+  naturalists: 'https://www.westminsterwoods.org/meet-our-teacher-naturalists',
+};
 
 // kind: travel | program | meal | routine | chaperone | evening
 // who: optional note on who's involved. cal: include in calendar export.
@@ -112,29 +111,30 @@ export const EXPERIENCE = [
   { icon: '🔥', title: 'Campfires & Community', text: 'Redwood amphitheater programs with songs, skits and reflection circles.' },
 ];
 
+// Trip at a glance: the one place for logistics.
 export const QUICK = [
   ['When', 'Tue Nov 17 – Thu Nov 19, 2026'],
-  ['Meet', 'Thornhill at 8:00 am; depart ~8:30 am'],
+  ['Meet', '8:00 am Tuesday at Thornhill; depart ~8:30'],
   ['Ride', 'Parent vehicles (carpool)'],
-  ['Lunch day 1', 'Fully disposable sack lunch from home'],
-  ['Return', 'Back at Thornhill ~3:00 pm Thursday'],
+  ['Return', '~3:00 pm Thursday at Thornhill'],
   ['Screens', 'Screen-free campus: no phones or electronics for students'],
 ];
-
 export const STAY = [
   'Single-gender cabins with only Thornhill students and two parent chaperones. Cabins have 8–10 beds.',
   'Each cabin area has its own bath house with separate shower stalls, toilets and sinks.',
   'Day (trail) groups: one Teacher Naturalist plus 2–3 parent chaperones.',
-  'Mr. Wilkins and Ms. Gustafson float between groups as needed.',
   'Students listed up to three peers for cabin and day groups; each is guaranteed at least one.',
-  'Hot meals in Vernon Dining Hall starting with Tuesday dinner, at Thornhill\'s own tables.',
+  'Meals are served in Vernon Dining Hall at Thornhill\'s own tables.',
   'Unfortunately there is no gender-neutral cabin option.',
 ];
 
+// Questions families ask, each with its supporting documents.
 export const FAQ = [
-  ['What if my child has dietary needs?', 'Read the Dietary letter and Allergen grid (links below) and let the teachers know before the trip.'],
-  ['Can students bring medication?', 'Yes, but hand it to the teachers. They store and give all medication. Only fast-acting emergency meds (Epi-Pens, inhalers) may be kept by students.'],
-  ['Can I call my child?', 'Students are screen-free, and calls home tend to make homesickness worse. Teachers and staff will reach out if anything comes up.'],
-  ['What\'s the weather like?', 'Redwood forest: cool and damp, even when it\'s warm elsewhere. Mid-November can be cold and rainy, so pack layers and rain gear.'],
-  ['Is there cell service?', 'Spotty at best. This app saves itself for offline use the first time you open it on Wi-Fi, so open it once before you leave.'],
+  { q: 'Food & allergies', a: 'Camp serves hot meals starting with Tuesday dinner. If your child has dietary needs, read the dietary letter and allergen grid and tell the teachers before the trip.',
+    links: [['Sample menu', DOC.menu], ['Dietary letter', DOC.dietary], ['Allergen grid', DOC.allergens]] },
+  { q: 'Medication', a: 'Pack it, then hand it to the teachers at drop-off. They store and give all medication. Only emergency meds (Epi-Pens, inhalers) stay with students.' },
+  { q: 'Can I call my child?', a: 'Students are screen-free, and calls home tend to make homesickness worse. Teachers and staff will reach out if anything comes up.' },
+  { q: 'Cell service & this app', a: 'Service is spotty in the redwoods. This app saves itself for offline use the first time you open it, so open it once on Wi-Fi before you leave.' },
+  { q: 'Who leads the program?', a: 'Westminster Woods Teacher Naturalists lead each trail group and evening program; Mr. Wilkins and Ms. Gustafson float between groups.',
+    links: [['Meet the Teacher Naturalists', DOC.naturalists], ['Thornhill\'s itinerary (PDF)', DOC.itinerary]] },
 ];

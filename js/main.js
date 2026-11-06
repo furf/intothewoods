@@ -5,11 +5,11 @@ import { updatePackBadge } from './pages/packing.js';
 const ROUTES = {
   '': { mod: 'home', tab: 'home', title: 'Into the Woods' },
   schedule: { mod: 'schedule', tab: 'schedule', title: 'Schedule' },
-  packing: { mod: 'packing', tab: 'packing', title: 'Packing List' },
+  packing: { mod: 'packing', tab: 'packing', title: 'Packing' },
   guide: { mod: 'guide', tab: 'guide', title: 'Chaperones' },
   more: { mod: 'more', tab: 'more', title: 'More' },
-  travel: { mod: 'travel', tab: 'more', title: 'Getting There', back: true },
-  map: { mod: 'map', tab: 'more', title: 'Campus Map', back: true },
+  map: { mod: 'map', tab: 'more', title: 'Map & Directions', back: true },
+  travel: { mod: 'map', tab: 'more', title: 'Map & Directions', back: true },
   contacts: { mod: 'contacts', tab: 'more', title: 'Contacts', back: true },
   games: { mod: 'games', tab: 'more', title: 'Games & Riddles', back: true },
   compass: { mod: 'compass', tab: 'more', title: 'Compass', back: true },
@@ -21,7 +21,9 @@ const ROUTES = {
 const view = $('#view');
 let cleanup = null;
 let current = null;
-const scrollPos = {};
+
+// We decide scroll position ourselves: every new page starts at the top.
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
 function parse() {
   const raw = location.hash.replace(/^#\/?/, '');
@@ -33,7 +35,8 @@ function parse() {
 async function navigate() {
   const { name, sub, params } = parse();
   const route = ROUTES[name];
-  if (current != null) scrollPos[current] = window.scrollY;
+  const same = name === current;
+  current = name;
 
   let page;
   try {
@@ -58,13 +61,9 @@ async function navigate() {
       if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });
     view.innerHTML = '';
+    if (!same) window.scrollTo(0, 0);
     cleanup = page.render(view, { sub, params }) || null;
-    const restore = name === current ? window.scrollY : (scrollPos[name] || 0);
-    window.scrollTo(0, sub ? 0 : restore);
   };
-
-  const same = name === current;
-  current = name;
   if (document.startViewTransition && !same && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     document.startViewTransition(swap);
   } else {

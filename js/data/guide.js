@@ -17,20 +17,6 @@ export const ROLE = [
   ['Be positive', 'If you think something is boring, they will too. Participate, ask questions, have fun!'],
 ];
 
-export const DAY = [
-  ['7:00', 'Wake up', 'Your alarm. Students stay in bed until 7:00 (quiet reading or drawing is OK). Showers are open until breakfast. Do a quick cabin tidy.'],
-  ['8:15', 'Breakfast', 'Students arrive dressed for the day: day pack, full water bottle, jacket and layers, closed-toed shoes.'],
-  ['After meals', 'Recess', 'Supervise the Gaga Pit and playground. No basketball or cargo net. Escort cabin runs.'],
-  ['Morning', 'Chaperone check-in', 'A brief meeting about the day. Ask for support here.'],
-  ['9:20–3:45', 'Trail group', 'Spread out: Naturalist in front, chaperones in the middle and at the rear. Remind students to drink water. Circle up and join in.'],
-  ['4:00', 'Rec time', 'Staff your rec area. On the whistle, walk students to their cabin post on the Big Green Field.'],
-  ['4:45', 'Cabin time', 'About 30 minutes to regroup. Pack layers and water for the night program.'],
-  ['5:15', 'Dinner', 'One adult per table. Keep it calm and run a quick clean-up; that gets you to free time sooner.'],
-  ['6:15–7:15', 'Your time off', 'Class Meeting is teacher-led. Shower, call home, recharge.'],
-  ['7:15', 'Night program', 'Be at the meeting room on time and join in.'],
-  ['8:45–9:30', 'Bedtime', 'Bed prep, showers (about 5 min), lights out at 9:30.'],
-];
-
 export const RULES = {
   General: [
     'Stick together: students walk alone only during rec time, and only within rec zones. Cabins are not a rec zone.',
@@ -72,8 +58,8 @@ export const BEDTIME = [
 export const NIGHT = [
   ['Bathroom', 'Students may go without waking anyone, but tell them they can wake you if they\'re nervous to walk out alone.'],
   ['Bedwetting', 'Keep it discreet. Swap in a spare sleeping bag from the meeting room, bag the wet one outside the cabin, and tell WW staff at breakfast. They\'ll quietly launder it.'],
-  ['Vomit', 'Use the nearest vomit kit (Meadow Cabin bathroom, Homestead, Woods Inn or Boxcar) and follow its instructions.'],
-  ['Need help?', 'Call your teachers\' house extension from the Dining Hall or Redwood Center phone, or use an emergency radio (Meadow Cabin bathroom, Dining Hall, Hut J by cabin 11).'],
+  ['Vomit', 'Grab the nearest vomit kit and follow its instructions. Locations are on the Contacts page.'],
+  ['Need help?', 'The teachers and the WW Evening Coordinator are on call. Use a camp landline or emergency radio (see Contacts).'],
   ['Homesick at night', 'Try to get them back to bed. If that fails, call the teacher house. A familiar teacher helps, and you get some sleep.'],
 ];
 
