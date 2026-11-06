@@ -10,13 +10,13 @@ export default {
   render(el) {
     const st = Object.assign({ color: 'red', level: 0.6 }, store.get('itw:light', {}));
     el.innerHTML = `
-      <div class="nightlight" id="nl" role="application" aria-label="Night light. Tap to show or hide controls.">
+      <div class="nightlight" id="nl">
         <div class="nl-glow"></div>
         <div class="nl-controls">
           <div class="nl-swatches">${COLORS.map(([id, c, t]) => `<button type="button" data-c="${id}" style="--sw:${c}" aria-label="${t}"></button>`).join('')}</div>
           <label class="nl-slider"><span>Brightness</span><input type="range" min="0.08" max="1" step="0.01" value="${st.level}"></label>
           <p>The screen stays awake while this is open. Tap anywhere to hide the controls.</p>
-          <a class="btn ghost" href="#/more">Done</a>
+          <a class="btn ghost" href="#/guide">Done</a>
         </div>
       </div>`;
     const nl = el.querySelector('#nl');

@@ -1,29 +1,54 @@
-import { esc, icon, copy, store, $$ } from '../ui.js';
-import { PLACES, MAPS } from '../data/trip.js';
+import { esc, icon, copy, store, today, $$ } from '../ui.js';
+import { PLACES, MAPS, SCHEDULE } from '../data/trip.js';
 
 // Places only. Emergency phones, radios and the alarm live on the Contacts page.
 const SPOTS = [
-  ['🟩', 'Big Green Field', 'Center of camp. Cabin line-up posts for end of rec time and emergencies.'],
-  ['🍽️', 'Vernon Dining Hall', 'All meals.'],
-  ['🏠', 'Cabins', 'Hillside 1–9, Creekside 11–19, Pool 22–24, Meadow 31–36.'],
-  ['🎯', 'Rec areas', 'Tree House, Cargo Net, Playground, Ga-Ga Pit, Basketball Court.'],
-  ['🧗', 'Challenge Course Canyon', 'High Ropes Challenges.'],
-  ['🔥', 'Campfires', 'Hillside, Adventure, Center and Creekside campfire circles.'],
-  ['🐟', 'Creek Zip & Coho Crossing', 'Bridge over Dutch Bill Creek, salmon habitat.'],
+  ['Big Green Field', 'Center of camp. Cabin line-up posts for end of rec time and emergencies.'],
+  ['Vernon Dining Hall', 'All meals.'],
+  ['Cabins', 'Hillside 1–9, Creekside 11–19, Pool 22–24, Meadow 31–36.'],
+  ['Rec areas', 'Tree House, Cargo Net, Playground, Ga-Ga Pit, Basketball Court.'],
+  ['Challenge Course Canyon', 'High Ropes Challenges.'],
+  ['Campfires', 'Hillside, Adventure, Center and Creekside campfire circles.'],
+  ['Creek Zip & Coho Crossing', 'Bridge over Dutch Bill Creek, salmon habitat.'],
 ];
 
-const directions = () => `
+// Two directions, one layout: "there" is Thornhill → camp, "home" is camp → Thornhill.
+const TRIPS = {
+  there: {
+    dest: PLACES.camp, links: MAPS, primary: 'Google Maps from Thornhill',
+    mapTitle: 'Driving route from Thornhill to Westminster Woods',
+    tips: [
+      '<b>About 1½–2 hours</b> from Oakland. We\'re due at camp by 10:15.',
+      '<b>Cell service fades</b> on the winding stretch near Occidental. Start navigation before you leave, or save an offline map area.',
+      'The last roads are <b>narrow and curvy</b>. Car-sick kids do better up front with a window cracked.',
+    ],
+  },
+  home: {
+    dest: PLACES.school, links: MAPS.back, primary: 'Google Maps from camp',
+    mapTitle: 'Driving route from Westminster Woods to Thornhill',
+    tips: [
+      'We leave camp after lunch Thursday (~12:30) and are due at <b>Thornhill around 3:00 pm</b>, where families pick up.',
+      '<b>There\'s little or no signal at camp.</b> Start navigation before you pull out, or save an offline map area the night before.',
+      'The first stretch is <b>narrow and curvy</b>. Car-sick kids do better up front with a window cracked.',
+      'Do a last check before you go: water bottles, jackets and every student\'s bag in the car.',
+    ],
+  },
+};
+
+const directions = (which) => {
+  const t = TRIPS[which];
+  return `
   <section class="card">
     <div class="address">
       ${icon('pin')}
-      <div><b>${esc(PLACES.camp.name)}</b><span>${esc(PLACES.camp.address)}</span></div>
+      <div><b>${esc(t.dest.name)}</b><span>${esc(t.dest.address)}</span></div>
       <button class="icon-btn" type="button" id="copyAddr" aria-label="Copy address">${icon('copy')}</button>
     </div>
     <div class="btn-grid">
-      <a class="btn" href="${MAPS.google}" target="_blank" rel="noopener">${icon('car')} Google Maps from Thornhill</a>
-      <a class="btn ghost-dark" href="${MAPS.googleHere}" target="_blank" rel="noopener">From here</a>
-      <a class="btn ghost-dark" href="${MAPS.apple}" target="_blank" rel="noopener">Apple Maps</a>
-      <a class="btn ghost-dark" href="${MAPS.waze}" target="_blank" rel="noopener">Waze</a>
+      <a class="btn" href="${t.links.google}" target="_blank" rel="noopener">${icon('car')} ${t.primary}</a>
+      <a class="btn ghost-dark" href="${t.links.googleHere}" target="_blank" rel="noopener">From here</a>
+      <a class="btn ghost-dark" href="${t.links.apple}" target="_blank" rel="noopener">Apple Maps</a>
+      <a class="btn ghost-dark" href="${t.links.waze}" target="_blank" rel="noopener">Waze</a>
     </div>
     <div class="map-embed" id="mapEmbed">
       <div class="map-offline">${icon('map')}<p>The live map needs a connection.<br>The buttons above still open your maps app.</p></div>
@@ -31,13 +56,9 @@ const directions = () => `
   </section>
   <section class="card">
     <h2>Driving tips</h2>
-    <ul class="bullets">
-      <li><b>About 1½–2 hours</b> from Oakland. We're due at camp by 10:15.</li>
-      <li><b>Cell service fades</b> on the winding stretch near Occidental. Start navigation before you leave, or save an offline map area.</li>
-      <li>The last roads are <b>narrow and curvy</b>. Car-sick kids do better up front with a window cracked.</li>
-      <li>Going home: <a href="${MAPS.returnHome}" target="_blank" rel="noopener">directions back to Thornhill</a>.</li>
-    </ul>
+    <ul class="bullets">${t.tips.map((x) => `<li>${x}</li>`).join('')}</ul>
   </section>`;
+};
 
 const campus = () => `
   <div class="zoomer" id="zoomer" aria-label="Campus map. Pinch or use the buttons to zoom.">
@@ -51,29 +72,33 @@ const campus = () => `
   <p class="muted small center">Pinch, drag or double-tap to zoom. Map is not to scale.</p>
   <section class="card">
     <h2>Key spots</h2>
-    <ul class="spots">${SPOTS.map(([e, n, d]) => `<li><span aria-hidden="true">${e}</span><div><b>${esc(n)}</b><p>${esc(d)}</p></div></li>`).join('')}</ul>
-    <a class="btn small ghost-dark" href="#/contacts">${icon('alert')} Emergency phones, radios &amp; alarm</a>
+    <dl class="pairs">${SPOTS.map(([n, d]) => `<dt>${esc(n)}</dt><dd>${esc(d)}</dd>`).join('')}</dl>
+    <p class="small"><a href="#/contacts">Emergency phones, radios and the alarm are on Contacts</a>.</p>
   </section>`;
 
 export default {
   render(el, { params }) {
-    let tab = params.get('v') || store.get('itw:mapTab', 'directions');
+    // On departure day, open on "Getting home" unless a link asks for a specific view.
+    const lastDay = SCHEDULE[SCHEDULE.length - 1].date;
+    let tab = params.get('v') || (today() === lastDay ? 'home' : store.get('itw:mapTab', 'there'));
     el.innerHTML = `
       <div class="page">
-        <div class="seg two" role="tablist" aria-label="Map view">
-          <button role="tab" type="button" data-v="directions"><b>Getting there</b></button>
-          <button role="tab" type="button" data-v="campus"><b>Campus map</b></button>
+        <div class="seg three" role="group" aria-label="Map view">
+          <button type="button" data-v="there"><b>Getting there</b></button>
+          <button type="button" data-v="home"><b>Getting home</b></button>
+          <button type="button" data-v="campus"><b>Campus map</b></button>
         </div>
         <div id="mview"></div>
       </div>`;
     const mv = el.querySelector('#mview');
     let undo = null;
     const go = (v) => {
-      tab = v === 'campus' ? 'campus' : 'directions';
+      // 'directions' was the old name for "Getting there" (saved preference / old links).
+      tab = v === 'campus' || v === 'home' ? v : 'there';
       store.set('itw:mapTab', tab);
-      $$('.seg button', el).forEach((b) => b.setAttribute('aria-selected', String(b.dataset.v === tab)));
+      $$('.seg button', el).forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === tab)));
       if (undo) undo();
-      if (tab === 'campus') { mv.innerHTML = campus(); undo = panZoom(mv); } else { mv.innerHTML = directions(); undo = liveMap(mv); }
+      if (tab === 'campus') { mv.innerHTML = campus(); undo = panZoom(mv); } else { mv.innerHTML = directions(tab); undo = liveMap(mv, TRIPS[tab]); }
     };
     el.querySelector('.seg').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) go(b.dataset.v); });
     go(tab);
@@ -81,12 +106,12 @@ export default {
   },
 };
 
-function liveMap(el) {
-  el.querySelector('#copyAddr').addEventListener('click', () => copy(PLACES.camp.address, 'Address copied'));
+function liveMap(el, trip) {
+  el.querySelector('#copyAddr').addEventListener('click', () => copy(trip.dest.address, 'Address copied'));
   const box = el.querySelector('#mapEmbed');
   const load = () => {
     if (!navigator.onLine || box.querySelector('iframe')) return;
-    box.insertAdjacentHTML('afterbegin', `<iframe title="Driving route from Thornhill to Westminster Woods" src="${MAPS.embed}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`);
+    box.insertAdjacentHTML('afterbegin', `<iframe title="${trip.mapTitle}" src="${trip.links.embed}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`);
   };
   load();
   window.addEventListener('online', load);

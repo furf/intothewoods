@@ -1,4 +1,4 @@
-import { esc, icon, at, fmtTime } from '../ui.js';
+import { esc, icon, at, fmtTime, isStandalone, shareOrCopy, toast } from '../ui.js';
 import { TRIP, QUICK, EXPERIENCE, STAY, FAQ, SCHEDULE } from '../data/trip.js';
 
 
@@ -80,7 +80,7 @@ export default {
 
         <section class="card">
           <h2>What students will experience</h2>
-          <ul class="exp">${EXPERIENCE.map((e) => `<li><span class="exp-ic" aria-hidden="true">${e.icon}</span><div><b>${esc(e.title)}</b><p>${esc(e.text)}</p></div></li>`).join('')}</ul>
+          <dl class="pairs">${EXPERIENCE.map((e) => `<dt>${esc(e.title)}</dt><dd>${esc(e.text)}</dd>`).join('')}</dl>
         </section>
 
         <section class="card">
@@ -93,8 +93,37 @@ export default {
           ${FAQ.map((f) => `<details class="faq"><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p>${f.links ? `<div class="linklist">${f.links.map(([l, h]) => `<a href="${esc(h)}" target="_blank" rel="noopener">${esc(l)}${icon('external')}</a>`).join('')}</div>` : ''}</details>`).join('')}
         </section>
 
-        <p class="footnote">Unofficial trip helper made by Thornhill parents. Not affiliated with Westminster Woods.</p>
+        <section class="card">
+          <h2>Keep it on your phone</h2>
+          <div class="install-box">
+            <img src="icons/icon-192.png" alt="" width="52" height="52">
+            <p class="small muted">${isStandalone()
+              ? 'Installed. Everything works without signal.'
+              : /iphone|ipad|ipod/i.test(navigator.userAgent)
+                ? 'In Safari, tap Share, then \u201cAdd to Home Screen\u201d. Open it once on Wi-Fi and it works without signal.'
+                : 'Install it for one-tap access. Open it once on Wi-Fi and it works without signal.'}</p>
+          </div>
+          <div class="btn-row">
+            ${isStandalone() ? '' : `<button class="btn install-btn" type="button" id="installBtn">${icon('download')} Install</button>`}
+            <button class="btn ghost-dark" type="button" id="shareBtn">${icon('share')} Share with families</button>
+          </div>
+        </section>
+
+        <p class="footnote">Unofficial trip helper made by Thornhill parents. Not affiliated with Westminster Woods. Content adapted from the WW packing list, trip slides and Chaperone Handbook.</p>
       </div>`;
+
+    el.querySelector('#installBtn')?.addEventListener('click', async () => {
+      const p = window.__installPrompt;
+      if (!p) { toast('Use your browser menu: \u201cAdd to Home Screen\u201d or \u201cInstall app\u201d.', 4000); return; }
+      p.prompt();
+      await p.userChoice.catch(() => {});
+      window.__installPrompt = null;
+    });
+    el.querySelector('#shareBtn').addEventListener('click', () => shareOrCopy({
+      title: 'Into the Woods',
+      text: 'Thornhill\'s Westminster Woods trip app: schedule, packing list, directions and chaperone guide. Works offline.',
+      url: location.href.split('#')[0],
+    }));
 
     // Lite YouTube: only load the player on tap (keeps the page fast & offline-friendly).
     const video = el.querySelector('#video');

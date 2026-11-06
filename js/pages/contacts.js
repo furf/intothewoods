@@ -13,25 +13,24 @@ function vcard(c) {
     'END:VCARD'].filter(Boolean).join('\r\n');
 }
 
+// Every trip contact with a number, for the one-tap "save all" download.
 let registry = [];
 function card(c, opts = {}) {
-  const i = registry.push(c) - 1;
+  if (!opts.noSave && (c.phone || c.email)) registry.push(c);
   const canText = c.phone && !/^9-?1-?1$/.test(c.phone) && !/^1-800/.test(c.phone);
   return `<article class="contact ${opts.cls || ''}">
     <div class="avatar" aria-hidden="true">${opts.cls === 'urgent' ? icon('alert') : esc((c.name.match(/\b\w/g) || []).slice(0, 2).join(''))}</div>
     <div class="contact-main">
       <b>${esc(c.name)}</b>${c.aka ? ` <span class="muted small">(${esc(c.aka)})</span>` : ''}
       <small>${esc(c.role || '')}</small>
-      ${c.phone ? `<a class="contact-line" href="${telHref(c.phone)}">${esc(c.phone)}</a>` : '<span class="contact-line tbd">Phone: coming soon</span>'}
-      ${c.email ? `<a class="contact-line" href="mailto:${esc(c.email)}">${esc(c.email)}</a>` : ''}
+      ${c.phone ? `<span class="contact-line">${esc(c.phone)}</span>` : '<span class="contact-line tbd">Number coming soon</span>'}
       ${c.note ? `<p class="small">${esc(c.note)}</p>` : ''}
     </div>
     <div class="contact-actions">
-      ${c.phone ? `<a class="round" href="${telHref(c.phone)}" aria-label="Call ${esc(c.name)}">${icon('phone')}</a>` : ''}
-      ${canText ? `<a class="round" href="${smsHref(c.phone)}" aria-label="Text ${esc(c.name)}">${icon('msg')}</a>` : ''}
-      ${c.email ? `<a class="round" href="mailto:${esc(c.email)}" aria-label="Email ${esc(c.name)}">${icon('mail')}</a>` : ''}
-      ${!opts.noSave && (c.phone || c.email) ? `<button class="round" type="button" data-vcf="${i}" aria-label="Save ${esc(c.name)} to contacts">${icon('download')}</button>` : ''}
-      ${opts.del != null ? `<button class="round" type="button" data-del="${opts.del}" aria-label="Remove ${esc(c.name)}">${icon('x')}</button>` : ''}
+      ${c.phone ? `<a class="act call" href="${telHref(c.phone)}" aria-label="Call ${esc(c.name)}">${icon('phone')}Call${c.phone === '911' ? ' 911' : ''}</a>` : ''}
+      ${canText ? `<a class="act" href="${smsHref(c.phone)}" aria-label="Text ${esc(c.name)}">${icon('msg')}Text</a>` : ''}
+      ${c.email ? `<a class="act" href="mailto:${esc(c.email)}" aria-label="Email ${esc(c.name)}">${icon('mail')}Email</a>` : ''}
+      ${opts.del != null ? `<button class="act" type="button" data-del="${opts.del}" aria-label="Remove ${esc(c.name)}">${icon('x')}Remove</button>` : ''}
     </div>
   </article>`;
 }
@@ -44,7 +43,7 @@ export default {
       el.innerHTML = `
         <div class="page">
           <h2 class="group-title danger">${icon('alert')} Emergency</h2>
-          ${EMERGENCY.map((c) => card(c, { cls: 'urgent', noSave: c.phone === '911' })).join('')}
+          ${EMERGENCY.map((c) => card(c, { cls: 'urgent', noSave: true })).join('')}
           <section class="card alert-card">
             <h2>At camp</h2>
             <dl class="pairs">${ON_SITE.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
@@ -61,8 +60,11 @@ export default {
           ${CHAPERONES.map((c) => card({ ...c, org: 'Thornhill School' })).join('')}
           <p class="muted small pad">More chaperones will be added here soon.</p>
 
-          <h2 class="group-title">My contacts <span class="muted small">(this device only)</span></h2>
-          ${mine.map((c, i) => card(c, { del: i })).join('') || '<p class="muted small pad">Add a co-chaperone or your cabin buddy so their number is here even without signal.</p>'}
+          <button class="btn wide ghost" type="button" id="saveAll">${icon('download')} Save all trip contacts to my phone</button>
+
+          <h2 class="group-title">My contacts</h2>
+          <p class="lead small">Saved on this device only.</p>
+          ${mine.map((c, i) => card(c, { del: i, noSave: true })).join('') || '<p class="muted small pad">Add a co-chaperone or your cabin buddy so their number is here even without signal.</p>'}
           <form class="card add-contact" id="addForm">
             <input name="name" placeholder="Name" required maxlength="60" autocomplete="off">
             <input name="role" placeholder="Role (e.g. Cabin 12 co-chaperone)" maxlength="80" autocomplete="off">
@@ -71,10 +73,9 @@ export default {
           </form>
         </div>`;
 
-      el.querySelectorAll('[data-vcf]').forEach((b) => b.addEventListener('click', () => {
-        const c = registry[Number(b.dataset.vcf)];
-        download(`${c.name.replace(/\W+/g, '-')}.vcf`, vcard(c), 'text/vcard');
-      }));
+      el.querySelector('#saveAll').addEventListener('click', () => {
+        download('westminster-woods-trip-contacts.vcf', registry.map(vcard).join('\r\n'), 'text/vcard');
+      });
       el.querySelectorAll('[data-del]').forEach((b) => b.addEventListener('click', () => {
         const list = store.get(KEY, []);
         list.splice(Number(b.dataset.del), 1);

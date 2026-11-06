@@ -58,15 +58,20 @@ export const store = {
 };
 
 let toastTimer;
-export function toast(msg, ms = 2600) {
+// toast('Saved') or toast('Update ready', 0, { label: 'Reload', onClick }). ms = 0 keeps it up until acted on.
+export function toast(msg, ms = 2600, action = null) {
   const el = $('#toast');
-  el.textContent = msg;
+  $('.toast-msg', el).textContent = msg;
+  const btn = $('.toast-act', el);
+  btn.hidden = !action;
+  btn.textContent = action?.label || '';
+  btn.onclick = action ? () => { el.classList.remove('show'); el.hidden = true; action.onClick(); } : null;
   el.hidden = false;
   el.classList.remove('show');
   void el.offsetWidth;
   el.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { el.classList.remove('show'); setTimeout(() => { el.hidden = true; }, 250); }, ms);
+  if (ms) toastTimer = setTimeout(() => { el.classList.remove('show'); setTimeout(() => { el.hidden = true; }, 250); }, ms);
 }
 
 export const buzz = (ms = 8) => { try { navigator.vibrate?.(ms); } catch { /* unsupported */ } };

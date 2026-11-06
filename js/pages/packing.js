@@ -43,9 +43,9 @@ export default {
     let which = params.get('list') === 'chaperone' ? 'chaperone' : store.get('itw:packTab', 'student');
     el.innerHTML = `
       <div class="page">
-        <div class="seg two" role="tablist" aria-label="Which list">
-          <button role="tab" type="button" data-list="student"><b>Student</b><small>Camp packing list</small></button>
-          <button role="tab" type="button" data-list="chaperone"><b>Chaperone</b><small>For grown-ups</small></button>
+        <div class="seg two" role="group" aria-label="Which list">
+          <button type="button" data-list="student"><b>Student</b><small>Camp packing list</small></button>
+          <button type="button" data-list="chaperone"><b>Chaperone</b><small>For grown-ups</small></button>
         </div>
         <div id="list"></div>
       </div>
@@ -65,7 +65,7 @@ export default {
 
     const draw = () => {
       store.set('itw:packTab', which);
-      $$('.seg button', el).forEach((b) => b.setAttribute('aria-selected', String(b.dataset.list === which)));
+      $$('.seg button', el).forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.list === which)));
       renderList(listEl, which, () => { cel.hidden = false; });
     };
     $('.seg', el).addEventListener('click', (e) => {
@@ -154,7 +154,8 @@ function renderList(root, which, onComplete) {
       <div class="section-body">
         ${sec.note ? `<p class="section-note">${esc(sec.note)}</p>` : ''}
         <ul class="items"></ul>
-        <form class="add-item"><input type="text" placeholder="Add your own item…" maxlength="80" aria-label="Add your own item to ${esc(sec.title)}"><button class="btn small" type="submit">Add</button></form>
+        <button class="add-toggle" type="button" aria-expanded="false">${icon('plus')} Add your own</button>
+        <form class="add-item" hidden><input type="text" placeholder="Item name" maxlength="80" enterkeyhint="done" aria-label="Add your own item to ${esc(sec.title)}"><button class="btn small" type="submit">Add</button></form>
       </div>`;
     const ul = $('.items', s);
     itemsFor(sec, st).forEach((it) => ul.appendChild(itemEl(sec, it)));
@@ -164,7 +165,16 @@ function renderList(root, which, onComplete) {
       e.currentTarget.setAttribute('aria-expanded', String(!st.collapsed[sec.id]));
       save();
     });
-    $('form', s).addEventListener('submit', (e) => {
+    const addBtn = $('.add-toggle', s), addForm = $('form', s);
+    addBtn.addEventListener('click', () => {
+      addBtn.hidden = true; addBtn.setAttribute('aria-expanded', 'true');
+      addForm.hidden = false; $('input', addForm).focus();
+    });
+    // Collapse back to the quiet link when the field is left empty.
+    $('input', addForm).addEventListener('blur', (e) => {
+      setTimeout(() => { if (!e.target.value.trim() && !addForm.contains(document.activeElement)) { addForm.hidden = true; addBtn.hidden = false; addBtn.setAttribute('aria-expanded', 'false'); } }, 150);
+    });
+    addForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const input = $('input', e.currentTarget);
       const label = input.value.trim();

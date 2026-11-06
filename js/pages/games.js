@@ -14,7 +14,7 @@ export default {
     let tab = params.get('t') || store.get('itw:gamesTab', 'riddles');
     el.innerHTML = `
       <div class="page">
-        <div class="seg three" role="tablist">${TABS.map(([id, t]) => `<button role="tab" type="button" data-t="${id}"><b>${t}</b></button>`).join('')}</div>
+        <div class="seg three" role="group" aria-label="Activity type">${TABS.map(([id, t]) => `<button type="button" data-t="${id}"><b>${t}</b></button>`).join('')}</div>
         <div id="gview"></div>
       </div>`;
     const v = $('#gview', el);
@@ -50,7 +50,7 @@ export default {
             <article class="game card" data-i="${i}">
               <h3>${esc(g.name)}</h3>
               <div class="chips">
-                <span class="chip">👥 ${esc(g.players)}</span><span class="chip">📍 ${esc(g.where)}</span><span class="chip">⚡ ${esc(g.energy)}</span>
+                <span class="chip">${esc(g.players)} players</span><span class="chip">${esc(g.where)}</span><span class="chip">${esc(g.energy)} energy</span>
               </div>
               <p>${esc(g.how)}</p>
             </article>`).join('')}</div>`;
@@ -81,7 +81,7 @@ export default {
     const go = (t) => {
       tab = views[t] ? t : 'riddles';
       store.set('itw:gamesTab', tab);
-      $$('.seg button', el).forEach((b) => b.setAttribute('aria-selected', String(b.dataset.t === tab)));
+      $$('.seg button', el).forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.t === tab)));
       views[tab]();
     };
     $('.seg', el).addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) go(b.dataset.t); });

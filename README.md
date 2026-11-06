@@ -7,18 +7,25 @@ Live: https://furf.github.io/intothewoods/
 
 ## Pages
 
-Five tabs: **Home · Schedule · Packing · Chaperones · More**. Each fact lives in one place:
+Five tabs: **Home · Schedule · Packing · Chaperones · Contacts**. Each fact lives in one place:
 
 | Route | What's there |
 | --- | --- |
-| `#/` Home | Countdown → live "Now / Next", trip at a glance (the one place for logistics), overview video, what students will experience, where they stay, FAQ with its documents |
+| `#/` Home | Countdown → live "Now / Next", trip at a glance, overview video, what students will experience, where they stay, FAQ with its documents, install & share |
 | `#/schedule` | Day-by-day timeline. Programs are prominent; routines and meals are compact rows you tap to expand. Chaperone notes toggle, "Now" button, add-to-calendar |
-| `#/packing` | Student and chaperone lists |
-| `#/guide` | Chaperones: shortcuts to schedule, emergencies and packing; handbook sections (role, tools of the trade, homesickness, bedtime & overnight, rules, good to know); cabin activities |
-| `#/map` | Getting there (address, maps apps, live route, driving tips) and the zoomable campus map |
-| `#/contacts` | Emergency numbers and the on-campus alarm, phones, radios and kits; camp, Thornhill, chaperones, your own contacts |
-| `#/games`, `#/cabin`, `#/field` | Games & riddles, cabin agreement, field guide |
-| `#/compass`, `#/light` | Compass with find-your-way-back; night light |
+| `#/packing` | Student and chaperone lists (the design reference for the rest of the app) |
+| `#/guide` | Chaperones: at-camp tools (map, night light, compass), cabin activities (agreement, games, field guide), handbook sections |
+| `#/contacts` | Emergency numbers and the on-campus alarm, phones, radios and kits; camp, Thornhill, chaperones; save all to your phone; your own contacts |
+| `#/map`, `#/light`, `#/compass`, `#/cabin`, `#/games`, `#/field` | Opened from Chaperones, with a Back button |
+
+Old `#/more` and `#/travel` links redirect to Chaperones and the map.
+
+## Design rules
+
+The packing checklist is the model: one job per screen, list rows with 44px+ targets,
+quiet chrome. The handwritten face (Gochi Hand) is only for page and section titles and
+brand moments; anything you scan or tap is Nunito. Category color goes on dots, icons and
+labels, never on side stripes. No emoji as icons.
 
 ## Editing content
 
@@ -29,7 +36,8 @@ All trip content lives in plain data files, no build step:
 - `js/data/packing.js`, `guide.js`, `games.js`, `field.js`
 
 After changing any file, bump `VERSION` in `sw.js` (and add new files to its
-`SHELL` list) so installed copies update.
+`SHELL` list). Installed copies download the new version in the background and show
+"A new version is ready · Reload"; nothing switches until the person taps it.
 
 ## Run & deploy
 

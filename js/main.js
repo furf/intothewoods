@@ -7,16 +7,17 @@ const ROUTES = {
   schedule: { mod: 'schedule', tab: 'schedule', title: 'Schedule' },
   packing: { mod: 'packing', tab: 'packing', title: 'Packing' },
   guide: { mod: 'guide', tab: 'guide', title: 'Chaperones' },
-  more: { mod: 'more', tab: 'more', title: 'More' },
-  map: { mod: 'map', tab: 'more', title: 'Map & Directions', back: true },
-  travel: { mod: 'map', tab: 'more', title: 'Map & Directions', back: true },
-  contacts: { mod: 'contacts', tab: 'more', title: 'Contacts', back: true },
-  games: { mod: 'games', tab: 'more', title: 'Games & Riddles', back: true },
-  compass: { mod: 'compass', tab: 'more', title: 'Compass', back: true },
-  light: { mod: 'light', tab: 'more', title: 'Night Light', back: true, immersive: true },
-  field: { mod: 'field', tab: 'more', title: 'Field Guide', back: true },
-  cabin: { mod: 'cabin', tab: 'more', title: 'Cabin Agreement', back: true },
+  contacts: { mod: 'contacts', tab: 'contacts', title: 'Contacts' },
+  // Tools live under the Chaperones tab; Back returns there.
+  map: { mod: 'map', tab: 'guide', title: 'Map & Directions', back: true },
+  games: { mod: 'games', tab: 'guide', title: 'Games & Riddles', back: true },
+  compass: { mod: 'compass', tab: 'guide', title: 'Compass', back: true },
+  light: { mod: 'light', tab: 'guide', title: 'Night Light', back: true, immersive: true },
+  field: { mod: 'field', tab: 'guide', title: 'Field Guide', back: true },
+  cabin: { mod: 'cabin', tab: 'guide', title: 'Cabin Agreement', back: true },
 };
+// Old links (home-screen shortcuts, shared URLs) keep working.
+const ALIASES = { more: 'guide', travel: 'map' };
 
 const view = $('#view');
 let cleanup = null;
@@ -28,9 +29,11 @@ if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 function parse() {
   const raw = location.hash.replace(/^#\/?/, '');
   const [path, query = ''] = raw.split('?');
-  const [name, ...rest] = path.split('/');
+  const [raw0, ...rest] = path.split('/');
+  const name = ALIASES[raw0] || raw0;
   return { name: ROUTES[name] ? name : '', sub: rest.join('/'), params: new URLSearchParams(query) };
 }
+let firstRender = true;
 
 async function navigate() {
   const { name, sub, params } = parse();
@@ -63,6 +66,9 @@ async function navigate() {
     view.innerHTML = '';
     if (!same) window.scrollTo(0, 0);
     cleanup = page.render(view, { sub, params }) || null;
+    // Move focus to the new page so screen readers announce it (not on first load).
+    if (!same && !firstRender) view.focus({ preventScroll: true });
+    firstRender = false;
   };
   if (document.startViewTransition && !same && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     document.startViewTransition(swap);
@@ -74,7 +80,7 @@ async function navigate() {
 window.addEventListener('hashchange', navigate);
 navigate();
 
-// Back button: return to the previous in-app screen when there is one; otherwise go to More.
+// Back button: return to the previous in-app screen when there is one; otherwise go to Chaperones.
 let internalNavs = 0;
 window.addEventListener('hashchange', () => { internalNavs++; });
 $('#backBtn').addEventListener('click', (e) => {
@@ -82,44 +88,62 @@ $('#backBtn').addEventListener('click', (e) => {
 });
 
 // ---- Online / offline status ----
+// Silent when all is well. Only shows when offline, or while the app is still saving itself.
 const statusBtn = $('#status');
-let offlineReady = false;
+const swSupported = 'serviceWorker' in navigator;
+let offlineReady = !swSupported;
 function renderStatus() {
   const online = navigator.onLine;
+  const saving = online && !offlineReady;
+  statusBtn.hidden = online && !saving;
   statusBtn.classList.toggle('offline', !online);
-  statusBtn.classList.toggle('ready', offlineReady);
-  $('.status-text', statusBtn).textContent = online ? 'Online' : 'Offline';
+  $('.status-text', statusBtn).textContent = online ? 'Saving…' : 'Offline';
   statusBtn.setAttribute('aria-label', online
-    ? `Online${offlineReady ? ', saved for offline use' : ''}`
-    : 'Offline. Everything saved still works');
+    ? 'Saving the app for offline use'
+    : 'Offline. Everything in the app still works');
 }
-window.addEventListener('online', () => { renderStatus(); toast('Back online 📶'); });
-window.addEventListener('offline', () => { renderStatus(); toast('Offline: no problem, the app still works 🌲'); });
+window.addEventListener('online', () => { renderStatus(); toast('Back online'); });
+window.addEventListener('offline', () => { renderStatus(); toast('You\'re offline. The app still works; live maps and video need signal.', 4000); });
 statusBtn.addEventListener('click', () => {
-  if (!navigator.onLine) toast('You\'re offline. Everything in the app still works; maps & video need signal.');
-  else toast(offlineReady ? 'Online · the whole app is saved for offline use ✅' : 'Online · saving the app for offline use…');
+  if (!navigator.onLine) toast('You\'re offline. Everything in the app still works; live maps and video need signal.', 4000);
+  else toast('Saving the app for offline use. Keep it open for a moment.');
 });
 renderStatus();
 
 // ---- Service worker ----
-if ('serviceWorker' in navigator) {
+// A new version waits until the person chooses to reload, so a page never mixes old and new code.
+if (swSupported) {
+  // Reload only when the person asked for the update (not when a first install takes control).
+  let updateRequested = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!updateRequested) return;
+    updateRequested = false;
+    location.reload();
+  });
+  const offerUpdate = (worker) => toast('A new version of the app is ready.', 0, {
+    label: 'Reload', onClick: () => { updateRequested = true; worker.postMessage('SKIP_WAITING'); },
+  });
   navigator.serviceWorker.register('sw.js').then((reg) => {
-    navigator.serviceWorker.ready.then(() => { offlineReady = true; renderStatus(); });
+    navigator.serviceWorker.ready.then(() => {
+      offlineReady = true; renderStatus();
+      if (!navigator.serviceWorker.controller) toast('Saved for offline use. Works without signal.', 3200);
+    });
+    if (reg.waiting && navigator.serviceWorker.controller) offerUpdate(reg.waiting);
     reg.addEventListener('updatefound', () => {
       const nw = reg.installing;
       nw?.addEventListener('statechange', () => {
-        if (nw.state === 'installed' && navigator.serviceWorker.controller) {
-          toast('Updated! Pull the latest by reopening the app.', 4000);
-        }
+        if (nw.state === 'installed' && navigator.serviceWorker.controller) offerUpdate(nw);
       });
     });
-  }).catch(() => {});
+    // Check for updates when the app comes back to the foreground.
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') reg.update().catch(() => {}); });
+  }).catch(() => { offlineReady = true; renderStatus(); });
 }
 
 // Ask the browser to keep our data (checklists, notes) even under storage pressure.
 navigator.storage?.persist?.().catch(() => {});
 
-// Capture the install prompt so the More page can offer an "Install" button.
+// Capture the install prompt so Home can offer an "Install" button.
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   window.__installPrompt = e;

@@ -66,8 +66,8 @@ export default {
     let dayIdx = pickDay();
     el.innerHTML = `
       <div class="page">
-        <div class="seg" role="tablist" aria-label="Trip day">
-          ${SCHEDULE.map((d, i) => `<button role="tab" type="button" data-day="${i}"><b>${d.short}</b><small>${d.date.slice(5).replace('-', '/')}</small></button>`).join('')}
+        <div class="seg" role="group" aria-label="Trip day">
+          ${SCHEDULE.map((d, i) => `<button type="button" data-day="${i}"><b>${d.short}</b><small>${d.date.slice(5).replace('-', '/')}</small></button>`).join('')}
         </div>
         <div class="toolbar">
           <label class="toggle"><input type="checkbox" id="chapToggle"><span class="switch" aria-hidden="true"></span>Chaperone notes</label>
@@ -95,13 +95,17 @@ export default {
       dayIdx = i;
       store.set('itw:day', i);
       const day = SCHEDULE[i];
-      $$('.seg button', el).forEach((b, j) => b.setAttribute('aria-selected', String(j === i)));
+      $$('.seg button', el).forEach((b, j) => b.setAttribute('aria-pressed', String(j === i)));
       dayView.innerHTML = `
         <h2 class="day-title">${esc(day.day)} <span>${esc(day.label)}</span></h2>
         <ol class="timeline">${day.items.map((it, j) => itemHTML(day, it, j)).join('')}</ol>`;
+      autoKey = null; autoOpened = null; // fresh rows: let the current item open again
       markNow();
     };
 
+    // Whatever is happening now opens on its own, whatever its kind. It opens once when it
+    // becomes current (so closing it sticks), and the row we opened closes when the next item starts.
+    let autoKey = null, autoOpened = null;
     const markNow = () => {
       const day = SCHEDULE[dayIdx];
       const now = new Date();
@@ -109,10 +113,20 @@ export default {
       day.items.forEach((it, j) => { if (at(day.date, it.t) <= now) curI = j; });
       const last = day.items[day.items.length - 1];
       const dayOver = now > at(day.date, last.t) && today(now) !== day.date;
-      $$('.ev', dayView).forEach((li, j) => {
+      const lis = $$('.ev', dayView);
+      lis.forEach((li, j) => {
         li.classList.toggle('past', curI >= 0 && (j < curI || dayOver));
         li.classList.toggle('now', j === curI && !dayOver);
       });
+      const nowLi = curI >= 0 && !dayOver ? lis[curI] : null;
+      const key = nowLi ? `${dayIdx}:${curI}` : null;
+      if (key !== autoKey) {
+        if (autoOpened?.isConnected) autoOpened.open = false;
+        autoOpened = null;
+        const d = nowLi?.querySelector('details.ev-body');
+        if (d && !d.open) { d.open = true; autoOpened = d; }
+        autoKey = key;
+      }
       const tripDay = SCHEDULE.some((d) => d.date === today(now));
       nowBtn.hidden = !tripDay;
     };

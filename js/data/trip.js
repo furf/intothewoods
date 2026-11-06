@@ -33,7 +33,14 @@ export const MAPS = {
   apple: `https://maps.apple.com/?saddr=${enc(PLACES.school.address)}&daddr=${enc(PLACES.camp.address)}&dirflg=d`,
   waze: `https://waze.com/ul?q=${enc(PLACES.camp.address)}&navigate=yes`,
   embed: `https://www.google.com/maps?saddr=${enc(PLACES.school.address)}&daddr=${enc(PLACES.camp.address)}&output=embed`,
-  returnHome: `https://www.google.com/maps/dir/?api=1&origin=${enc(to)}&destination=${enc(from)}&travelmode=driving`,
+  // Getting home: the same set, reversed (camp → Thornhill).
+  back: {
+    google: `https://www.google.com/maps/dir/?api=1&origin=${enc(to)}&destination=${enc(from)}&travelmode=driving`,
+    googleHere: `https://www.google.com/maps/dir/?api=1&destination=${enc(from)}&travelmode=driving`,
+    apple: `https://maps.apple.com/?saddr=${enc(PLACES.camp.address)}&daddr=${enc(PLACES.school.address)}&dirflg=d`,
+    waze: `https://waze.com/ul?q=${enc(PLACES.school.address)}&navigate=yes`,
+    embed: `https://www.google.com/maps?saddr=${enc(PLACES.camp.address)}&daddr=${enc(PLACES.school.address)}&output=embed`,
+  },
 };
 
 const DOC = {
@@ -104,16 +111,15 @@ export const SCHEDULE = [
 ];
 
 export const EXPERIENCE = [
-  { icon: '🌲', title: 'Forest Ecology', text: 'Redwood forest anatomy, food chains and local biodiversity.' },
-  { icon: '🐟', title: 'Watershed & Stream Ecology', text: 'Aquatic habitats, water chemistry, macro-invertebrates and Coho salmon habitat in Dutch Bill Creek.' },
-  { icon: '🦉', title: 'Night Ecology & Biomimicry', text: 'Nocturnal adaptations, night-sky observation and how engineering mimics nature.' },
-  { icon: '🤝', title: 'Social-Emotional Learning', text: 'Cabin life and group activities build cooperation, empathy and independence ahead of middle school.' },
-  { icon: '🔥', title: 'Campfires & Community', text: 'Redwood amphitheater programs with songs, skits and reflection circles.' },
+  { title: 'Forest Ecology', text: 'Redwood forest anatomy, food chains and local biodiversity.' },
+  { title: 'Watershed & Stream Ecology', text: 'Aquatic habitats, water chemistry, macro-invertebrates and Coho salmon habitat in Dutch Bill Creek.' },
+  { title: 'Night Ecology & Biomimicry', text: 'Nocturnal adaptations, night-sky observation and how engineering mimics nature.' },
+  { title: 'Social-Emotional Learning', text: 'Cabin life and group activities build cooperation, empathy and independence ahead of middle school.' },
+  { title: 'Campfires & Community', text: 'Redwood amphitheater programs with songs, skits and reflection circles.' },
 ];
 
 // Trip at a glance: the one place for logistics.
 export const QUICK = [
-  ['When', 'Tue Nov 17 – Thu Nov 19, 2026'],
   ['Meet', '8:00 am Tuesday at Thornhill; depart ~8:30'],
   ['Ride', 'Parent vehicles (carpool)'],
   ['Return', '~3:00 pm Thursday at Thornhill'],

@@ -1,5 +1,5 @@
 // Offline-first service worker. Bump VERSION whenever any file below changes.
-const VERSION = 'itw-v5';
+const VERSION = 'itw-v8';
 const SHELL = [
   './',
   'index.html',
@@ -31,14 +31,18 @@ const SHELL = [
   'js/pages/home.js',
   'js/pages/light.js',
   'js/pages/map.js',
-  'js/pages/more.js',
   'js/pages/packing.js',
   'js/pages/schedule.js',
   'js/ui.js',
 ];
 
+// A new version installs in the background, then waits. The page offers "Reload",
+// which sends SKIP_WAITING, so a running page never mixes old and new modules.
 self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(VERSION).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
+  event.waitUntil(caches.open(VERSION).then((c) => c.addAll(SHELL)));
+});
+self.addEventListener('message', (event) => {
+  if (event.data === 'SKIP_WAITING') self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
