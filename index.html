@@ -4,107 +4,49 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Into the Woods</title>
-  <meta name="description" content="Overnight packing checklist for Westminster Woods school programs.">
+  <meta name="description" content="Thornhill's overnight trip to Westminster Woods, Nov 17–19, 2026: schedule, packing, chaperone guide, maps and contacts. Works offline.">
   <meta name="theme-color" content="#1f3a2b">
+  <meta name="color-scheme" content="light dark">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Into the Woods">
+  <meta name="format-detection" content="telephone=no">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" type="image/png" sizes="48x48" href="icons/favicon-48.png">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <link rel="preload" href="fonts/gochi-hand.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/nunito.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="modulepreload" href="js/main.js">
+  <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-  <header class="hero">
-    <svg class="ridge" viewBox="0 0 400 60" preserveAspectRatio="none" aria-hidden="true">
-      <path d="M0 60 L0 38 L18 22 L30 34 L46 10 L62 32 L74 20 L92 40 L110 16 L126 34 L140 24 L158 44 L176 14 L192 36 L206 26 L224 46 L240 18 L258 38 L270 28 L288 42 L304 12 L320 34 L334 24 L352 44 L368 20 L384 36 L400 26 L400 60 Z"/>
-    </svg>
-    <div class="hero-inner">
-      <img class="logo" src="img/logo.png" alt="Westminster Woods" width="919" height="163">
-      <h1>School Programs Packing List</h1>
-      <p class="sub">Overnight trip</p>
-
-      <div class="progress-card">
-        <div class="ring" role="img" aria-label="Packing progress">
-          <svg viewBox="0 0 120 120" aria-hidden="true">
-            <circle class="ring-track" cx="60" cy="60" r="52"/>
-            <circle class="ring-fill" cx="60" cy="60" r="52" pathLength="100"/>
-          </svg>
-          <img src="img/trees.png" alt="" width="121" height="161">
-        </div>
-        <div class="progress-text">
-          <div class="pct"><span id="pct">0</span>%</div>
-          <div id="progressLabel" class="progress-label">Let's get packing</div>
-          <label class="camper">
-            <span>Camper</span>
-            <input id="camper" type="text" placeholder="Name" autocomplete="off" maxlength="40">
-          </label>
-        </div>
-      </div>
-    </div>
+  <header class="appbar" id="appbar">
+    <a class="appbar-back" id="backBtn" href="#/more" aria-label="Back" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+    </a>
+    <a class="appbar-brand" href="#/" aria-label="Home">
+      <img src="img/trees.webp" alt="" width="26" height="30">
+    </a>
+    <h1 class="appbar-title" id="appTitle">Into the Woods</h1>
+    <button class="status" id="status" type="button" aria-live="polite">
+      <span class="dot"></span><span class="status-text">Online</span>
+    </button>
   </header>
 
-  <main>
-    <aside class="notice">
-      <strong>Screen-free campus.</strong>
-      We're nestled in a redwood forest &mdash; it can be cool even in warmer months.
-      Be ready to carry your own luggage to your cabin.
-    </aside>
+  <main id="view" tabindex="-1"></main>
 
-    <div class="toolbar">
-      <label class="toggle">
-        <input id="hidePacked" type="checkbox">
-        <span class="switch" aria-hidden="true"></span>
-        Hide packed items
-      </label>
-      <button id="resetBtn" class="btn ghost" type="button">Start over</button>
-    </div>
+  <nav class="tabbar" id="tabbar" aria-label="Main">
+    <a href="#/" data-tab="home"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg><span>Home</span></a>
+    <a href="#/schedule" data-tab="schedule"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>Schedule</span></a>
+    <a href="#/packing" data-tab="packing"><svg viewBox="0 0 24 24"><path d="M8 7V5a4 4 0 0 1 8 0v2"/><rect x="5" y="7" width="14" height="14" rx="3"/><path d="M9 14h6v3H9z"/></svg><span>Packing</span><b class="tab-badge" id="packBadge" hidden></b></a>
+    <a href="#/guide" data-tab="guide"><svg viewBox="0 0 24 24"><path d="M12 6c-2-1.5-5-2-8-1.5V19c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V4.5c-3-.5-6 0-8 1.5z"/><path d="M12 6v14.5"/></svg><span>Guide</span></a>
+    <a href="#/more" data-tab="more"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/><circle cx="12" cy="12" r="2"/></svg><span>More</span></a>
+  </nav>
 
-    <div id="sections"></div>
-  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
-  <footer class="foot">
-    <img src="img/trees.png" alt="" width="40" height="53">
-    <div>
-      <strong>Westminster Woods</strong><br>
-      6510 Bohemian Highway, Occidental, CA 95465<br>
-      <a href="tel:+17078742426">(707) 874-2426</a> &middot;
-      <a href="https://www.westminsterwoods.org" rel="noopener">westminsterwoods.org</a>
-      <br><span class="unofficial">Unofficial packing helper &mdash; not affiliated with Westminster Woods.</span>
-    </div>
-  </footer>
-
-  <div id="celebrate" class="celebrate" hidden>
-    <div class="celebrate-card">
-      <img src="img/trees.png" alt="" width="121" height="161">
-      <h2>All packed!</h2>
-      <p>See you under the redwoods.</p>
-      <button class="btn" type="button" id="celebrateClose">Yay!</button>
-    </div>
-  </div>
-
-  <template id="sectionTpl">
-    <section class="section">
-      <button class="section-head" type="button" aria-expanded="true">
-        <span class="section-icon" aria-hidden="true"></span>
-        <span class="section-title"></span>
-        <span class="section-count"></span>
-        <span class="chev" aria-hidden="true"></span>
-      </button>
-      <div class="section-body">
-        <p class="section-note" hidden></p>
-        <ul class="items"></ul>
-        <form class="add-item">
-          <input type="text" placeholder="Add your own item&hellip;" maxlength="80" aria-label="Add your own item">
-          <button class="btn small" type="submit">Add</button>
-        </form>
-      </div>
-    </section>
-  </template>
-
-  <script src="app.js"></script>
+  <noscript><p style="padding:24px">Into the Woods needs JavaScript to run.</p></noscript>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>

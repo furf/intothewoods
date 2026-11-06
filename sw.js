@@ -1,20 +1,41 @@
-// Offline-first service worker. Bump VERSION when any shell file changes.
-const VERSION = 'itw-v2';
+// Offline-first service worker. Bump VERSION whenever any file below changes.
+const VERSION = 'itw-v3';
 const SHELL = [
   './',
   'index.html',
-  'styles.css',
-  'app.js',
   'manifest.webmanifest',
-  'img/logo.png',
-  'img/trees.png',
+  'css/app.css',
   'fonts/gochi-hand.woff2',
   'fonts/nunito.woff2',
+  'icons/apple-touch-icon.png',
+  'icons/favicon-48.png',
   'icons/icon-192.png',
   'icons/icon-512.png',
   'icons/maskable-512.png',
-  'icons/apple-touch-icon.png',
-  'icons/favicon-48.png',
+  'img/campus-map.webp',
+  'img/logo.webp',
+  'img/trees.webp',
+  'js/data/field.js',
+  'js/data/games.js',
+  'js/data/guide.js',
+  'js/data/packing.js',
+  'js/data/people.js',
+  'js/data/trip.js',
+  'js/main.js',
+  'js/pages/cabin.js',
+  'js/pages/compass.js',
+  'js/pages/contacts.js',
+  'js/pages/field.js',
+  'js/pages/games.js',
+  'js/pages/guide.js',
+  'js/pages/home.js',
+  'js/pages/light.js',
+  'js/pages/map.js',
+  'js/pages/more.js',
+  'js/pages/packing.js',
+  'js/pages/schedule.js',
+  'js/pages/travel.js',
+  'js/ui.js',
 ];
 
 self.addEventListener('install', (event) => {
@@ -31,29 +52,27 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const req = event.request;
-  if (req.method !== 'GET' || new URL(req.url).origin !== self.location.origin) return;
+  if (req.method !== 'GET') return;
+  const url = new URL(req.url);
+  if (url.origin !== self.location.origin) return; // maps, video, Drive: network only
 
-  // Pages: network first so updates show up, cache fallback when offline (no signal at camp).
+  // App shell: serve from cache instantly, refresh in the background (stale-while-revalidate).
   if (req.mode === 'navigate') {
     event.respondWith(
-      fetch(req)
-        .then((res) => {
-          const copy = res.clone();
-          caches.open(VERSION).then((c) => c.put('./', copy));
+      caches.match('./').then((cached) => {
+        const fresh = fetch(req).then((res) => {
+          if (res.ok) caches.open(VERSION).then((c) => c.put('./', res.clone()));
           return res;
-        })
-        .catch(() => caches.match('./'))
+        }).catch(() => cached);
+        return cached || fresh;
+      })
     );
     return;
   }
 
-  // Assets: cache first.
   event.respondWith(
-    caches.match(req).then((hit) => hit || fetch(req).then((res) => {
-      if (res.ok) {
-        const copy = res.clone();
-        caches.open(VERSION).then((c) => c.put(req, copy));
-      }
+    caches.match(req, { ignoreSearch: true }).then((hit) => hit || fetch(req).then((res) => {
+      if (res.ok) { const copy = res.clone(); caches.open(VERSION).then((c) => c.put(req, copy)); }
       return res;
     }))
   );
