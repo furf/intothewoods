@@ -3,19 +3,19 @@ import { PLACES, MAPS, SCHEDULE } from '../data/trip.js';
 
 // Places only. Emergency phones, radios and the alarm live on the Contacts page.
 const SPOTS = [
-  ['Big Green Field', 'Center of camp. Cabin line-up posts for end of rec time and emergencies.'],
-  ['Vernon Dining Hall', 'All meals.'],
-  ['Cabins', 'Hillside 1–9, Creekside 11–19, Pool 22–24, Meadow 31–36.'],
-  ['Rec areas', 'Tree House, Cargo Net, Playground, Ga-Ga Pit, Basketball Court.'],
-  ['Challenge Course Canyon', 'High Ropes Challenges.'],
-  ['Campfires', 'Hillside, Adventure, Center and Creekside campfire circles.'],
-  ['Creek Zip & Coho Crossing', 'Bridge over Dutch Bill Creek, salmon habitat.'],
+  ['flag', 'Big Green Field', 'Center of camp. Cabin line-up posts for end of rec time and emergencies.'],
+  ['utensils', 'Vernon Dining Hall', 'All meals.'],
+  ['cabin', 'Cabins', 'Hillside 1–9, Creekside 11–19, Pool 22–24, Meadow 31–36.'],
+  ['ball', 'Rec areas', 'Tree House, Cargo Net, Playground, Ga-Ga Pit, Basketball Court.'],
+  ['mountain', 'Challenge Course Canyon', 'High Ropes Challenges.'],
+  ['fire', 'Campfires', 'Hillside, Adventure, Center and Creekside campfire circles.'],
+  ['fish', 'Creek Zip & Coho Crossing', 'Bridge over Dutch Bill Creek, salmon habitat.'],
 ];
 
 // Two directions, one layout: "there" is Thornhill → camp, "home" is camp → Thornhill.
 const TRIPS = {
   there: {
-    dest: PLACES.camp, links: MAPS, primary: 'Google Maps from Thornhill',
+    dest: PLACES.camp, links: MAPS,
     mapTitle: 'Driving route from Thornhill to Westminster Woods',
     tips: [
       '<b>About 1½–2 hours</b> from Oakland. We\'re due at camp by 10:15.',
@@ -24,7 +24,7 @@ const TRIPS = {
     ],
   },
   home: {
-    dest: PLACES.school, links: MAPS.back, primary: 'Google Maps from camp',
+    dest: PLACES.school, links: MAPS.back,
     mapTitle: 'Driving route from Westminster Woods to Thornhill',
     tips: [
       'We leave camp after lunch Thursday (~12:30) and are due at <b>Thornhill around 3:00 pm</b>, where families pick up.',
@@ -44,11 +44,11 @@ const directions = (which) => {
       <div><b>${esc(t.dest.name)}</b><span>${esc(t.dest.address)}</span></div>
       <button class="icon-btn" type="button" id="copyAddr" aria-label="Copy address">${icon('copy')}</button>
     </div>
+    <p class="dir-label">Directions to ${esc(t.dest.name)} in</p>
     <div class="btn-grid">
-      <a class="btn" href="${t.links.google}" target="_blank" rel="noopener">${icon('car')} ${t.primary}</a>
-      <a class="btn ghost-dark" href="${t.links.googleHere}" target="_blank" rel="noopener">From here</a>
-      <a class="btn ghost-dark" href="${t.links.apple}" target="_blank" rel="noopener">Apple Maps</a>
-      <a class="btn ghost-dark" href="${t.links.waze}" target="_blank" rel="noopener">Waze</a>
+      <a class="btn" href="${t.links.google}" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="${t.links.apple}" target="_blank" rel="noopener">Apple Maps</a>
+      <a class="btn" href="${t.links.waze}" target="_blank" rel="noopener">Waze</a>
     </div>
     <div class="map-embed" id="mapEmbed">
       <div class="map-offline">${icon('map')}<p>The live map needs a connection.<br>The buttons above still open your maps app.</p></div>
@@ -72,7 +72,7 @@ const campus = () => `
   <p class="muted small center">Pinch, drag or double-tap to zoom. Map is not to scale.</p>
   <section class="card">
     <h2>Key spots</h2>
-    <dl class="pairs">${SPOTS.map(([n, d]) => `<dt>${esc(n)}</dt><dd>${esc(d)}</dd>`).join('')}</dl>
+    <ul class="ilist">${SPOTS.map(([ic, n, d]) => `<li><span class="menu-ic">${icon(ic)}</span><div><b>${esc(n)}</b><p>${esc(d)}</p></div></li>`).join('')}</ul>
     <p class="small"><a href="#/contacts">Emergency phones, radios and the alarm are on Contacts</a>.</p>
   </section>`;
 

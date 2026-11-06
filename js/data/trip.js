@@ -25,30 +25,27 @@ export const PLACES = {
 };
 
 const enc = encodeURIComponent;
-const from = `${PLACES.school.name}, ${PLACES.school.address}`;
-const to = `${PLACES.camp.name}, ${PLACES.camp.address}`;
+// Directions to each destination from wherever you are; the embed previews the full route.
+const directionsTo = (place) => ({
+  google: `https://www.google.com/maps/dir/?api=1&destination=${enc(`${place.name}, ${place.address}`)}&travelmode=driving`,
+  apple: `https://maps.apple.com/?daddr=${enc(place.address)}&dirflg=d`,
+  waze: `https://waze.com/ul?q=${enc(place.address)}&navigate=yes`,
+});
 export const MAPS = {
-  google: `https://www.google.com/maps/dir/?api=1&origin=${enc(from)}&destination=${enc(to)}&travelmode=driving`,
-  googleHere: `https://www.google.com/maps/dir/?api=1&destination=${enc(to)}&travelmode=driving`,
-  apple: `https://maps.apple.com/?saddr=${enc(PLACES.school.address)}&daddr=${enc(PLACES.camp.address)}&dirflg=d`,
-  waze: `https://waze.com/ul?q=${enc(PLACES.camp.address)}&navigate=yes`,
+  ...directionsTo(PLACES.camp),
   embed: `https://www.google.com/maps?saddr=${enc(PLACES.school.address)}&daddr=${enc(PLACES.camp.address)}&output=embed`,
-  // Getting home: the same set, reversed (camp → Thornhill).
+  // Getting home: camp → Thornhill.
   back: {
-    google: `https://www.google.com/maps/dir/?api=1&origin=${enc(to)}&destination=${enc(from)}&travelmode=driving`,
-    googleHere: `https://www.google.com/maps/dir/?api=1&destination=${enc(from)}&travelmode=driving`,
-    apple: `https://maps.apple.com/?saddr=${enc(PLACES.camp.address)}&daddr=${enc(PLACES.school.address)}&dirflg=d`,
-    waze: `https://waze.com/ul?q=${enc(PLACES.school.address)}&navigate=yes`,
+    ...directionsTo(PLACES.school),
     embed: `https://www.google.com/maps?saddr=${enc(PLACES.camp.address)}&daddr=${enc(PLACES.school.address)}&output=embed`,
   },
 };
 
 const DOC = {
-  itinerary: 'https://drive.google.com/file/d/1wyYW0prPxbsaYolV0_zZQMHcNdZmYTpC/view?usp=sharing',
   menu: 'https://docs.google.com/document/d/1F6kLN9EwWtXr--4m7ryxesP6cGObT8iT/edit?usp=sharing',
   dietary: 'https://drive.google.com/file/d/13-Ouqw3JRs9i4Se83sUJVMEHdsJ-hIFa/view?usp=sharing',
   allergens: 'https://drive.google.com/file/d/1QAfWqpTOVpphAm7yT0O9SoyTefpTnJIJ/view?usp=sharing',
-  naturalists: 'https://www.westminsterwoods.org/meet-our-teacher-naturalists',
+  naturalists: 'https://www.westminsterwoods.org/spstaff',
 };
 
 // kind: travel | program | meal | routine | chaperone | evening
@@ -111,20 +108,13 @@ export const SCHEDULE = [
 ];
 
 export const EXPERIENCE = [
-  { title: 'Forest Ecology', text: 'Redwood forest anatomy, food chains and local biodiversity.' },
-  { title: 'Watershed & Stream Ecology', text: 'Aquatic habitats, water chemistry, macro-invertebrates and Coho salmon habitat in Dutch Bill Creek.' },
-  { title: 'Night Ecology & Biomimicry', text: 'Nocturnal adaptations, night-sky observation and how engineering mimics nature.' },
-  { title: 'Social-Emotional Learning', text: 'Cabin life and group activities build cooperation, empathy and independence ahead of middle school.' },
-  { title: 'Campfires & Community', text: 'Redwood amphitheater programs with songs, skits and reflection circles.' },
+  { icon: 'tree', title: 'Forest Ecology', text: 'Redwood forest anatomy, food chains and local biodiversity.' },
+  { icon: 'drop', title: 'Watershed & Stream Ecology', text: 'Aquatic habitats, water chemistry, macro-invertebrates and Coho salmon habitat in Dutch Bill Creek.' },
+  { icon: 'moon', title: 'Night Ecology & Biomimicry', text: 'Nocturnal adaptations, night-sky observation and how engineering mimics nature.' },
+  { icon: 'users', title: 'Social-Emotional Learning', text: 'Cabin life and group activities build cooperation, empathy and independence ahead of middle school.' },
+  { icon: 'fire', title: 'Campfires & Community', text: 'Redwood amphitheater programs with songs, skits and reflection circles.' },
 ];
 
-// Trip at a glance: the one place for logistics.
-export const QUICK = [
-  ['Meet', '8:00 am Tuesday at Thornhill; depart ~8:30'],
-  ['Ride', 'Parent vehicles (carpool)'],
-  ['Return', '~3:00 pm Thursday at Thornhill'],
-  ['Screens', 'Screen-free campus: no phones or electronics for students'],
-];
 export const STAY = [
   'Single-gender cabins with only Thornhill students and two parent chaperones. Cabins have 8–10 beds.',
   'Each cabin area has its own bath house with separate shower stalls, toilets and sinks.',
@@ -142,5 +132,5 @@ export const FAQ = [
   { q: 'Can I call my child?', a: 'Students are screen-free, and calls home tend to make homesickness worse. Teachers and staff will reach out if anything comes up.' },
   { q: 'Cell service & this app', a: 'Service is spotty in the redwoods. This app saves itself for offline use the first time you open it, so open it once on Wi-Fi before you leave.' },
   { q: 'Who leads the program?', a: 'Westminster Woods Teacher Naturalists lead each trail group and evening program; Mr. Wilkins and Ms. Gustafson float between groups.',
-    links: [['Meet the Teacher Naturalists', DOC.naturalists], ['Thornhill\'s itinerary (PDF)', DOC.itinerary]] },
+    links: [['Meet the Teacher Naturalists', DOC.naturalists]] },
 ];

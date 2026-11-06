@@ -1,5 +1,5 @@
-import { esc, icon, at, fmtTime, isStandalone, shareOrCopy, toast } from '../ui.js';
-import { TRIP, QUICK, EXPERIENCE, STAY, FAQ, SCHEDULE } from '../data/trip.js';
+import { esc, icon, at, fmtTime, today, isStandalone, shareOrCopy, toast } from '../ui.js';
+import { TRIP, EXPERIENCE, STAY, FAQ, SCHEDULE } from '../data/trip.js';
 
 
 // Find what's happening now / next during the trip.
@@ -21,18 +21,20 @@ export function nowNext(now = new Date()) {
 function countdown(target) {
   const ms = target - Date.now();
   if (ms <= 0) return null;
-  const d = Math.floor(ms / 864e5), h = Math.floor((ms % 864e5) / 36e5), m = Math.floor((ms % 36e5) / 6e4);
-  return { d, h, m };
+  const d = Math.floor(ms / 864e5), h = Math.floor((ms % 864e5) / 36e5), m = Math.floor((ms % 36e5) / 6e4), s = Math.floor((ms % 6e4) / 1e3);
+  return { d, h, m, s };
 }
 
 function statusCard() {
   const start = new Date(TRIP.start), end = new Date(TRIP.end), now = new Date();
   if (now < start) {
     const c = countdown(start);
-    return `<div class="countdown" aria-label="Countdown to departure">
+    const two = (n) => String(n).padStart(2, '0');
+    return `<div class="countdown" role="timer" aria-label="Countdown to departure">
       <div><b>${c.d}</b><span>days</span></div>
-      <div><b>${c.h}</b><span>hours</span></div>
-      <div><b>${c.m}</b><span>min</span></div>
+      <div><b>${two(c.h)}</b><span>hours</span></div>
+      <div><b>${two(c.m)}</b><span>min</span></div>
+      <div><b>${two(c.s)}</b><span>sec</span></div>
     </div>
     <p class="hero-note">until we meet at Thornhill: <b>Tue Nov 17, 8:00 am</b></p>`;
   }
@@ -44,6 +46,35 @@ function statusCard() {
     ${cur ? `<a class="nn now" href="#/schedule"><small>Now</small><b>${esc(cur.title)}</b><span>${fmtTime(cur.t)}${cur.where ? ' · ' + esc(cur.where) : ''}</span></a>` : ''}
     ${next ? `<a class="nn" href="#/schedule"><small>Next · ${esc(next.day.short)}</small><b>${esc(next.title)}</b><span>${fmtTime(next.t)}${next.where ? ' · ' + esc(next.where) : ''}</span></a>` : ''}
   </div>`;
+}
+
+// The day's major activities (the ones that go on the calendar). On a trip day that's today;
+// before the trip it previews day one; after the trip there's nothing to show.
+function glance(now = new Date()) {
+  let i = SCHEDULE.findIndex((d) => d.date === today(now));
+  const isToday = i >= 0;
+  if (!isToday) {
+    if (now > new Date(TRIP.end)) return '';
+    i = 0;
+  }
+  const day = SCHEDULE[i];
+  const items = day.items.filter((it) => it.cal);
+  const rows = items.map((it, j) => {
+    const start = at(day.date, it.t);
+    const nextStart = items[j + 1] && at(day.date, items[j + 1].t);
+    const end = it.end ? at(day.date, it.end) : nextStart;
+    const state = !isToday || now < start ? '' : !end || now < end ? 'now' : 'past';
+    return `<li class="${state}">
+      <time>${fmtTime(it.t)}${it.approx ? '<small>approx</small>' : ''}</time>
+      <span><b>${esc(it.title)}</b>${state === 'now' ? '<em>Now</em>' : ''}${it.where ? `<small>${esc(it.where)}</small>` : ''}</span>
+    </li>`;
+  }).join('');
+  return `<section class="card" id="glance">
+    <h2>${isToday ? 'Today' : esc(day.day)} at a glance</h2>
+    <p class="muted small glance-sub">${esc(day.label)}${isToday ? '' : ' · ' + esc(day.short) + ' ' + day.date.slice(5).replace('-', '/')}</p>
+    <ol class="glance">${rows}</ol>
+    <a class="btn small" href="#/schedule?day=${i}">${icon('calendar')} Full schedule</a>
+  </section>`;
 }
 
 export default {
@@ -58,14 +89,7 @@ export default {
       </section>
 
       <div class="page">
-        <section class="card">
-          <h2>Trip at a glance</h2>
-          <dl class="facts">${QUICK.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
-          <div class="btn-row">
-            <a class="btn small" href="#/schedule">${icon('calendar')} Full schedule</a>
-            <a class="btn small ghost-dark" href="#/map">${icon('car')} Directions</a>
-          </div>
-        </section>
+        ${glance()}
 
         <section class="card flush">
           <div class="video" id="video">
@@ -80,7 +104,7 @@ export default {
 
         <section class="card">
           <h2>What students will experience</h2>
-          <dl class="pairs">${EXPERIENCE.map((e) => `<dt>${esc(e.title)}</dt><dd>${esc(e.text)}</dd>`).join('')}</dl>
+          <ul class="ilist">${EXPERIENCE.map((e) => `<li><span class="menu-ic">${icon(e.icon)}</span><div><b>${esc(e.title)}</b><p>${esc(e.text)}</p></div></li>`).join('')}</ul>
         </section>
 
         <section class="card">
@@ -109,7 +133,7 @@ export default {
           </div>
         </section>
 
-        <p class="footnote">Unofficial trip helper made by Thornhill parents. Not affiliated with Westminster Woods. Content adapted from the WW packing list, trip slides and Chaperone Handbook.</p>
+        <p class="footnote">This app was built with <span role="img" aria-label="love">❤️</span> for Thornhill by <a href="https://sparkler.fun/" target="_blank" rel="noopener">SPARKLER*FUN</a>. Not affiliated with Thornhill Elementary School or Westminster Woods. Site content adapted from materials provided to parents and chaperones.</p>
       </div>`;
 
     el.querySelector('#installBtn')?.addEventListener('click', async () => {
@@ -135,10 +159,19 @@ export default {
       video.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${TRIP.video}?autoplay=1&rel=0&playsinline=1" title="Westminster Woods overview video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe>`;
     });
 
+    // Before the trip the countdown ticks every second; otherwise Now/Next and the glance refresh every 30 s.
+    let n = 0;
     const tick = setInterval(() => {
-      const h = el.querySelector('#heroStatus');
-      if (h) h.innerHTML = statusCard();
-    }, 30000);
+      n++;
+      const before = Date.now() < new Date(TRIP.start);
+      if (before || n % 30 === 0) {
+        const h = el.querySelector('#heroStatus');
+        if (h) h.innerHTML = statusCard();
+      }
+      if (n % 30) return;
+      const g = el.querySelector('#glance'), fresh = glance();
+      if (g && fresh) g.outerHTML = fresh; else if (g) g.remove();
+    }, 1000);
     return () => clearInterval(tick);
   },
 };

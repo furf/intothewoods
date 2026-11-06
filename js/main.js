@@ -6,15 +6,16 @@ const ROUTES = {
   '': { mod: 'home', tab: 'home', title: 'Into the Woods' },
   schedule: { mod: 'schedule', tab: 'schedule', title: 'Schedule' },
   packing: { mod: 'packing', tab: 'packing', title: 'Packing' },
-  guide: { mod: 'guide', tab: 'guide', title: 'Chaperones' },
-  contacts: { mod: 'contacts', tab: 'contacts', title: 'Contacts' },
-  // Tools live under the Chaperones tab; Back returns there.
-  map: { mod: 'map', tab: 'guide', title: 'Map & Directions', back: true },
-  games: { mod: 'games', tab: 'guide', title: 'Games & Riddles', back: true },
-  compass: { mod: 'compass', tab: 'guide', title: 'Compass', back: true },
-  light: { mod: 'light', tab: 'guide', title: 'Night Light', back: true, immersive: true },
-  field: { mod: 'field', tab: 'guide', title: 'Field Guide', back: true },
-  cabin: { mod: 'cabin', tab: 'guide', title: 'Cabin Agreement', back: true },
+  map: { mod: 'map', tab: 'map', title: 'Driving' },
+  guide: { mod: 'guide', tab: 'guide', title: 'Guide' },
+  // Contacts opens from the phone button in the header.
+  contacts: { mod: 'contacts', title: 'Contacts', back: '#/' },
+  // Tools live under the Guide tab; Back returns there.
+  games: { mod: 'games', tab: 'guide', title: 'Games & Riddles', back: '#/guide' },
+  compass: { mod: 'compass', tab: 'guide', title: 'Compass', back: '#/guide' },
+  light: { mod: 'light', tab: 'guide', title: 'Night Light', back: '#/guide', immersive: true },
+  field: { mod: 'field', tab: 'guide', title: 'Field Guide', back: '#/guide' },
+  cabin: { mod: 'cabin', tab: 'guide', title: 'Cabin Agreement', back: '#/guide' },
 };
 // Old links (home-screen shortcuts, shared URLs) keep working.
 const ALIASES = { more: 'guide', travel: 'map' };
@@ -58,6 +59,9 @@ async function navigate() {
     $('#appTitle').textContent = route.title;
     document.title = name ? `${route.title} · Into the Woods` : 'Into the Woods';
     $('#backBtn').hidden = !route.back;
+    if (route.back) $('#backBtn').setAttribute('href', route.back);
+    const cb = $('#contactsBtn');
+    if (name === 'contacts') cb.setAttribute('aria-current', 'page'); else cb.removeAttribute('aria-current');
     $$('#tabbar a').forEach((a) => {
       const on = a.dataset.tab === route.tab;
       a.classList.toggle('active', on);
@@ -71,7 +75,8 @@ async function navigate() {
     firstRender = false;
   };
   if (document.startViewTransition && !same && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document.startViewTransition(swap);
+    // A fast second tap skips the animation (the page still updates); don't log that as an error.
+    document.startViewTransition(swap).ready.catch(() => {});
   } else {
     swap();
   }
@@ -80,7 +85,7 @@ async function navigate() {
 window.addEventListener('hashchange', navigate);
 navigate();
 
-// Back button: return to the previous in-app screen when there is one; otherwise go to Chaperones.
+// Back button: return to the previous in-app screen when there is one; otherwise go to the route's parent.
 let internalNavs = 0;
 window.addEventListener('hashchange', () => { internalNavs++; });
 $('#backBtn').addEventListener('click', (e) => {
@@ -88,25 +93,26 @@ $('#backBtn').addEventListener('click', (e) => {
 });
 
 // ---- Online / offline status ----
-// Silent when all is well. Only shows when offline, or while the app is still saving itself.
+// Always visible: signal is spotty in the woods, so chaperones can see at a glance whether they're connected.
 const statusBtn = $('#status');
 const swSupported = 'serviceWorker' in navigator;
 let offlineReady = !swSupported;
 function renderStatus() {
   const online = navigator.onLine;
   const saving = online && !offlineReady;
-  statusBtn.hidden = online && !saving;
   statusBtn.classList.toggle('offline', !online);
-  $('.status-text', statusBtn).textContent = online ? 'Saving…' : 'Offline';
-  statusBtn.setAttribute('aria-label', online
-    ? 'Saving the app for offline use'
-    : 'Offline. Everything in the app still works');
+  statusBtn.classList.toggle('saving', saving);
+  $('.status-text', statusBtn).textContent = !online ? 'Offline' : saving ? 'Saving…' : 'Online';
+  statusBtn.setAttribute('aria-label', !online
+    ? 'Offline. Everything in the app still works'
+    : saving ? 'Online. Saving the app for offline use' : 'Online');
 }
 window.addEventListener('online', () => { renderStatus(); toast('Back online'); });
 window.addEventListener('offline', () => { renderStatus(); toast('You\'re offline. The app still works; live maps and video need signal.', 4000); });
 statusBtn.addEventListener('click', () => {
   if (!navigator.onLine) toast('You\'re offline. Everything in the app still works; live maps and video need signal.', 4000);
-  else toast('Saving the app for offline use. Keep it open for a moment.');
+  else if (!offlineReady) toast('Saving the app for offline use. Keep it open for a moment.');
+  else toast('You\'re online. Live maps and video will load. The rest works either way.', 3200);
 });
 renderStatus();
 

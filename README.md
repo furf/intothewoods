@@ -7,18 +7,24 @@ Live: https://furf.github.io/intothewoods/
 
 ## Pages
 
-Five tabs: **Home · Schedule · Packing · Chaperones · Contacts**. Each fact lives in one place:
+Five tabs: **Home · Packing · Driving · Schedule · Guide**. The header holds an
+always-on Online/Offline badge (signal is spotty in the woods) and a phone button for
+**Contacts**. Each fact lives in one place:
 
 | Route | What's there |
 | --- | --- |
-| `#/` Home | Countdown → live "Now / Next", trip at a glance, overview video, what students will experience, where they stay, FAQ with its documents, install & share |
-| `#/schedule` | Day-by-day timeline. Programs are prominent; routines and meals are compact rows you tap to expand. Chaperone notes toggle, "Now" button, add-to-calendar |
+| `#/` Home | Countdown (to the second) → live "Now / Next", today at a glance (the day's major activities; previews day one before the trip), overview video, what students will experience, where they stay, FAQ with its documents, install & share |
 | `#/packing` | Student and chaperone lists (the design reference for the rest of the app) |
-| `#/guide` | Chaperones: at-camp tools (map, night light, compass), cabin activities (agreement, games, field guide), handbook sections |
-| `#/contacts` | Emergency numbers and the on-campus alarm, phones, radios and kits; camp, Thornhill, chaperones; save all to your phone; your own contacts |
-| `#/map`, `#/light`, `#/compass`, `#/cabin`, `#/games`, `#/field` | Opened from Chaperones, with a Back button |
+| `#/map` | Driving: getting there, getting home (opens by default on the last day), campus map |
+| `#/schedule` | Day-by-day timeline (`?day=0–2` opens a day). Programs are prominent; routines and meals are compact rows you tap to expand, and whatever is happening now opens on its own. Chaperone notes toggle, "Now" button, add-to-calendar |
+| `#/guide` | Guide: before you go (packing list, cabin agreement, games, field guide), handbook sections, then what you might need at camp (campus map, night light, compass) |
+| `#/contacts` | From the header. Emergency numbers and the on-campus alarm, phones, radios and kits; camp, Thornhill, chaperones; save all to your phone; your own contacts |
+| `#/light`, `#/compass`, `#/cabin`, `#/games`, `#/field` | Opened from Guide, with a Back button |
 
-Old `#/more` and `#/travel` links redirect to Chaperones and the map.
+Phones are mostly put away at camp (photos aside), so the app is built for
+preparation, guidance and travel first.
+
+Old `#/more` and `#/travel` links redirect to Guide and Driving.
 
 ## Design rules
 
@@ -58,4 +64,4 @@ whole app, including fonts, images and icons, is about 500 KB. Every page is
 precached by the service worker, so the app runs fully offline.
 Self-hosted fonts: Gochi Hand & Nunito (SIL OFL).
 
-Unofficial helper made by Thornhill parents; not affiliated with Westminster Woods.
+Built with ❤️ for Thornhill by SPARKLER*FUN. Not affiliated with Thornhill Elementary School or Westminster Woods.

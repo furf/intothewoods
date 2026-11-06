@@ -24,24 +24,35 @@ export default {
         const solved = new Set(store.get('itw:solved', []));
         v.innerHTML = `
           <p class="lead">Tap a card to reveal the answer. Great for trail walks and the dinner line.</p>
-          <p class="muted small" id="solvedCount"></p>
+          <div class="toolbar">
+            <label class="toggle"><input type="checkbox" id="showAll"><span class="switch" aria-hidden="true"></span>Show all answers</label>
+            <span class="muted small" id="solvedCount"></span>
+          </div>
           <div class="riddles">${RIDDLES.map(([q, a], i) => `
-            <button class="riddle ${solved.has(i) ? 'flipped' : ''}" type="button" data-i="${i}" aria-pressed="${solved.has(i)}">
+            <button class="riddle" type="button" data-i="${i}" aria-pressed="false">
               <span class="riddle-n">#${i + 1}</span>
               <span class="riddle-q">${esc(q)}</span>
               <span class="riddle-a"><b>Answer:</b> ${esc(a)}</span>
-            </button>`).join('')}</div>
-          <button class="btn ghost small" type="button" id="hideAll">Hide all answers</button>`;
-        const count = () => { $('#solvedCount', v).textContent = `${solved.size} of ${RIDDLES.length} revealed`; };
-        count();
-        $$('.riddle', v).forEach((b) => b.addEventListener('click', () => {
-          const i = Number(b.dataset.i);
-          const on = b.classList.toggle('flipped');
-          b.setAttribute('aria-pressed', String(on));
-          if (on) { solved.add(i); buzz(); } else solved.delete(i);
-          store.set('itw:solved', [...solved]); count();
+            </button>`).join('')}</div>`;
+        const cards = $$('.riddle', v);
+        const showAll = $('#showAll', v);
+        // Cards and the switch stay in step: the switch is on only when every answer is showing.
+        const sync = () => {
+          cards.forEach((c, i) => { const on = solved.has(i); c.classList.toggle('flipped', on); c.setAttribute('aria-pressed', String(on)); });
+          showAll.checked = solved.size === RIDDLES.length;
+          $('#solvedCount', v).textContent = `${solved.size} of ${RIDDLES.length} revealed`;
+          store.set('itw:solved', [...solved]);
+        };
+        sync();
+        cards.forEach((c, i) => c.addEventListener('click', () => {
+          if (solved.has(i)) solved.delete(i); else { solved.add(i); buzz(); }
+          sync();
         }));
-        $('#hideAll', v).addEventListener('click', () => { store.set('itw:solved', []); views.riddles(); });
+        showAll.addEventListener('change', () => {
+          solved.clear();
+          if (showAll.checked) RIDDLES.forEach((_, i) => solved.add(i));
+          sync();
+        });
       },
       games() {
         v.innerHTML = `

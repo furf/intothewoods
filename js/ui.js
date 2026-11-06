@@ -44,6 +44,14 @@ const P = {
   zoomin: '<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4M8 11h6M11 8v6"/>',
   zoomout: '<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4M8 11h6"/>',
   expand: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',
+  tree: '<path d="M12 3 6.5 10.5h3L5 17h14l-4.5-6.5h3z"/><path d="M12 17v4"/>',
+  fire: '<path d="M12 3c.5 3 5 5 5 10a5 5 0 0 1-10 0c0-2.4 1.3-4 2.5-5 .3 1.8 1.2 3 2.5 3-.5-2.8-.7-5.3 0-8z"/><path d="M5 21h14"/>',
+  flag: '<path d="M6 21V4"/><path d="M6 4h12l-3 4 3 4H6"/>',
+  utensils: '<path d="M5 3v5a2 2 0 0 0 4 0V3M7 3v18"/><path d="M18 21V3c-2.5 1.5-3.5 4.5-3.5 9H18"/>',
+  cabin: '<path d="M2 12 12 4l10 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/>',
+  ball: '<circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M5.6 5.6c2.6 3.2 2.6 9.6 0 12.8M18.4 5.6c-2.6 3.2-2.6 9.6 0 12.8"/>',
+  mountain: '<path d="M2 20 9 8l4 6 3-4 6 10z"/>',
+  fish: '<path d="M2.5 12c2.8-3.8 8-5 12.5-2.5L20 6v12l-5-3.5C10.5 17 5.3 15.8 2.5 12z"/><path d="M7 11.5v.5"/>',
 };
 export const icon = (name, cls = '') =>
   `<svg class="ic ${cls}" viewBox="0 0 24 24" aria-hidden="true">${P[name] || ''}</svg>`;

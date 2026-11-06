@@ -5,16 +5,17 @@ const pairs = (list) => `<dl class="pairs">${list.map(([k, v]) => `<dt>${esc(k)}
 const tools = (list) => pairs(list.map(([, t, d]) => [t, d]));
 const row = ([href, ic, t, d]) => `<a href="${href}"><span class="menu-ic">${icon(ic)}</span><span><b>${t}</b><small>${d}</small></span><span class="chev" aria-hidden="true"></span></a>`;
 
-// Things chaperones open at camp, grouped by when they reach for them.
-const AT_CAMP = [
-  ['#/map', 'map', 'Map &amp; directions', 'Campus map, driving route, address'],
+// Phones are mostly put away at camp (photos aside), so the guide leads with preparation.
+const BEFORE = [
+  ['#/packing?list=chaperone', 'pack', 'Your packing list', 'What grown-ups bring'],
+  ['#/cabin', 'tent', 'Cabin agreement', 'Plan it now, do it at your first Cabin Time'],
+  ['#/games', 'puzzle', 'Games &amp; riddles', 'Learn a few before you go'],
+  ['#/field', 'leaf', 'Field guide', 'Redwoods, banana slugs, coho and stars'],
+];
+const IF_NEEDED = [
+  ['#/map?v=campus', 'map', 'Campus map', 'Cabins, dining hall, rec areas, trails'],
   ['#/light', 'light', 'Night light', 'Red cabin light that keeps the screen on'],
   ['#/compass', 'compass', 'Compass', 'Save a spot and find your way back'],
-];
-const WITH_CABIN = [
-  ['#/cabin', 'tent', 'Cabin agreement', 'Do it at your first Cabin Time'],
-  ['#/games', 'puzzle', 'Games &amp; riddles', 'Easy to lead, anywhere'],
-  ['#/field', 'leaf', 'Field guide', 'Redwoods, banana slugs, coho and stars'],
 ];
 
 // Ordered by when you'll need it: before the trip → during the day → at night → reference.
@@ -53,11 +54,8 @@ export default {
       <div class="page">
         <p class="mission">${esc(MISSION)}</p>
 
-        <h2 class="group-title">At camp</h2>
-        <nav class="menu" aria-label="At camp">${AT_CAMP.map(row).join('')}</nav>
-
-        <h2 class="group-title">With your cabin</h2>
-        <nav class="menu" aria-label="With your cabin">${WITH_CABIN.map(row).join('')}</nav>
+        <h2 class="group-title">Before you go</h2>
+        <nav class="menu" aria-label="Before you go">${BEFORE.map(row).join('')}</nav>
 
         <h2 class="group-title">Handbook</h2>
         ${SECTIONS.map(([id, t, body]) => `
@@ -66,7 +64,9 @@ export default {
             <div class="acc-body">${body()}</div>
           </details>`).join('')}
 
-        <nav class="menu" aria-label="Before you go">${row(['#/packing?list=chaperone', 'pack', 'Your packing list', 'What grown-ups bring'])}</nav>
+        <h2 class="group-title">If you need it at camp</h2>
+        <p class="lead small">Phones stay put away during programs, except for photos.</p>
+        <nav class="menu" aria-label="If you need it at camp">${IF_NEEDED.map(row).join('')}</nav>
 
         <p class="footnote">Condensed from the Westminster Woods Chaperone Handbook. You'll get a full orientation at camp on day one.</p>
       </div>`;

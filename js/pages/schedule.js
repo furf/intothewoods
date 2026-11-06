@@ -3,7 +3,9 @@ import { SCHEDULE, PLACES } from '../data/trip.js';
 
 const KIND = { travel: 'Travel', program: 'Program', meal: 'Meal', routine: '', chaperone: 'Chaperones', evening: 'Evening' };
 
-function pickDay() {
+function pickDay(params) {
+  const asked = Number(params?.get('day'));
+  if (params?.has('day') && SCHEDULE[asked]) return asked;
   const idx = SCHEDULE.findIndex((d) => d.date === today());
   return idx >= 0 ? idx : store.get('itw:day', 0);
 }
@@ -62,8 +64,8 @@ function compactBody(it) {
 }
 
 export default {
-  render(el) {
-    let dayIdx = pickDay();
+  render(el, { params } = {}) {
+    let dayIdx = pickDay(params);
     el.innerHTML = `
       <div class="page">
         <div class="seg" role="group" aria-label="Trip day">
