@@ -17,7 +17,7 @@ function vcard(c) {
 let registry = [];
 function card(c, opts = {}) {
   if (!opts.noSave && (c.phone || c.email)) registry.push(c);
-  const canText = c.phone && !/^9-?1-?1$/.test(c.phone) && !/^1-800/.test(c.phone);
+  const canText = c.phone && !/^9-?1-?1$/.test(c.phone) && !/^(1-800|\(800\))/.test(c.phone);
   return `<article class="contact ${opts.cls || ''}">
     <div class="avatar" aria-hidden="true">${opts.cls === 'urgent' ? icon('alert') : esc((c.name.match(/\b\w/g) || []).slice(0, 2).join(''))}</div>
     <div class="contact-main">
