@@ -100,7 +100,7 @@ To change content:
 3. Run the app and examine the changed page.
 4. Commit the change.
 
-> **Note:** Teacher and chaperone phone numbers are in `js/data/people.js`. Some numbers are not available yet. These contacts show "Phone: coming soon".
+> **Note:** Teacher and chaperone phone numbers are in `js/data/people.js`. Some numbers are not available yet. These contacts show "Number coming soon".
 
 ### Add a page
 
@@ -167,7 +167,7 @@ Some pages read query parameters:
 
 ### Offline support
 
-The service worker caches all files in the `SHELL` list when it installs. The cache has approximately 33 files and 540 KB, including fonts, images and icons.
+The service worker caches all files in the `SHELL` list when it installs. The cache has 32 files (538 KB). This total includes the fonts, images and icons.
 
 - Pages, scripts, styles and images come from the cache first.
 - The YouTube video, the live Google map and Google Drive documents need a connection.
