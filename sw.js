@@ -1,5 +1,5 @@
 // Offline-first service worker. Bump VERSION whenever any file below changes.
-const VERSION = 'itw-v12';
+const VERSION = 'itw-v13';
 const SHELL = [
   './',
   'index.html',
@@ -22,16 +22,16 @@ const SHELL = [
   'js/data/people.js',
   'js/data/trip.js',
   'js/main.js',
-  'js/pages/cabin.js',
+  'js/pages/cabin-agreement.js',
+  'js/pages/checklist.js',
   'js/pages/compass.js',
   'js/pages/contacts.js',
-  'js/pages/field.js',
+  'js/pages/directions.js',
+  'js/pages/field-guide.js',
   'js/pages/games.js',
   'js/pages/guide.js',
   'js/pages/home.js',
-  'js/pages/light.js',
-  'js/pages/map.js',
-  'js/pages/packing.js',
+  'js/pages/night-light.js',
   'js/pages/schedule.js',
   'js/ui.js',
 ];
