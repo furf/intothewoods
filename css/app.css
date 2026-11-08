@@ -401,6 +401,9 @@ input:focus { outline: none; border-style: solid; border-color: var(--fern); }
 .steps li { counter-increment: s; display: grid; grid-template-columns: 30px 1fr; gap: 10px; padding: 7px 0; }
 .steps li::before { content: counter(s); width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--fern); color: #0f2416; font-weight: 800; font-size: 14px; }
 .steps li b { display: block; }
+/* Title and description both sit in the text column, under each other. */
+.steps li > b, .steps li > span { grid-column: 2; }
+.steps li:has(> b) { row-gap: 2px; }
 .steps li span { color: var(--muted); }
 .steps li b + span { font-size: 15px; }
 
