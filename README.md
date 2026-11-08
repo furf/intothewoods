@@ -26,11 +26,11 @@ The app has five sections in the tab bar:
 | --- | --- | --- |
 | Home | `#/home` | Countdown to departure. During the trip, it shows what happens now and next. It also shows today at a glance, an overview video, what students do, where they stay, the FAQ, and install and share buttons. |
 | Checklist | `#/checklist` | Packing checklists for students and chaperones. Progress is saved on the device. |
-| Directions | `#/directions` | Directions to camp, directions home, and the campus map. |
+| Directions | `#/directions` | Directions to camp, directions home, and the campus map. The campus map also shows on-campus emergency information. |
 | Schedule | `#/schedule` | The timeline for each day of the trip, with notes for chaperones. |
 | Guide | `#/guide` | The chaperone handbook, and links to the tools below. |
 
-The header has an online/offline badge and a phone button. The phone button opens Contacts (`#/contacts`): emergency numbers, on-campus emergency information, and camp, school and chaperone contacts.
+The header has an online/offline badge and a phone button. The phone button opens Contacts (`#/contacts`): emergency numbers, and camp, school and chaperone contacts.
 
 The Guide links to these tools. Each tool has a Back button that returns to the Guide.
 
