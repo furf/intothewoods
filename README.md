@@ -4,6 +4,7 @@ Into the Woods is an installable web app for the Thornhill School overnight trip
 Parents and chaperones use it to prepare for the trip and to find information at camp.
 The app works offline. Cell signal at camp is weak or not available.
 
+- **Production:** https://thornhill-intothewoods.vercel.app/
 - **Stack:** static HTML, CSS and JavaScript modules. There is no framework and no build step.
 - **Host:** Vercel. The `main` branch deploys to production. Each other branch gets a preview deployment.
 - **Content:** trip data is in plain JavaScript files in `js/data/`.
