@@ -145,7 +145,7 @@ export default {
     });
     el.querySelector('#shareBtn').addEventListener('click', () => shareOrCopy({
       title: 'Into the Woods',
-      text: 'Thornhill\'s Westminster Woods trip app: schedule, packing list, directions and chaperone guide. Works offline.',
+      text: 'Thornhill\'s Westminster Woods trip app: schedule, packing checklist, directions and chaperone guide. Works offline.',
       url: location.href.split('#')[0],
     }));
 

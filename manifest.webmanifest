@@ -1,7 +1,7 @@
 {
   "name": "Into the Woods: Westminster Woods Trip",
   "short_name": "Into the Woods",
-  "description": "Thornhill's overnight trip to Westminster Woods: schedule, packing, chaperone guide, maps and contacts. Works offline.",
+  "description": "Thornhill's overnight trip to Westminster Woods: schedule, packing checklist, chaperone guide, maps and contacts. Works offline.",
   "id": "./",
   "start_url": "./#/",
   "scope": "./",
@@ -18,7 +18,7 @@
   ],
   "shortcuts": [
     { "name": "Schedule", "url": "./#/schedule", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Packing list", "url": "./#/checklist", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Packing checklist", "url": "./#/checklist", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
     { "name": "Contacts", "url": "./#/contacts", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
     { "name": "Night light", "url": "./#/night-light", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
   ]
