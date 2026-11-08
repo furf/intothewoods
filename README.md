@@ -24,7 +24,7 @@ The app has five sections in the tab bar:
 | Section | Route | Purpose |
 | --- | --- | --- |
 | Home | `#/home` | Countdown to departure. During the trip, it shows what happens now and next. It also shows today at a glance, an overview video, what students do, where they stay, the FAQ, and install and share buttons. |
-| Checklist | `#/checklist` | Packing lists for students and chaperones. Progress is saved on the device. |
+| Checklist | `#/checklist` | Packing checklists for students and chaperones. Progress is saved on the device. |
 | Directions | `#/directions` | Directions to camp, directions home, and the campus map. |
 | Schedule | `#/schedule` | The timeline for each day of the trip, with notes for chaperones. |
 | Guide | `#/guide` | The chaperone handbook, and links to the tools below. |
@@ -88,7 +88,7 @@ All trip content is in `js/data/`. Each file exports plain arrays and objects.
 | --- | --- |
 | `trip.js` | Dates, places, map links, schedule, FAQ, and what students do. |
 | `people.js` | Emergency numbers, on-campus emergency information, teachers, school and chaperones. |
-| `packing.js` | The student and chaperone packing lists. |
+| `packing.js` | The student and chaperone packing checklists. |
 | `guide.js` | The chaperone handbook text. |
 | `games.js` | Riddles, games and question cards. |
 | `field.js` | Field guide entries. |
@@ -161,7 +161,7 @@ Some pages read query parameters:
 
 | URL | Result |
 | --- | --- |
-| `#/checklist?list=chaperone` | Opens the chaperone packing list. |
+| `#/checklist?list=chaperone` | Opens the chaperone packing checklist. |
 | `#/directions?v=campus` | Opens the campus map. |
 | `#/schedule?day=0` | Opens a day of the trip. Use `0`, `1` or `2`. |
 
