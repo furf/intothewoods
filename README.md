@@ -5,7 +5,7 @@ Parents and chaperones use it to prepare for the trip and to find information at
 The app works offline. Cell signal at camp is weak or not available.
 
 - **Stack:** static HTML, CSS and JavaScript modules. There is no framework and no build step.
-- **Hosting:** Vercel. The `main` branch deploys to production. Each other branch gets a preview deployment.
+- **Host:** Vercel. The `main` branch deploys to production. Each other branch gets a preview deployment.
 - **Content:** trip data is in plain JavaScript files in `js/data/`.
 
 ## Contents
@@ -137,11 +137,11 @@ Installed copies of the app download the new version in the background. The app 
 - `js/main.js` is the router. It reads the URL hash, loads the page module, and renders the page into `#view`.
 - `js/pages/*.js` contains one module for each route.
 - `js/data/*.js` contains the trip content.
-- `js/ui.js` contains shared helpers: icons, storage, toasts, formatting and downloads.
+- `js/ui.js` contains shared helpers: icons, storage, toasts, phone number format and downloads.
 - `css/app.css` contains all styles.
 - `sw.js` is the service worker.
 
-### Routing
+### Routes
 
 The router uses hash URLs, for example `#/checklist?list=chaperone`. Hash URLs work on a static host without server rewrites.
 
