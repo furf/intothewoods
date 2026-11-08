@@ -2,7 +2,7 @@
 
 export const EMERGENCY = [
   { name: 'Emergency services', role: 'Police · Fire · Ambulance', phone: '911', note: 'Call first, then a Thornhill teacher and WW staff.' },
-  { name: 'Poison Control', role: 'National hotline, 24/7', phone: '1-800-222-1222' },
+  { name: 'Poison Control', role: 'National hotline, 24/7', phone: '(800) 222-1222' },
 ];
 
 export const ON_SITE = [
@@ -25,5 +25,5 @@ export const SCHOOL = {
 };
 
 export const CHAPERONES = [
-  { name: 'David Furfero', role: 'Chaperone · Parent of Laila Furfero', phone: '347-878-3873', email: 'furf@furf.com' },
+  { name: 'David Furfero', role: 'Chaperone · Parent of Laila Furfero', phone: '(347) 878-3873', email: 'furf@furf.com' },
 ];
