@@ -5,7 +5,7 @@ Parents and chaperones use it to prepare for the trip and to find information at
 The app works offline. Cell signal at camp is weak or not available.
 
 - **Stack:** static HTML, CSS and JavaScript modules. There is no framework and no build step.
-- **Hosting:** Vercel. The `main` branch deploys to production. Each other branch gets a preview deployment.
+- **Host:** Vercel. The `main` branch deploys to production. Each other branch gets a preview deployment.
 - **Content:** trip data is in plain JavaScript files in `js/data/`.
 
 ## Contents
@@ -100,7 +100,7 @@ To change content:
 3. Run the app and examine the changed page.
 4. Commit the change.
 
-> **Note:** Teacher and chaperone phone numbers are in `js/data/people.js`. Some numbers are not available yet. These contacts show "Phone: coming soon".
+> **Note:** Teacher and chaperone phone numbers are in `js/data/people.js`. Some numbers are not available yet. These contacts show "Number coming soon". You can write a number in any format. Contacts shows it as (###) ###-####.
 
 ### Add a page
 
@@ -137,11 +137,11 @@ Installed copies of the app download the new version in the background. The app 
 - `js/main.js` is the router. It reads the URL hash, loads the page module, and renders the page into `#view`.
 - `js/pages/*.js` contains one module for each route.
 - `js/data/*.js` contains the trip content.
-- `js/ui.js` contains shared helpers: icons, storage, toasts, formatting and downloads.
+- `js/ui.js` contains shared helpers: icons, storage, toasts, phone number format and downloads.
 - `css/app.css` contains all styles.
 - `sw.js` is the service worker.
 
-### Routing
+### Routes
 
 The router uses hash URLs, for example `#/checklist?list=chaperone`. Hash URLs work on a static host without server rewrites.
 
@@ -167,7 +167,7 @@ Some pages read query parameters:
 
 ### Offline support
 
-The service worker caches all files in the `SHELL` list when it installs. The cache has approximately 33 files and 540 KB, including fonts, images and icons.
+The service worker caches all files in the `SHELL` list when it installs. The cache has 32 files (538 KB). This total includes the fonts, images and icons.
 
 - Pages, scripts, styles and images come from the cache first.
 - The YouTube video, the live Google map and Google Drive documents need a connection.
@@ -176,6 +176,24 @@ The service worker caches all files in the `SHELL` list when it installs. The ca
 ### Data on the device
 
 Checklist progress is in `localStorage` with the prefix `intothewoods:`. Settings and contacts that people add use the prefix `itw:`. The app asks the browser to keep this data (`navigator.storage.persist()`). The app does not send data to a server.
+
+### Phone numbers
+
+Contacts shows each phone number in one format. The `formatPhone()` helper in `js/ui.js` applies the format when the page renders. The helper does not change the stored value.
+
+| Number | Result |
+| --- | --- |
+| 10 digits, or 11 digits that start with 1 | (###) ###-####. The first digit (1) is removed. |
+| Other numbers, for example `911` or `+44 20 7946 0958` | No change. |
+
+The same rules apply to the trip data and to contacts that people add on the device.
+
+The **Text** button does not show for these numbers:
+
+- `911`
+- Toll-free numbers: area codes 800, 833, 844, 855, 866, 877 and 888
+
+The **Save all trip contacts to my phone** button saves the camp, school and chaperone contacts that have a phone number or an email address. It does not save the emergency numbers or the contacts that people add.
 
 ### Design rules
 
@@ -215,6 +233,13 @@ Add the link to the related FAQ entry in `js/data/trip.js`.
 3. Make small commits. Use [Conventional Commits](https://www.conventionalcommits.org/) for the messages, for example `feat(nav): rename Packing section to Checklist`.
 4. Update this README in the same pull request when a change makes it incorrect.
 5. Push your commits and update the pull request title and description.
+
+Claude Code uses the project skills in `.claude/skills/`:
+
+| Skill | Purpose |
+| --- | --- |
+| `workflow` | The steps above, scope rules, consistency rules and tests. |
+| `readme` | The rules for this README: structure, ASD-STE100 style and accuracy. |
 
 ---
 

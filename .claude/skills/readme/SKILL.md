@@ -1,6 +1,6 @@
 ---
 name: readme
-description: Write or update README.md for this repository. Use when a change makes the README incorrect (routes, pages, files, data, deployment, workflow), when asked to document something, or when reviewing docs. Applies ASD-STE100, an IC4 software engineer audience, the inverted pyramid and the project's tutorial section structure.
+description: Write or update README.md for this repository. Use when a change makes the README incorrect (routes, pages, files, data, deployment, workflow), when asked to document something, or to review docs. Applies ASD-STE100, an IC4 software engineer audience, the inverted pyramid and the project's tutorial section structure.
 ---
 
 # README
@@ -16,7 +16,7 @@ Update the README when a change affects any of these:
 - How to run, edit, add a page or release
 - Offline behavior, the service worker update flow or the `SHELL` contents
 - Deployment (Vercel: `main` is production, other branches get previews)
-- The contributing workflow
+- The workflow for contributors
 - Design rules
 
 If no update is necessary, say so in the pull request description.
@@ -32,12 +32,12 @@ Write for an IC4 software engineer who is new to this repository.
 
 Put the most important information first. A reader who stops after any section must have the most useful information so far.
 
-1. **Title and summary** (no heading): what the app is, who uses it, that it works offline. Then a short list: stack, hosting, where content lives.
+1. **Title and summary** (no heading): what the app is, who uses it, that it works offline. Then a short list: stack, host, where content lives.
 2. **Contents**: links to the sections below.
 3. **Overview**: what the app does, as tables of sections and tools with routes and purpose.
 4. **Getting started**: prerequisites, install, run. Numbered steps with code blocks.
 5. **Usage**: tasks as procedures. Edit trip content, add a page, release a change.
-6. **Technical details**: architecture, routing, offline support, data on the device, design rules. Use tables for reference data.
+6. **Technical details**: architecture, routes, offline support, data on the device, design rules. Use tables for reference data.
 7. **FAQ**: the questions a new engineer asks first. Bold question, then a short answer.
 8. **Contributing**: the workflow from the `workflow` skill, in short steps.
 9. Credit line.
@@ -84,7 +84,7 @@ Every statement must be true for the code on the branch.
 
 ## Checklist
 
-- [ ] The summary tells what the app is, who uses it, the stack and the hosting.
+- [ ] The summary tells what the app is, who uses it, the stack and the host.
 - [ ] The sections follow the structure above.
 - [ ] Each route, file and field in the README exists in the code.
 - [ ] Procedures are numbered, with one instruction for each step.
