@@ -1,24 +1,27 @@
 import { $, $$, toast } from './ui.js';
-import { updatePackBadge } from './pages/packing.js';
+import { updatePackBadge } from './pages/checklist.js';
 
-// route -> { module, tab, title, back }
+// route -> { module, tab, title, back, immersive }
+//   module:    page file in js/pages/
+//   tab:       tab bar item to highlight (null for none)
+//   title:     header and document title
+//   back:      Back button target (null hides it)
+//   immersive: hide the header and tab bar
 const ROUTES = {
-  '': { mod: 'home', tab: 'home', title: 'Into the Woods' },
-  schedule: { mod: 'schedule', tab: 'schedule', title: 'Schedule' },
-  packing: { mod: 'packing', tab: 'packing', title: 'Checklist' },
-  map: { mod: 'map', tab: 'map', title: 'Directions' },
-  guide: { mod: 'guide', tab: 'guide', title: 'Guide' },
+  home: { module: 'home', tab: 'home', title: 'Into the Woods', back: null, immersive: false },
+  schedule: { module: 'schedule', tab: 'schedule', title: 'Schedule', back: null, immersive: false },
+  checklist: { module: 'checklist', tab: 'checklist', title: 'Checklist', back: null, immersive: false },
+  directions: { module: 'directions', tab: 'directions', title: 'Directions', back: null, immersive: false },
+  guide: { module: 'guide', tab: 'guide', title: 'Guide', back: null, immersive: false },
   // Contacts opens from the phone button in the header.
-  contacts: { mod: 'contacts', title: 'Contacts', back: '#/' },
+  contacts: { module: 'contacts', tab: null, title: 'Contacts', back: '#/', immersive: false },
   // Tools live under the Guide tab; Back returns there.
-  games: { mod: 'games', tab: 'guide', title: 'Games & Riddles', back: '#/guide' },
-  compass: { mod: 'compass', tab: 'guide', title: 'Compass', back: '#/guide' },
-  light: { mod: 'light', tab: 'guide', title: 'Night Light', back: '#/guide', immersive: true },
-  field: { mod: 'field', tab: 'guide', title: 'Field Guide', back: '#/guide' },
-  cabin: { mod: 'cabin', tab: 'guide', title: 'Cabin Agreement', back: '#/guide' },
+  games: { module: 'games', tab: 'guide', title: 'Games & Riddles', back: '#/guide', immersive: false },
+  compass: { module: 'compass', tab: 'guide', title: 'Compass', back: '#/guide', immersive: false },
+  'night-light': { module: 'night-light', tab: 'guide', title: 'Night Light', back: '#/guide', immersive: true },
+  'field-guide': { module: 'field-guide', tab: 'guide', title: 'Field Guide', back: '#/guide', immersive: false },
+  'cabin-agreement': { module: 'cabin-agreement', tab: 'guide', title: 'Cabin Agreement', back: '#/guide', immersive: false },
 };
-// Old links (home-screen shortcuts, shared URLs) keep working.
-const ALIASES = { more: 'guide', travel: 'map' };
 
 const view = $('#view');
 let cleanup = null;
@@ -30,9 +33,8 @@ if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 function parse() {
   const raw = location.hash.replace(/^#\/?/, '');
   const [path, query = ''] = raw.split('?');
-  const [raw0, ...rest] = path.split('/');
-  const name = ALIASES[raw0] || raw0;
-  return { name: ROUTES[name] ? name : '', sub: rest.join('/'), params: new URLSearchParams(query) };
+  const [name, ...rest] = path.split('/');
+  return { name: ROUTES[name] ? name : 'home', sub: rest.join('/'), params: new URLSearchParams(query) };
 }
 let firstRender = true;
 
@@ -44,7 +46,7 @@ async function navigate() {
 
   let page;
   try {
-    page = (await import(`./pages/${route.mod}.js`)).default;
+    page = (await import(`./pages/${route.module}.js`)).default;
   } catch (err) {
     console.error(err);
     view.innerHTML = '<div class="page"><div class="card"><h2>Page unavailable</h2><p>This page hasn\'t been saved for offline use yet. Reconnect once and it will be.</p></div></div>';
@@ -54,10 +56,10 @@ async function navigate() {
   const swap = () => {
     if (typeof cleanup === 'function') cleanup();
     cleanup = null;
-    document.body.dataset.route = name || 'home';
+    document.body.dataset.route = name;
     document.body.classList.toggle('immersive', !!route.immersive);
     $('#appTitle').textContent = route.title;
-    document.title = name ? `${route.title} · Into the Woods` : 'Into the Woods';
+    document.title = name === 'home' ? route.title : `${route.title} · Into the Woods`;
     $('#backBtn').hidden = !route.back;
     if (route.back) $('#backBtn').setAttribute('href', route.back);
     const cb = $('#contactsBtn');

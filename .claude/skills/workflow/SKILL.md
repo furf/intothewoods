@@ -1,6 +1,6 @@
 ---
 name: workflow
-description: The required workflow for every change request in this repository. Use at the start of any request that changes files - a feature, fix, rename, refactor, content edit or docs change. Covers scope control, one branch and pull request per request, the plan in the PR description, small Conventional Commits, testing, and what not to do without approval.
+description: The required workflow for every change request in this repository. Use at the start of any request that changes files - a feature, fix, rename, refactor, content edit or docs change. It covers scope control, one branch and pull request per request, and the plan in the PR description. It also covers small Conventional Commits, tests, and what not to do without approval.
 ---
 
 # Workflow
