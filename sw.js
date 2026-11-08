@@ -26,12 +26,12 @@ const SHELL = [
   'js/pages/checklist.js',
   'js/pages/compass.js',
   'js/pages/contacts.js',
+  'js/pages/directions.js',
   'js/pages/field.js',
   'js/pages/games.js',
   'js/pages/guide.js',
   'js/pages/home.js',
   'js/pages/light.js',
-  'js/pages/map.js',
   'js/pages/schedule.js',
   'js/ui.js',
 ];

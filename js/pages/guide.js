@@ -13,7 +13,7 @@ const BEFORE = [
   ['#/field', 'leaf', 'Field guide', 'Redwoods, banana slugs, coho and stars'],
 ];
 const IF_NEEDED = [
-  ['#/map?v=campus', 'map', 'Campus map', 'Cabins, dining hall, rec areas, trails'],
+  ['#/directions?v=campus', 'map', 'Campus map', 'Cabins, dining hall, rec areas, trails'],
   ['#/light', 'light', 'Night light', 'Red cabin light that keeps the screen on'],
   ['#/compass', 'compass', 'Compass', 'Save a spot and find your way back'],
 ];

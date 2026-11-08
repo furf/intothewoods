@@ -6,7 +6,7 @@ const ROUTES = {
   '': { mod: 'home', tab: 'home', title: 'Into the Woods' },
   schedule: { mod: 'schedule', tab: 'schedule', title: 'Schedule' },
   checklist: { mod: 'checklist', tab: 'checklist', title: 'Checklist' },
-  map: { mod: 'map', tab: 'map', title: 'Directions' },
+  directions: { mod: 'directions', tab: 'directions', title: 'Directions' },
   guide: { mod: 'guide', tab: 'guide', title: 'Guide' },
   // Contacts opens from the phone button in the header.
   contacts: { mod: 'contacts', title: 'Contacts', back: '#/' },
@@ -18,7 +18,7 @@ const ROUTES = {
   cabin: { mod: 'cabin', tab: 'guide', title: 'Cabin Agreement', back: '#/guide' },
 };
 // Old links (home-screen shortcuts, shared URLs) keep working.
-const ALIASES = { more: 'guide', travel: 'map', packing: 'checklist' };
+const ALIASES = { more: 'guide', travel: 'directions', packing: 'checklist', map: 'directions' };
 
 const view = $('#view');
 let cleanup = null;
