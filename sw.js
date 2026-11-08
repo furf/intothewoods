@@ -23,6 +23,7 @@ const SHELL = [
   'js/data/trip.js',
   'js/main.js',
   'js/pages/cabin.js',
+  'js/pages/checklist.js',
   'js/pages/compass.js',
   'js/pages/contacts.js',
   'js/pages/field.js',
@@ -31,7 +32,6 @@ const SHELL = [
   'js/pages/home.js',
   'js/pages/light.js',
   'js/pages/map.js',
-  'js/pages/packing.js',
   'js/pages/schedule.js',
   'js/ui.js',
 ];

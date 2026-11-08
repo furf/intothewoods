@@ -1,11 +1,11 @@
 import { $, $$, toast } from './ui.js';
-import { updatePackBadge } from './pages/packing.js';
+import { updatePackBadge } from './pages/checklist.js';
 
 // route -> { module, tab, title, back }
 const ROUTES = {
   '': { mod: 'home', tab: 'home', title: 'Into the Woods' },
   schedule: { mod: 'schedule', tab: 'schedule', title: 'Schedule' },
-  packing: { mod: 'packing', tab: 'packing', title: 'Checklist' },
+  checklist: { mod: 'checklist', tab: 'checklist', title: 'Checklist' },
   map: { mod: 'map', tab: 'map', title: 'Directions' },
   guide: { mod: 'guide', tab: 'guide', title: 'Guide' },
   // Contacts opens from the phone button in the header.
@@ -18,7 +18,7 @@ const ROUTES = {
   cabin: { mod: 'cabin', tab: 'guide', title: 'Cabin Agreement', back: '#/guide' },
 };
 // Old links (home-screen shortcuts, shared URLs) keep working.
-const ALIASES = { more: 'guide', travel: 'map' };
+const ALIASES = { more: 'guide', travel: 'map', packing: 'checklist' };
 
 const view = $('#view');
 let cleanup = null;
