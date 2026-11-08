@@ -19,7 +19,8 @@ function card(contact, opts = {}) {
   // Format on render, so numbers that people typed in any style look the same.
   const c = { ...contact, phone: formatPhone(contact.phone) };
   if (!opts.noSave && (c.phone || c.email)) registry.push(c);
-  const canText = c.phone && !/^9-?1-?1$/.test(c.phone) && !/^\(800\)/.test(c.phone);
+  // Toll-free numbers (800, 833, 844, 855, 866, 877, 888) cannot receive texts.
+  const canText = c.phone && !/^9-?1-?1$/.test(c.phone) && !/^\(8(00|33|44|55|66|77|88)\)/.test(c.phone);
   return `<article class="contact ${opts.cls || ''}">
     <div class="avatar" aria-hidden="true">${opts.cls === 'urgent' ? icon('alert') : esc((c.name.match(/\b\w/g) || []).slice(0, 2).join(''))}</div>
     <div class="contact-main">
