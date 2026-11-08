@@ -82,8 +82,8 @@ export default {
     el.innerHTML = `
       <section class="hero">
         <img class="logo" src="img/logo.webp" alt="Westminster Woods" width="919" height="163">
-        <h2 class="hero-title">Thornhill goes into the woods</h2>
-        <p class="sub">${esc(TRIP.dates)} · Overnight field trip</p>
+        <h2 class="hero-title">Into the Woods 2026</h2>
+        <p class="sub">Thornhill Elementary • November 17–19</p>
         <div class="hero-card" id="heroStatus">${statusCard()}</div>
         <svg class="ridge" viewBox="0 0 400 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 60 L0 38 L18 22 L30 34 L46 10 L62 32 L74 20 L92 40 L110 16 L126 34 L140 24 L158 44 L176 14 L192 36 L206 26 L224 46 L240 18 L258 38 L270 28 L288 42 L304 12 L320 34 L334 24 L352 44 L368 20 L384 36 L400 26 L400 60 Z"/></svg>
       </section>
