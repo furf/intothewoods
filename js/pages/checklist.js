@@ -44,7 +44,7 @@ export default {
     el.innerHTML = `
       <div class="page">
         <div class="seg two" role="group" aria-label="Which list">
-          <button type="button" data-list="student"><b>Student</b><small>Camp packing list</small></button>
+          <button type="button" data-list="student"><b>Student</b><small>Camp packing checklist</small></button>
           <button type="button" data-list="chaperone"><b>Chaperone</b><small>For grown-ups</small></button>
         </div>
         <div id="list"></div>
