@@ -13,6 +13,9 @@ function vcard(c) {
     'END:VCARD'].filter(Boolean).join('\r\n');
 }
 
+// The emergency alarm is an instruction, not a place, so it opens the Emergency section.
+const ALARM = ON_SITE.filter(([name]) => name === 'Emergency alarm');
+
 // Every trip contact with a number, for the one-tap "save all" download.
 let registry = [];
 function card(contact, opts = {}) {
@@ -46,11 +49,10 @@ export default {
       el.innerHTML = `
         <div class="page">
           <h2 class="group-title danger">${icon('alert')} Emergency</h2>
-          ${EMERGENCY.map((c) => card(c, { cls: 'urgent', noSave: true })).join('')}
           <section class="card alert-card">
-            <h2>At camp</h2>
-            <dl class="pairs">${ON_SITE.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
+            <dl class="pairs">${ALARM.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
           </section>
+          ${EMERGENCY.map((c) => card(c, { cls: 'urgent', noSave: true })).join('')}
 
           <h2 class="group-title">Westminster Woods</h2>
           ${card({ name: PLACES.camp.name, role: 'Camp office · Evening Coordinator on site at night', phone: PLACES.camp.phone, address: PLACES.camp.address, org: 'Westminster Woods' })}
