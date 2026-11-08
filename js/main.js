@@ -5,7 +5,7 @@ import { updatePackBadge } from './pages/packing.js';
 const ROUTES = {
   '': { mod: 'home', tab: 'home', title: 'Into the Woods' },
   schedule: { mod: 'schedule', tab: 'schedule', title: 'Schedule' },
-  packing: { mod: 'packing', tab: 'packing', title: 'Packing' },
+  packing: { mod: 'packing', tab: 'packing', title: 'Checklist' },
   map: { mod: 'map', tab: 'map', title: 'Driving' },
   guide: { mod: 'guide', tab: 'guide', title: 'Guide' },
   // Contacts opens from the phone button in the header.
