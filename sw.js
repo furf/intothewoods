@@ -1,5 +1,5 @@
 // Offline-first service worker. Bump VERSION whenever any file below changes.
-const VERSION = 'itw-v11';
+const VERSION = 'itw-v12';
 const SHELL = [
   './',
   'index.html',
