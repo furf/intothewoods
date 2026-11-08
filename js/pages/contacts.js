@@ -1,4 +1,4 @@
-import { esc, icon, telHref, smsHref, download, store, toast } from '../ui.js';
+import { esc, icon, telHref, smsHref, download, store, toast, formatPhone } from '../ui.js';
 import { EMERGENCY, ON_SITE, TEACHERS, SCHOOL, CHAPERONES } from '../data/people.js';
 import { PLACES } from '../data/trip.js';
 
@@ -15,9 +15,11 @@ function vcard(c) {
 
 // Every trip contact with a number, for the one-tap "save all" download.
 let registry = [];
-function card(c, opts = {}) {
+function card(contact, opts = {}) {
+  // Format on render, so numbers that people typed in any style look the same.
+  const c = { ...contact, phone: formatPhone(contact.phone) };
   if (!opts.noSave && (c.phone || c.email)) registry.push(c);
-  const canText = c.phone && !/^9-?1-?1$/.test(c.phone) && !/^(1-800|\(800\))/.test(c.phone);
+  const canText = c.phone && !/^9-?1-?1$/.test(c.phone) && !/^\(800\)/.test(c.phone);
   return `<article class="contact ${opts.cls || ''}">
     <div class="avatar" aria-hidden="true">${opts.cls === 'urgent' ? icon('alert') : esc((c.name.match(/\b\w/g) || []).slice(0, 2).join(''))}</div>
     <div class="contact-main">
