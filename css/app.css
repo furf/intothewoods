@@ -590,3 +590,16 @@ details.ev-body.compact[open] .ev-where { color: var(--muted); }
 }
 .seg.three button { padding-inline: 4px; }
 .seg.three button b { font-size: 15px; text-wrap: balance; }
+
+/* ---------- Touch targets: 44 x 44 px minimum ---------- */
+/* The Online badge keeps its 32 px pill. A transparent layer extends its hit area to 44 px. */
+.status { position: relative; }
+.status::before { content: ''; position: absolute; inset: -8px -1px; }
+.btn.small, .toast-act { min-height: 44px; }
+.btn { min-width: 44px; }
+.faq summary { min-height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.faq summary::after { float: none; }
+.toggle { min-height: 44px; }
+.camper input, .cabin-no input,
+input[type="text"], input[type="tel"], input:not([type]), .add-contact input, .add-two input { min-height: 44px; }
+.nl-slider input { height: 44px; }
