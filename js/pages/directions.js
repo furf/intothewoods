@@ -2,7 +2,7 @@ import { esc, icon, copy, store, today, $$ } from '../ui.js';
 import { PLACES, MAPS, SCHEDULE } from '../data/trip.js';
 import { ON_SITE } from '../data/people.js';
 
-// Places only. Emergency phones, radios and the alarm live on the Contacts page.
+// Places on the campus map. The emergency alarm instruction is on the Contacts page.
 const SPOTS = [
   ['flag', 'Big Green Field', 'Center of camp. Cabin line-up posts for end of rec time and emergencies.'],
   ['utensils', 'Vernon Dining Hall', 'All meals.'],
@@ -78,7 +78,6 @@ const campus = () => `
   <section class="card">
     <h2>Key spots</h2>
     <ul class="ilist">${[...SPOTS, ...EMERGENCY_SPOTS].map(([ic, n, d]) => `<li><span class="menu-ic">${icon(ic)}</span><div><b>${esc(n)}</b><p>${esc(d)}</p></div></li>`).join('')}</ul>
-    <p class="small"><a href="#/contacts">Emergency phones, radios and the alarm are on Contacts</a>.</p>
   </section>
 `;
 
