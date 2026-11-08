@@ -22,8 +22,6 @@ const ROUTES = {
   field: { module: 'field', tab: 'guide', title: 'Field Guide', back: '#/guide', immersive: false },
   cabin: { module: 'cabin', tab: 'guide', title: 'Cabin Agreement', back: '#/guide', immersive: false },
 };
-// Old links (home-screen shortcuts, shared URLs) keep working.
-const ALIASES = { '': 'home', more: 'guide', travel: 'directions', packing: 'checklist', map: 'directions' };
 
 const view = $('#view');
 let cleanup = null;
@@ -35,8 +33,7 @@ if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 function parse() {
   const raw = location.hash.replace(/^#\/?/, '');
   const [path, query = ''] = raw.split('?');
-  const [raw0, ...rest] = path.split('/');
-  const name = ALIASES[raw0] || raw0;
+  const [name, ...rest] = path.split('/');
   return { name: ROUTES[name] ? name : 'home', sub: rest.join('/'), params: new URLSearchParams(query) };
 }
 let firstRender = true;
