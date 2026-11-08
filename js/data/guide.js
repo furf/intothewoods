@@ -58,8 +58,8 @@ export const BEDTIME = [
 export const NIGHT = [
   ['Bathroom', 'Students may go without waking anyone, but tell them they can wake you if they\'re nervous to walk out alone.'],
   ['Bedwetting', 'Keep it discreet. Swap in a spare sleeping bag from the meeting room, bag the wet one outside the cabin, and tell WW staff at breakfast. They\'ll quietly launder it.'],
-  ['Vomit', 'Grab the nearest vomit kit and follow its instructions. Locations are on the Contacts page.'],
-  ['Need help?', 'The teachers and the WW Evening Coordinator are on call. Use a camp landline or emergency radio (see Contacts).'],
+  ['Vomit', 'Grab the nearest vomit kit and follow its instructions. Locations are on the campus map.', { 'campus map': '#/directions?v=campus' }],
+  ['Need help?', 'The teachers and the WW Evening Coordinator are on call. Use a camp landline or emergency radio (see the campus map).', { 'campus map': '#/directions?v=campus' }],
   ['Homesick at night', 'Try to get them back to bed. If that fails, call the teacher house. A familiar teacher helps, and you get some sleep.'],
 ];
 
