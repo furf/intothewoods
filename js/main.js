@@ -1,21 +1,26 @@
 import { $, $$, toast } from './ui.js';
 import { updatePackBadge } from './pages/checklist.js';
 
-// route -> { module, tab, title, back }
+// route -> { module, tab, title, back, immersive }
+//   module:    page file in js/pages/
+//   tab:       tab bar item to highlight (null for none)
+//   title:     header and document title
+//   back:      Back button target (null hides it)
+//   immersive: hide the header and tab bar
 const ROUTES = {
-  home: { mod: 'home', tab: 'home', title: 'Into the Woods' },
-  schedule: { mod: 'schedule', tab: 'schedule', title: 'Schedule' },
-  checklist: { mod: 'checklist', tab: 'checklist', title: 'Checklist' },
-  directions: { mod: 'directions', tab: 'directions', title: 'Directions' },
-  guide: { mod: 'guide', tab: 'guide', title: 'Guide' },
+  home: { module: 'home', tab: 'home', title: 'Into the Woods', back: null, immersive: false },
+  schedule: { module: 'schedule', tab: 'schedule', title: 'Schedule', back: null, immersive: false },
+  checklist: { module: 'checklist', tab: 'checklist', title: 'Checklist', back: null, immersive: false },
+  directions: { module: 'directions', tab: 'directions', title: 'Directions', back: null, immersive: false },
+  guide: { module: 'guide', tab: 'guide', title: 'Guide', back: null, immersive: false },
   // Contacts opens from the phone button in the header.
-  contacts: { mod: 'contacts', title: 'Contacts', back: '#/' },
+  contacts: { module: 'contacts', tab: null, title: 'Contacts', back: '#/', immersive: false },
   // Tools live under the Guide tab; Back returns there.
-  games: { mod: 'games', tab: 'guide', title: 'Games & Riddles', back: '#/guide' },
-  compass: { mod: 'compass', tab: 'guide', title: 'Compass', back: '#/guide' },
-  light: { mod: 'light', tab: 'guide', title: 'Night Light', back: '#/guide', immersive: true },
-  field: { mod: 'field', tab: 'guide', title: 'Field Guide', back: '#/guide' },
-  cabin: { mod: 'cabin', tab: 'guide', title: 'Cabin Agreement', back: '#/guide' },
+  games: { module: 'games', tab: 'guide', title: 'Games & Riddles', back: '#/guide', immersive: false },
+  compass: { module: 'compass', tab: 'guide', title: 'Compass', back: '#/guide', immersive: false },
+  light: { module: 'light', tab: 'guide', title: 'Night Light', back: '#/guide', immersive: true },
+  field: { module: 'field', tab: 'guide', title: 'Field Guide', back: '#/guide', immersive: false },
+  cabin: { module: 'cabin', tab: 'guide', title: 'Cabin Agreement', back: '#/guide', immersive: false },
 };
 // Old links (home-screen shortcuts, shared URLs) keep working.
 const ALIASES = { '': 'home', more: 'guide', travel: 'directions', packing: 'checklist', map: 'directions' };
@@ -44,7 +49,7 @@ async function navigate() {
 
   let page;
   try {
-    page = (await import(`./pages/${route.mod}.js`)).default;
+    page = (await import(`./pages/${route.module}.js`)).default;
   } catch (err) {
     console.error(err);
     view.innerHTML = '<div class="page"><div class="card"><h2>Page unavailable</h2><p>This page hasn\'t been saved for offline use yet. Reconnect once and it will be.</p></div></div>';
