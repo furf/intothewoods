@@ -7,7 +7,7 @@ const row = ([href, ic, t, d]) => `<a href="${href}"><span class="menu-ic">${ico
 
 // Phones are mostly put away at camp (photos aside), so the guide leads with preparation.
 const BEFORE = [
-  ['#/checklist?list=chaperone', 'pack', 'Your packing list', 'What grown-ups bring'],
+  ['#/checklist?list=chaperone', 'pack', 'Your packing checklist', 'What grown-ups bring'],
   ['#/cabin-agreement', 'tent', 'Cabin agreement', 'Plan it now, do it at your first Cabin Time'],
   ['#/games', 'puzzle', 'Games &amp; riddles', 'Learn a few before you go'],
   ['#/field-guide', 'leaf', 'Field guide', 'Redwoods, banana slugs, coho and stars'],
