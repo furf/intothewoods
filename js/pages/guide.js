@@ -8,13 +8,13 @@ const row = ([href, ic, t, d]) => `<a href="${href}"><span class="menu-ic">${ico
 // Phones are mostly put away at camp (photos aside), so the guide leads with preparation.
 const BEFORE = [
   ['#/checklist?list=chaperone', 'pack', 'Your packing list', 'What grown-ups bring'],
-  ['#/cabin', 'tent', 'Cabin agreement', 'Plan it now, do it at your first Cabin Time'],
+  ['#/cabin-agreement', 'tent', 'Cabin agreement', 'Plan it now, do it at your first Cabin Time'],
   ['#/games', 'puzzle', 'Games &amp; riddles', 'Learn a few before you go'],
-  ['#/field', 'leaf', 'Field guide', 'Redwoods, banana slugs, coho and stars'],
+  ['#/field-guide', 'leaf', 'Field guide', 'Redwoods, banana slugs, coho and stars'],
 ];
 const IF_NEEDED = [
   ['#/directions?v=campus', 'map', 'Campus map', 'Cabins, dining hall, rec areas, trails'],
-  ['#/light', 'light', 'Night light', 'Red cabin light that keeps the screen on'],
+  ['#/night-light', 'light', 'Night light', 'Red cabin light that keeps the screen on'],
   ['#/compass', 'compass', 'Compass', 'Save a spot and find your way back'],
 ];
 
