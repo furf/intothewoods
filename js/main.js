@@ -18,9 +18,9 @@ const ROUTES = {
   // Tools live under the Guide tab; Back returns there.
   games: { module: 'games', tab: 'guide', title: 'Games & Riddles', back: '#/guide', immersive: false },
   compass: { module: 'compass', tab: 'guide', title: 'Compass', back: '#/guide', immersive: false },
-  light: { module: 'light', tab: 'guide', title: 'Night Light', back: '#/guide', immersive: true },
-  field: { module: 'field', tab: 'guide', title: 'Field Guide', back: '#/guide', immersive: false },
-  cabin: { module: 'cabin', tab: 'guide', title: 'Cabin Agreement', back: '#/guide', immersive: false },
+  'night-light': { module: 'night-light', tab: 'guide', title: 'Night Light', back: '#/guide', immersive: true },
+  'field-guide': { module: 'field-guide', tab: 'guide', title: 'Field Guide', back: '#/guide', immersive: false },
+  'cabin-agreement': { module: 'cabin-agreement', tab: 'guide', title: 'Cabin Agreement', back: '#/guide', immersive: false },
 };
 
 const view = $('#view');
