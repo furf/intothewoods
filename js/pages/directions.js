@@ -13,6 +13,11 @@ const SPOTS = [
   ['fish', 'Creek Zip & Coho Crossing', 'Bridge over Dutch Bill Creek, salmon habitat.'],
 ];
 
+// On-campus emergency places. The text lives in ON_SITE (js/data/people.js); this adds an icon.
+const EMERGENCY_SPOT_ICONS = { 'Landline phones': 'phone', 'Emergency radios': 'alert', 'Vomit kits': 'kit' };
+const EMERGENCY_SPOTS = ON_SITE.filter(([name]) => EMERGENCY_SPOT_ICONS[name]).map(([name, text]) => [EMERGENCY_SPOT_ICONS[name], name, text]);
+const AT_CAMP = ON_SITE.filter(([name]) => !EMERGENCY_SPOT_ICONS[name]);
+
 // Two directions, one layout: "there" is Thornhill → camp, "home" is camp → Thornhill.
 const TRIPS = {
   there: {
@@ -73,12 +78,12 @@ const campus = () => `
   <p class="muted small center">Pinch, drag or double-tap to zoom. Map is not to scale.</p>
   <section class="card">
     <h2>Key spots</h2>
-    <ul class="ilist">${SPOTS.map(([ic, n, d]) => `<li><span class="menu-ic">${icon(ic)}</span><div><b>${esc(n)}</b><p>${esc(d)}</p></div></li>`).join('')}</ul>
+    <ul class="ilist">${[...SPOTS, ...EMERGENCY_SPOTS].map(([ic, n, d]) => `<li><span class="menu-ic">${icon(ic)}</span><div><b>${esc(n)}</b><p>${esc(d)}</p></div></li>`).join('')}</ul>
     <p class="small"><a href="#/contacts">Emergency phones, radios and the alarm are on Contacts</a>.</p>
   </section>
   <section class="card alert-card">
     <h2>At camp</h2>
-    <dl class="pairs">${ON_SITE.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
+    <dl class="pairs">${AT_CAMP.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
   </section>`;
 
 export default {
