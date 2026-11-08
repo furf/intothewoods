@@ -1,5 +1,5 @@
 import { esc, icon, telHref, smsHref, download, store, toast, formatPhone } from '../ui.js';
-import { EMERGENCY, ON_SITE, TEACHERS, SCHOOL, CHAPERONES } from '../data/people.js';
+import { EMERGENCY, TEACHERS, SCHOOL, CHAPERONES } from '../data/people.js';
 import { PLACES } from '../data/trip.js';
 
 const KEY = 'itw:myContacts';
@@ -47,10 +47,6 @@ export default {
         <div class="page">
           <h2 class="group-title danger">${icon('alert')} Emergency</h2>
           ${EMERGENCY.map((c) => card(c, { cls: 'urgent', noSave: true })).join('')}
-          <section class="card alert-card">
-            <h2>At camp</h2>
-            <dl class="pairs">${ON_SITE.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
-          </section>
 
           <h2 class="group-title">Westminster Woods</h2>
           ${card({ name: PLACES.camp.name, role: 'Camp office · Evening Coordinator on site at night', phone: PLACES.camp.phone, address: PLACES.camp.address, org: 'Westminster Woods' })}

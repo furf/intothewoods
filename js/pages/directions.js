@@ -1,5 +1,6 @@
 import { esc, icon, copy, store, today, $$ } from '../ui.js';
 import { PLACES, MAPS, SCHEDULE } from '../data/trip.js';
+import { ON_SITE } from '../data/people.js';
 
 // Places only. Emergency phones, radios and the alarm live on the Contacts page.
 const SPOTS = [
@@ -74,6 +75,10 @@ const campus = () => `
     <h2>Key spots</h2>
     <ul class="ilist">${SPOTS.map(([ic, n, d]) => `<li><span class="menu-ic">${icon(ic)}</span><div><b>${esc(n)}</b><p>${esc(d)}</p></div></li>`).join('')}</ul>
     <p class="small"><a href="#/contacts">Emergency phones, radios and the alarm are on Contacts</a>.</p>
+  </section>
+  <section class="card alert-card">
+    <h2>At camp</h2>
+    <dl class="pairs">${ON_SITE.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
   </section>`;
 
 export default {
