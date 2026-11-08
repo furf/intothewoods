@@ -3,7 +3,7 @@ import { updatePackBadge } from './pages/checklist.js';
 
 // route -> { module, tab, title, back }
 const ROUTES = {
-  '': { mod: 'home', tab: 'home', title: 'Into the Woods' },
+  home: { mod: 'home', tab: 'home', title: 'Into the Woods' },
   schedule: { mod: 'schedule', tab: 'schedule', title: 'Schedule' },
   checklist: { mod: 'checklist', tab: 'checklist', title: 'Checklist' },
   directions: { mod: 'directions', tab: 'directions', title: 'Directions' },
@@ -18,7 +18,7 @@ const ROUTES = {
   cabin: { mod: 'cabin', tab: 'guide', title: 'Cabin Agreement', back: '#/guide' },
 };
 // Old links (home-screen shortcuts, shared URLs) keep working.
-const ALIASES = { more: 'guide', travel: 'directions', packing: 'checklist', map: 'directions' };
+const ALIASES = { '': 'home', more: 'guide', travel: 'directions', packing: 'checklist', map: 'directions' };
 
 const view = $('#view');
 let cleanup = null;
@@ -32,7 +32,7 @@ function parse() {
   const [path, query = ''] = raw.split('?');
   const [raw0, ...rest] = path.split('/');
   const name = ALIASES[raw0] || raw0;
-  return { name: ROUTES[name] ? name : '', sub: rest.join('/'), params: new URLSearchParams(query) };
+  return { name: ROUTES[name] ? name : 'home', sub: rest.join('/'), params: new URLSearchParams(query) };
 }
 let firstRender = true;
 
@@ -54,10 +54,10 @@ async function navigate() {
   const swap = () => {
     if (typeof cleanup === 'function') cleanup();
     cleanup = null;
-    document.body.dataset.route = name || 'home';
+    document.body.dataset.route = name;
     document.body.classList.toggle('immersive', !!route.immersive);
     $('#appTitle').textContent = route.title;
-    document.title = name ? `${route.title} · Into the Woods` : 'Into the Woods';
+    document.title = name === 'home' ? route.title : `${route.title} · Into the Woods`;
     $('#backBtn').hidden = !route.back;
     if (route.back) $('#backBtn').setAttribute('href', route.back);
     const cb = $('#contactsBtn');
