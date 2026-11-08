@@ -30,7 +30,7 @@ The app has five sections in the tab bar:
 | Schedule | `#/schedule` | The timeline for each day of the trip, with notes for chaperones. |
 | Guide | `#/guide` | The chaperone handbook, and links to the tools below. |
 
-The header has an online/offline badge and a phone button. The phone button opens Contacts (`#/contacts`): emergency numbers, and camp, school and chaperone contacts.
+The header has an online/offline badge and a phone button. The phone button opens Contacts (`#/contacts`): the emergency alarm, emergency numbers, and camp, school and chaperone contacts.
 
 The Guide links to these tools. Each tool has a Back button that returns to the Guide.
 
