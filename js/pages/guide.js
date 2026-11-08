@@ -1,7 +1,9 @@
 import { esc, icon } from '../ui.js';
 import { MISSION, GOLDEN_RULE, ROLE, RULES, SERIOUS, BEDTIME, NIGHT, PROACTIVE, RESPONSIVE, HOMESICK, TN_TIPS, OTHER } from '../data/guide.js';
 
-const pairs = (list) => `<dl class="pairs">${list.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>`;
+// An optional third item, { phrase: href }, turns that phrase in the text into a link.
+const linked = (text, links = {}) => Object.entries(links).reduce((html, [phrase, href]) => html.replace(esc(phrase), `<a href="${esc(href)}">${esc(phrase)}</a>`), esc(text));
+const pairs = (list) => `<dl class="pairs">${list.map(([k, v, links]) => `<dt>${esc(k)}</dt><dd>${linked(v, links)}</dd>`).join('')}</dl>`;
 const tools = (list) => pairs(list.map(([, t, d]) => [t, d]));
 const row = ([href, ic, t, d]) => `<a href="${href}"><span class="menu-ic">${icon(ic)}</span><span><b>${t}</b><small>${d}</small></span><span class="chev" aria-hidden="true"></span></a>`;
 
