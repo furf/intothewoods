@@ -234,6 +234,13 @@ Add the link to the related FAQ entry in `js/data/trip.js`.
 4. Update this README in the same pull request when a change makes it incorrect.
 5. Push your commits and update the pull request title and description.
 
+Claude Code uses the project skills in `.claude/skills/`:
+
+| Skill | Purpose |
+| --- | --- |
+| `workflow` | The steps above, scope rules, consistency rules and tests. |
+| `readme` | The rules for this README: structure, ASD-STE100 style and accuracy. |
+
 ---
 
 Built with ❤️ for Thornhill by SPARKLER*FUN. Not affiliated with Thornhill Elementary School or Westminster Woods.
