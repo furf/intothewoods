@@ -84,6 +84,15 @@ export function toast(msg, ms = 2600, action = null) {
 
 export const buzz = (ms = 8) => { try { navigator.vibrate?.(ms); } catch { /* unsupported */ } };
 
+// Show a North American number as (###) ###-####. A leading 1 is dropped.
+// Other numbers (911, international) stay as they were typed.
+export function formatPhone(p = '') {
+  const s = String(p).trim();
+  const d = s.replace(/\D/g, '');
+  const n = d.length === 11 && d[0] === '1' ? d.slice(1) : d;
+  return n.length === 10 ? `(${n.slice(0, 3)}) ${n.slice(3, 6)}-${n.slice(6)}` : s;
+}
+
 export const telHref = (p) => 'tel:' + String(p).replace(/[^\d+]/g, '');
 export const smsHref = (p) => 'sms:' + String(p).replace(/[^\d+]/g, '');
 
