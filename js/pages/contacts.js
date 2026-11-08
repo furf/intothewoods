@@ -1,5 +1,5 @@
 import { esc, icon, telHref, smsHref, download, store, toast, formatPhone } from '../ui.js';
-import { EMERGENCY, TEACHERS, SCHOOL, CHAPERONES } from '../data/people.js';
+import { EMERGENCY, ON_SITE, TEACHERS, SCHOOL, CHAPERONES } from '../data/people.js';
 import { PLACES } from '../data/trip.js';
 
 const KEY = 'itw:myContacts';
@@ -12,6 +12,9 @@ function vcard(c) {
     c.address ? `ADR;TYPE=WORK:;;${c.address.replace(/,/g, '\\,')};;;;` : '',
     'END:VCARD'].filter(Boolean).join('\r\n');
 }
+
+// The emergency alarm is an instruction, not a place, so it opens the Emergency section.
+const ALARM = ON_SITE.filter(([name]) => name === 'Emergency alarm');
 
 // Every trip contact with a number, for the one-tap "save all" download.
 let registry = [];
@@ -46,6 +49,9 @@ export default {
       el.innerHTML = `
         <div class="page">
           <h2 class="group-title danger">${icon('alert')} Emergency</h2>
+          <section class="card alert-card">
+            <dl class="pairs">${ALARM.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
+          </section>
           ${EMERGENCY.map((c) => card(c, { cls: 'urgent', noSave: true })).join('')}
 
           <h2 class="group-title">Westminster Woods</h2>
