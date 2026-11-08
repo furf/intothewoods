@@ -18,7 +18,7 @@
   ],
   "shortcuts": [
     { "name": "Schedule", "url": "./#/schedule", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Packing list", "url": "./#/packing", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Packing list", "url": "./#/checklist", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
     { "name": "Contacts", "url": "./#/contacts", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
     { "name": "Night light", "url": "./#/light", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
   ]
