@@ -1,4 +1,7 @@
 .DS_Store
-docs/reference/
-.agents/
-.claude/
+
+.agents
+.claude
+
+/docs/reference
+
