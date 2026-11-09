@@ -36,7 +36,7 @@ function statusCard() {
       <div><b>${two(c.m)}</b><span>min</span></div>
       <div><b>${two(c.s)}</b><span>sec</span></div>
     </div>
-    <p class="hero-note">until we meet at Thornhill: <b>Tue Nov 17, 8:00 am</b></p>`;
+    <p class="hero-note">until we meet: <b>Tuesday, Nov 17, 8:00 am</b></p>`;
   }
   if (now > end) {
     return '<p class="hero-note big">We made it home! 🌲 Thanks for an amazing trip.</p>';
@@ -48,16 +48,25 @@ function statusCard() {
   </div>`;
 }
 
-// The day's major activities (the ones that go on the calendar). On a trip day that's today;
-// before the trip it previews day one; after the trip there's nothing to show.
-function glance(now = new Date()) {
-  let i = SCHEDULE.findIndex((d) => d.date === today(now));
-  const isToday = i >= 0;
-  if (!isToday) {
-    if (now > new Date(TRIP.end)) return '';
-    i = 0;
-  }
+// The day's major activities (the ones that go on the calendar), one card per trip day.
+// The carousel opens on today; before the trip on the first day, after the trip on the last.
+function glanceIndex(now = new Date()) {
+  const i = SCHEDULE.findIndex((d) => d.date === today(now));
+  if (i >= 0) return i;
+  return now < new Date(TRIP.start) ? 0 : SCHEDULE.length - 1;
+}
+
+// "Day 1 • Tuesday, Nov 17 • Arrive", from the schedule data.
+function dayLine(i) {
   const day = SCHEDULE[i];
+  const date = new Date(`${day.date}T12:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  const name = day.label.split(' · ')[1];
+  return `Day ${i + 1} • ${day.day}, ${date} • ${name}`;
+}
+
+function glanceSlide(i, now = new Date()) {
+  const day = SCHEDULE[i];
+  const isToday = day.date === today(now);
   const items = day.items.filter((it) => it.cal);
   const rows = items.map((it, j) => {
     const start = at(day.date, it.t);
@@ -65,16 +74,43 @@ function glance(now = new Date()) {
     const end = it.end ? at(day.date, it.end) : nextStart;
     const state = !isToday || now < start ? '' : !end || now < end ? 'now' : 'past';
     return `<li class="${state}">
-      <time>${fmtTime(it.t)}${it.approx ? '<small>approx</small>' : ''}</time>
-      <span><b>${esc(it.title)}</b>${state === 'now' ? '<em>Now</em>' : ''}${it.where ? `<small>${esc(it.where)}</small>` : ''}</span>
+      <time>${fmtTime(it.t)}</time>
+      <span><b>${esc(it.title)}</b>${state === 'now' ? '<em>Now</em>' : ''}</span>
     </li>`;
   }).join('');
-  return `<section class="card" id="glance">
-    <h2>${isToday ? 'Today' : esc(day.day)} at a glance</h2>
-    <p class="muted small glance-sub">${esc(day.label)}${isToday ? '' : ' · ' + esc(day.short) + ' ' + day.date.slice(5).replace('-', '/')}</p>
-    <ol class="glance">${rows}</ol>
-    <a class="btn small" href="#/schedule?day=${i}">${icon('calendar')} Full schedule</a>
+  return `<h2>${isToday ? 'Today' : esc(day.day)} at a glance</h2>
+    <p class="muted small glance-sub">${esc(dayLine(i))}</p>
+    <ol class="glance">${rows}</ol>`;
+}
+
+function glance(now = new Date()) {
+  return `<section class="glance-carousel" id="glance" aria-roledescription="carousel" aria-label="Trip days at a glance">
+    <div class="glance-track">
+      ${SCHEDULE.map((d, i) => `<article class="card glance-slide" data-i="${i}" aria-roledescription="slide" aria-label="${esc(d.day)}">${glanceSlide(i, now)}</article>`).join('')}
+    </div>
+    <div class="glance-dots" role="group" aria-label="Choose a day">
+      ${SCHEDULE.map((d, i) => `<button type="button" data-i="${i}" aria-label="${esc(d.day)}"><span aria-hidden="true"></span></button>`).join('')}
+    </div>
   </section>`;
+}
+
+// Opens the carousel on the right day and keeps the dots in step with swipes.
+function initGlance(root) {
+  const track = root.querySelector('.glance-track');
+  if (!track) return;
+  const buttons = [...root.querySelectorAll('.glance-dots button')];
+  const slides = [...track.querySelectorAll('.glance-slide')];
+  const mark = (i) => buttons.forEach((b, j) => b.setAttribute('aria-pressed', String(j === i)));
+  // Cards have a gap and the track has side padding, so use each card's own position.
+  const leftOf = (i) => slides[i].offsetLeft - slides[0].offsetLeft;
+  const current = () => slides.reduce((best, _, i) => (Math.abs(leftOf(i) - track.scrollLeft) < Math.abs(leftOf(best) - track.scrollLeft) ? i : best), 0);
+  const go = (i, smooth) => {
+    track.scrollTo({ left: leftOf(i), behavior: smooth ? 'smooth' : 'auto' });
+    mark(i);
+  };
+  track.addEventListener('scroll', () => mark(current()), { passive: true });
+  buttons.forEach((b) => b.addEventListener('click', () => go(Number(b.dataset.i), true)));
+  requestAnimationFrame(() => go(glanceIndex(), false));
 }
 
 export default {
@@ -159,6 +195,8 @@ export default {
       video.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${TRIP.video}?autoplay=1&rel=0&playsinline=1" title="Westminster Woods overview video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe>`;
     });
 
+    initGlance(el);
+
     // Before the trip the countdown ticks every second; otherwise Now/Next and the glance refresh every 30 s.
     let n = 0;
     const tick = setInterval(() => {
@@ -169,8 +207,8 @@ export default {
         if (h) h.innerHTML = statusCard();
       }
       if (n % 30) return;
-      const g = el.querySelector('#glance'), fresh = glance();
-      if (g && fresh) g.outerHTML = fresh; else if (g) g.remove();
+      // Refresh the cards in place, so the day someone is looking at stays put.
+      el.querySelectorAll('.glance-slide').forEach((slide) => { slide.innerHTML = glanceSlide(Number(slide.dataset.i)); });
     }, 1000);
     return () => clearInterval(tick);
   },

@@ -39,7 +39,7 @@ function ics() {
 function itemHTML(day, it, i) {
   const k = KIND[it.kind];
   return `<li class="ev ev-${it.kind}" data-i="${i}">
-    <div class="ev-time"><b>${fmtTime(it.t).replace(/ (am|pm)/, '<small>$1</small>')}</b>${it.approx ? '<em>approx</em>' : ''}</div>
+    <div class="ev-time"><b>${fmtTime(it.t).replace(/ (am|pm)/, '<small>$1</small>')}</b></div>
     <div class="ev-dot" aria-hidden="true"></div>
     ${COMPACT.has(it.kind) ? compactBody(it) : `<div class="ev-body">
       ${k ? `<span class="ev-kind">${k}</span>` : ''}
@@ -52,15 +52,14 @@ function itemHTML(day, it, i) {
   </li>`;
 }
 
-// Daily routines and meals are quiet one-line rows; tap to see the details.
+// Daily routines and meals sit on the page background, with all their details shown.
 const COMPACT = new Set(['routine', 'meal', 'chaperone']);
 function compactBody(it) {
-  const head = `<h3>${esc(it.title)}</h3>${it.where ? `<span class="ev-where">${esc(it.where)}</span>` : ''}`;
-  if (!it.desc && !it.chap) return `<div class="ev-body compact"><div class="ev-sum">${head}</div></div>`;
-  return `<details class="ev-body compact"><summary class="ev-sum">${head}<span class="chev" aria-hidden="true"></span></summary>
+  return `<div class="ev-body compact">
+    <div class="ev-sum"><h3>${esc(it.title)}</h3>${it.where ? `<span class="ev-where">${esc(it.where)}</span>` : ''}</div>
     ${it.desc ? `<p>${esc(it.desc)}</p>` : ''}
     ${it.chap ? `<p class="chap-note"><b>Chaperones:</b> ${esc(it.chap)}</p>` : ''}
-  </details>`;
+  </div>`;
 }
 
 export default {
@@ -78,7 +77,7 @@ export default {
         <div id="dayView"></div>
         <div class="card actions-card">
           <button class="btn" type="button" id="icsBtn">${icon('calendar')} Add trip to my calendar</button>
-          <p class="muted small">Adds the main programs and travel times. Times are from Thornhill's Week 12 schedule; "approx" times may shift on site.</p>
+          <p class="muted small">Adds the main programs and travel times. Times are from Thornhill's Week 12 schedule.</p>
         </div>
       </div>`;
 
@@ -101,13 +100,9 @@ export default {
       dayView.innerHTML = `
         <h2 class="day-title">${esc(day.day)} <span>${esc(day.label)}</span></h2>
         <ol class="timeline">${day.items.map((it, j) => itemHTML(day, it, j)).join('')}</ol>`;
-      autoKey = null; autoOpened = null; // fresh rows: let the current item open again
       markNow();
     };
 
-    // Whatever is happening now opens on its own, whatever its kind. It opens once when it
-    // becomes current (so closing it sticks), and the row we opened closes when the next item starts.
-    let autoKey = null, autoOpened = null;
     const markNow = () => {
       const day = SCHEDULE[dayIdx];
       const now = new Date();
@@ -120,15 +115,6 @@ export default {
         li.classList.toggle('past', curI >= 0 && (j < curI || dayOver));
         li.classList.toggle('now', j === curI && !dayOver);
       });
-      const nowLi = curI >= 0 && !dayOver ? lis[curI] : null;
-      const key = nowLi ? `${dayIdx}:${curI}` : null;
-      if (key !== autoKey) {
-        if (autoOpened?.isConnected) autoOpened.open = false;
-        autoOpened = null;
-        const d = nowLi?.querySelector('details.ev-body');
-        if (d && !d.open) { d.open = true; autoOpened = d; }
-        autoKey = key;
-      }
       const tripDay = SCHEDULE.some((d) => d.date === today(now));
       nowBtn.hidden = !tripDay;
     };
