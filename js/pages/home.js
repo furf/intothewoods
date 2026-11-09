@@ -36,7 +36,7 @@ function statusCard() {
       <div><b>${two(c.m)}</b><span>min</span></div>
       <div><b>${two(c.s)}</b><span>sec</span></div>
     </div>
-    <p class="hero-note">until we meet at Thornhill: <b>Tue Nov 17, 8:00 am</b></p>`;
+    <p class="hero-note">until we meet at Thornhill: <b>Tuesday, Nov 17, 8:00 am</b></p>`;
   }
   if (now > end) {
     return '<p class="hero-note big">We made it home! 🌲 Thanks for an amazing trip.</p>';
@@ -56,6 +56,14 @@ function glanceIndex(now = new Date()) {
   return now < new Date(TRIP.start) ? 0 : SCHEDULE.length - 1;
 }
 
+// "Day 1 • Tuesday, Nov 17 • Arrive", from the schedule data.
+function dayLine(i) {
+  const day = SCHEDULE[i];
+  const date = new Date(`${day.date}T12:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  const name = day.label.split(' · ')[1];
+  return `Day ${i + 1} • ${day.day}, ${date} • ${name}`;
+}
+
 function glanceSlide(i, now = new Date()) {
   const day = SCHEDULE[i];
   const isToday = day.date === today(now);
@@ -71,7 +79,7 @@ function glanceSlide(i, now = new Date()) {
     </li>`;
   }).join('');
   return `<h2>${isToday ? 'Today' : esc(day.day)} at a glance</h2>
-    <p class="muted small glance-sub">${esc(day.label)} · ${esc(day.short)} ${day.date.slice(5).replace('-', '/')}</p>
+    <p class="muted small glance-sub">${esc(dayLine(i))}</p>
     <ol class="glance">${rows}</ol>
     <a class="btn small" href="#/schedule?day=${i}">${icon('calendar')} Full schedule</a>`;
 }
