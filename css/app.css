@@ -606,7 +606,8 @@ input[type="text"], input[type="tel"], input:not([type]), .add-contact input, .a
 .glance-track { display: flex; align-items: flex-start; gap: 12px; margin: 0 -16px; padding: 2px 16px 10px; scroll-padding: 0 16px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
 .glance-track::-webkit-scrollbar { display: none; }
 .glance-slide { flex: 0 0 100%; scroll-snap-align: start; scroll-snap-stop: always; margin-bottom: 0; }
-.glance-days { display: flex; justify-content: center; gap: 4px; margin-top: 4px; }
-.glance-days button { min-width: 44px; min-height: 44px; padding: 0 6px; border: 0; background: none; cursor: pointer; display: grid; place-items: center; }
-.glance-days span { padding: 3px 10px; border-radius: 99px; font-size: 13px; font-weight: 800; color: var(--on-bg-muted); }
-.glance-days button[aria-pressed="true"] span { background: var(--paper); color: var(--forest); }
+/* Pagination: small circles like the schedule line dots, each in a 44 px tap area. */
+.glance-dots { display: flex; justify-content: center; margin-top: -6px; }
+.glance-dots button { width: 44px; height: 44px; padding: 0; border: 0; background: none; cursor: pointer; display: grid; place-items: center; }
+.glance-dots span { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--on-bg-muted); }
+.glance-dots button[aria-pressed="true"] span { background: var(--fern); border-color: var(--fern); }

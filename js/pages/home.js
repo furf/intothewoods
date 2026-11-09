@@ -88,17 +88,17 @@ function glance(now = new Date()) {
     <div class="glance-track">
       ${SCHEDULE.map((d, i) => `<article class="card glance-slide" data-i="${i}" aria-roledescription="slide" aria-label="${esc(d.day)}">${glanceSlide(i, now)}</article>`).join('')}
     </div>
-    <div class="glance-days" role="group" aria-label="Choose a day">
-      ${SCHEDULE.map((d, i) => `<button type="button" data-i="${i}" aria-label="${esc(d.day)}"><span>${esc(d.short)}</span></button>`).join('')}
+    <div class="glance-dots" role="group" aria-label="Choose a day">
+      ${SCHEDULE.map((d, i) => `<button type="button" data-i="${i}" aria-label="${esc(d.day)}"><span aria-hidden="true"></span></button>`).join('')}
     </div>
   </section>`;
 }
 
-// Opens the carousel on the right day and keeps the day buttons in step with swipes.
+// Opens the carousel on the right day and keeps the dots in step with swipes.
 function initGlance(root) {
   const track = root.querySelector('.glance-track');
   if (!track) return;
-  const buttons = [...root.querySelectorAll('.glance-days button')];
+  const buttons = [...root.querySelectorAll('.glance-dots button')];
   const slides = [...track.querySelectorAll('.glance-slide')];
   const mark = (i) => buttons.forEach((b, j) => b.setAttribute('aria-pressed', String(j === i)));
   // Cards have a gap and the track has side padding, so use each card's own position.
