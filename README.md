@@ -24,7 +24,7 @@ The app has five sections in the tab bar:
 
 | Section | Route | Purpose |
 | --- | --- | --- |
-| Home | `#/home` | Countdown to departure. During the trip, it shows what happens now and next. It also shows today at a glance, an overview video, what students do, where they stay, the FAQ, and install and share buttons. |
+| Home | `#/home` | Countdown to departure. During the trip, it shows what happens now and next. It also shows each trip day at a glance (swipe between the three days), an overview video, what students do, where they stay, the FAQ, and install and share buttons. |
 | Checklist | `#/checklist` | Packing checklists for students and chaperones. Progress is saved on the device. |
 | Directions | `#/directions` | Directions to camp, directions home, and the campus map. The campus map also shows on-campus emergency information. |
 | Schedule | `#/schedule` | The timeline for each day of the trip, with notes for chaperones. |
