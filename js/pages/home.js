@@ -36,7 +36,7 @@ function statusCard() {
       <div><b>${two(c.m)}</b><span>min</span></div>
       <div><b>${two(c.s)}</b><span>sec</span></div>
     </div>
-    <p class="hero-note">until we meet at Thornhill: <b>Tuesday, Nov 17, 8:00 am</b></p>`;
+    <p class="hero-note">until we meet: <b>Tuesday, Nov 17, 8:00 am</b></p>`;
   }
   if (now > end) {
     return '<p class="hero-note big">We made it home! 🌲 Thanks for an amazing trip.</p>';
