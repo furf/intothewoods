@@ -602,14 +602,17 @@ input[type="text"], input[type="tel"], input:not([type]), .add-contact input, .a
 
 /* ---------- At a glance: three-day carousel ---------- */
 /* flow-root keeps the track's negative margins inside, so this box is exactly the card area. */
-.glance-carousel { display: flow-root; margin-bottom: 14px; }
+.glance-carousel { position: relative; display: flow-root; margin-bottom: 14px; }
 /* The track runs to the screen edges, so whole cards slide past; each card keeps its own corners.
    Cards share the tallest card's height, so the dots sit right under every card and the page does not jump. */
 .glance-track { display: flex; gap: 12px; margin: -16px -16px -32px; padding: 16px 16px 32px; scroll-padding: 0 16px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
 .glance-track::-webkit-scrollbar { display: none; }
-.glance-slide { flex: 0 0 100%; scroll-snap-align: start; scroll-snap-stop: always; margin-bottom: 0; }
+.glance-slide { flex: 0 0 100%; scroll-snap-align: start; scroll-snap-stop: always; margin-bottom: 0; padding-bottom: 48px; }
 /* Pagination: small circles like the schedule line dots, each in a 44 px tap area. */
-.glance-dots { display: flex; justify-content: center; margin-top: -6px; }
+/* The dots sit over the bottom of the cards. The track's padding holds the card shadow,
+   and its negative margins keep the layout and the 14 px gap below the same as other cards. */
+.glance-dots { position: absolute; left: 0; right: 0; bottom: 2px; display: flex; justify-content: center; pointer-events: none; }
+.glance-dots button { pointer-events: auto; }
 .glance-dots button { width: 44px; height: 44px; padding: 0; border: 0; background: none; cursor: pointer; display: grid; place-items: center; }
-.glance-dots span { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--on-bg-muted); }
+.glance-dots span { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--muted); }
 .glance-dots button[aria-pressed="true"] span { background: var(--fern); border-color: var(--fern); }
