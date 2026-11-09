@@ -54,7 +54,7 @@ const EVENING = [
   { t: '15:45', title: 'Council of All Schools', kind: 'routine', desc: 'Every school on campus gathers together to close out the program day.' },
   { t: '16:00', title: 'Recreation', kind: 'routine', desc: 'Students choose from the tree house, cargo net, playground, gaga ball, basketball court and scavenger hunt. Chaperones are stationed at a rec area (or roam as a "free agent"). One train whistle = rec is over: walk students to their cabin post on the Big Green Field.', chap: 'Be at your rec area by 4:00. You may need to leave your trail group a few minutes early.' },
   { t: '16:45', title: 'Cabin Time', kind: 'routine', desc: 'Back to cabins to regroup before dinner. Make sure everyone has layers and water for the evening program.', chap: 'Bring students to dinner ready for the whole evening.' },
-  { t: '17:15', title: 'Dinner', kind: 'meal', where: 'Vernon Dining Hall', desc: 'Hot family-style meal at Thornhill\'s assigned tables.', chap: 'At least one adult per table. Wash hands, follow portion sizes, one "gopher" per table, everyone stays seated until dismissal.' },
+  { t: '17:15', title: 'Dinner', kind: 'meal', where: 'Vernon Dining Hall', desc: 'Hot meal at Thornhill\'s assigned tables.', chap: 'At least one adult per table. Wash hands, follow portion sizes, one "gopher" per table, everyone stays seated until dismissal.' },
   { t: '18:15', title: 'Class Meeting', kind: 'routine', desc: 'Teacher-led hour: journaling, reflecting on the day, reinforcing science concepts, class bonding.', chap: 'Chaperone time off! Shower, call home, recharge. Be back at the meeting room by 7:15.' },
   { t: '19:00', title: 'Transition Time', kind: 'routine', desc: 'Gather layers and flashlights and head to the meeting room.' },
 ];

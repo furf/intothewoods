@@ -7,7 +7,7 @@ export const FIELD = [
     facts: ['Can grow up to 10 inches long.', 'Their slime helps them move, breathe and stay safe.', 'They are decomposers that recycle leaves, mushrooms and poop into soil.', 'Two pairs of tentacles: the upper pair senses light, the lower pair smells and feels.'],
     find: 'Check damp logs and the forest floor after rain. Look, but don\'t lick!' },
   { icon: '🐟', name: 'Coho Salmon', sci: 'Oncorhynchus kisutch',
-    facts: ['Hatch in creeks like Dutch Bill Creek, then swim to the ocean.', 'Return after about 1½ years to spawn where they were born.', 'Endangered in central California, so creek restoration matters.', 'They need cold, clean, shady water. Redwoods help!'],
+    facts: ['Hatch in creeks like Dutch Bill Creek and live there for about a year, then swim to the ocean.', 'Return after about 1½ years at sea, at about 3 years old, to spawn where they were born.', 'Endangered in central California, so creek restoration matters.', 'They need cold, clean, shady water. Redwoods help!'],
     find: 'Look from the Creek Zip & Coho Crossing bridge. Spawning season is in winter.' },
   { icon: '🍄', name: 'Fungi & Mushrooms', sci: 'Kingdom Fungi',
     facts: ['The mushroom is just the "fruit"; the fungus lives underground as a web of threads.', 'Fungi connect tree roots and help share nutrients.', 'November rains bring a mushroom boom.'],
