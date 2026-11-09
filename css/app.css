@@ -601,10 +601,11 @@ input[type="text"], input[type="tel"], input:not([type]), .add-contact input, .a
 .nl-slider input { height: 44px; }
 
 /* ---------- At a glance: three-day carousel ---------- */
-.glance-carousel { margin-bottom: 14px; }
+/* flow-root keeps the track's negative margins inside, so this box is exactly the card area. */
+.glance-carousel { display: flow-root; margin-bottom: 14px; }
 /* The track runs to the screen edges, so whole cards slide past; each card keeps its own corners.
    Cards share the tallest card's height, so the dots sit right under every card and the page does not jump. */
-.glance-track { display: flex; gap: 12px; margin: 0 -16px; padding: 2px 16px 10px; scroll-padding: 0 16px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
+.glance-track { display: flex; gap: 12px; margin: -16px -16px -32px; padding: 16px 16px 32px; scroll-padding: 0 16px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
 .glance-track::-webkit-scrollbar { display: none; }
 .glance-slide { flex: 0 0 100%; scroll-snap-align: start; scroll-snap-stop: always; margin-bottom: 0; }
 /* Pagination: small circles like the schedule line dots, each in a 44 px tap area. */
