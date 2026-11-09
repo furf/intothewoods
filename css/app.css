@@ -602,9 +602,10 @@ input[type="text"], input[type="tel"], input:not([type]), .add-contact input, .a
 
 /* ---------- At a glance: three-day carousel ---------- */
 .glance-carousel { margin-bottom: 14px; }
-.glance-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; border-radius: var(--radius); }
+/* The track runs to the screen edges, so whole cards slide past; each card keeps its own corners. */
+.glance-track { display: flex; align-items: flex-start; gap: 12px; margin: 0 -16px; padding: 2px 16px 10px; scroll-padding: 0 16px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
 .glance-track::-webkit-scrollbar { display: none; }
-.glance-slide { flex: 0 0 100%; scroll-snap-align: start; scroll-snap-stop: always; margin-bottom: 0; display: flex; flex-direction: column; }
+.glance-slide { flex: 0 0 100%; scroll-snap-align: start; scroll-snap-stop: always; margin-bottom: 0; }
 /* Cards share the tallest card's height, so the page does not jump on swipe. The button sits at the bottom. */
 .glance-slide > .btn { margin-top: auto; align-self: flex-start; }
 .glance-days { display: flex; justify-content: center; gap: 4px; margin-top: 4px; }

@@ -92,12 +92,16 @@ function initGlance(root) {
   const track = root.querySelector('.glance-track');
   if (!track) return;
   const buttons = [...root.querySelectorAll('.glance-days button')];
+  const slides = [...track.querySelectorAll('.glance-slide')];
   const mark = (i) => buttons.forEach((b, j) => b.setAttribute('aria-pressed', String(j === i)));
+  // Cards have a gap and the track has side padding, so use each card's own position.
+  const leftOf = (i) => slides[i].offsetLeft - slides[0].offsetLeft;
+  const current = () => slides.reduce((best, _, i) => (Math.abs(leftOf(i) - track.scrollLeft) < Math.abs(leftOf(best) - track.scrollLeft) ? i : best), 0);
   const go = (i, smooth) => {
-    track.scrollTo({ left: i * track.clientWidth, behavior: smooth ? 'smooth' : 'auto' });
+    track.scrollTo({ left: leftOf(i), behavior: smooth ? 'smooth' : 'auto' });
     mark(i);
   };
-  track.addEventListener('scroll', () => mark(Math.round(track.scrollLeft / track.clientWidth)), { passive: true });
+  track.addEventListener('scroll', () => mark(current()), { passive: true });
   buttons.forEach((b) => b.addEventListener('click', () => go(Number(b.dataset.i), true)));
   requestAnimationFrame(() => go(glanceIndex(), false));
 }
