@@ -75,7 +75,7 @@ function glanceSlide(i, now = new Date()) {
     const state = !isToday || now < start ? '' : !end || now < end ? 'now' : 'past';
     return `<li class="${state}">
       <time>${fmtTime(it.t)}</time>
-      <span><b>${esc(it.title)}</b>${state === 'now' ? '<em>Now</em>' : ''}${it.where ? `<small>${esc(it.where)}</small>` : ''}</span>
+      <span><b>${esc(it.title)}</b>${state === 'now' ? '<em>Now</em>' : ''}</span>
     </li>`;
   }).join('');
   return `<h2>${isToday ? 'Today' : esc(day.day)} at a glance</h2>

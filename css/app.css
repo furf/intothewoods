@@ -220,7 +220,6 @@ body.immersive { padding-bottom: 0; }
 .glance li:first-child { border-top: 0; }
 .glance time { font-weight: 800; font-variant-numeric: tabular-nums; color: var(--bark); white-space: nowrap; }
 .glance b { display: block; }
-.glance span > small { display: block; font-size: 14px; color: var(--muted); }
 .glance em { display: inline-block; margin-left: 8px; padding: 1px 8px; border-radius: 99px; background: var(--fern); color: #0f2a17; font-style: normal; font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; vertical-align: 2px; }
 .glance li.now { margin: 0 -10px; padding: 9px 10px; border-radius: 12px; border-top-color: transparent; background: color-mix(in srgb, var(--fern) 14%, transparent); }
 .glance li.now + li { border-top-color: transparent; }
