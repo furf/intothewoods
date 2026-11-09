@@ -599,3 +599,15 @@ body.immersive .toast { bottom: 24px; }
 .camper input, .cabin-no input,
 input[type="text"], input[type="tel"], input:not([type]), .add-contact input, .add-two input { min-height: 44px; }
 .nl-slider input { height: 44px; }
+
+/* ---------- At a glance: three-day carousel ---------- */
+.glance-carousel { margin-bottom: 14px; }
+.glance-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; border-radius: var(--radius); }
+.glance-track::-webkit-scrollbar { display: none; }
+.glance-slide { flex: 0 0 100%; scroll-snap-align: start; scroll-snap-stop: always; margin-bottom: 0; display: flex; flex-direction: column; }
+/* Cards share the tallest card's height, so the page does not jump on swipe. The button sits at the bottom. */
+.glance-slide > .btn { margin-top: auto; align-self: flex-start; }
+.glance-days { display: flex; justify-content: center; gap: 4px; margin-top: 4px; }
+.glance-days button { min-width: 44px; min-height: 44px; padding: 0 6px; border: 0; background: none; cursor: pointer; display: grid; place-items: center; }
+.glance-days span { padding: 3px 10px; border-radius: 99px; font-size: 13px; font-weight: 800; color: var(--on-bg-muted); }
+.glance-days button[aria-pressed="true"] span { background: var(--paper); color: var(--forest); }
