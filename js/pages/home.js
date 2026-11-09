@@ -65,7 +65,7 @@ function glance(now = new Date()) {
     const end = it.end ? at(day.date, it.end) : nextStart;
     const state = !isToday || now < start ? '' : !end || now < end ? 'now' : 'past';
     return `<li class="${state}">
-      <time>${fmtTime(it.t)}${it.approx ? '<small>approx</small>' : ''}</time>
+      <time>${fmtTime(it.t)}</time>
       <span><b>${esc(it.title)}</b>${state === 'now' ? '<em>Now</em>' : ''}${it.where ? `<small>${esc(it.where)}</small>` : ''}</span>
     </li>`;
   }).join('');

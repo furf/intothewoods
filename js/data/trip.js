@@ -65,7 +65,7 @@ const BEDTIME = [
 const MORNING = [
   { t: '07:00', title: 'Wake Up', kind: 'routine', desc: 'No wake-up call, so chaperones bring an alarm. Morning showers are open until breakfast. Do a quick all-together cabin tidy.', chap: 'Students arrive at breakfast dressed for the day with a day pack, a full water bottle, a jacket and layers, and closed-toed shoes.' },
   { t: '08:15', title: 'Breakfast', kind: 'meal', where: 'Vernon Dining Hall', desc: 'After breakfast there\'s often recess on the playground with all visiting schools.', chap: 'Supervise the Gaga Pit and playground. No basketball or cargo net during recess. Escort anyone who needs to grab something from a cabin.' },
-  { t: '08:50', approx: true, title: 'Chaperone Check-in', kind: 'chaperone', desc: 'A brief daily meeting to hear about the day\'s activities and ask for support with your cabin group.', chap: 'Time is approximate; staff will confirm on site.' },
+  { t: '08:50', title: 'Chaperone Check-in', kind: 'chaperone', desc: 'A brief daily meeting to hear about the day\'s activities and ask for support with your cabin group.' },
 ];
 
 export const SCHEDULE = [
@@ -75,7 +75,7 @@ export const SCHEDULE = [
       { t: '08:00', title: 'Meet at Thornhill', kind: 'travel', where: 'Thornhill School', desc: 'Students bring a fully disposable sack lunch, plus luggage they can carry to the cabin themselves.', cal: true },
       { t: '08:30', title: 'Depart for camp', kind: 'travel', desc: 'We drive up in parent vehicles.', cal: true },
       { t: '10:15', title: 'Arrive at Westminster Woods', kind: 'travel', desc: '15–20 minutes to use the restroom and play in the rec areas.', chap: 'Supervise the rec areas while students stretch their legs.', cal: true },
-      { t: '10:35', approx: true, title: 'Welcome', kind: 'program', end: '12:30', desc: 'The Welcome Assembly (~45 min): Teacher Naturalists make introductions, walk through the flow of the day and go over camp rules. Then move-in: students settle into their assigned cabins.', chap: 'Help your cabin move in. Teachers meet staff about medical, emotional and behavioral needs.', cal: true },
+      { t: '10:35', title: 'Welcome', kind: 'program', end: '12:30', desc: 'The Welcome Assembly (~45 min): Teacher Naturalists make introductions, walk through the flow of the day and go over camp rules. Then move-in: students settle into their assigned cabins.', chap: 'Help your cabin move in. Teachers meet staff about medical, emotional and behavioral needs.', cal: true },
       { t: '12:30', title: 'Sack Lunch', kind: 'meal', desc: 'Everyone eats the lunch they brought. Staff talk about composting and conservation.' },
       { t: '13:30', title: 'Community Exploration', kind: 'program', end: '15:45', desc: 'Students meet their trail groups for a first adventure, building a sense of place in the forest and community within the group.', chap: 'Chaperone Meeting happens now: chaperones and teachers meet the Daytime Coordinator to cover safety, expectations and tools for success.', cal: true },
       ...EVENING,
@@ -101,8 +101,8 @@ export const SCHEDULE = [
       { ...MORNING[0], desc: 'Last morning! Pack up bags, check under bunks for stray socks, and tidy the cabin.' },
       MORNING[1], MORNING[2],
       { t: '09:20', title: 'Be the Change', kind: 'program', end: '12:30', desc: 'The final program: students reflect on what they discovered and how they\'ll bring it home to their school, community and planet.', cal: true },
-      { t: '12:30', approx: true, title: 'Lunch & Depart', kind: 'travel', desc: 'Load the cars and head home.', chap: 'Dress students for the outdoors even on the last day: closed-toed shoes and layers.', cal: true },
-      { t: '15:00', approx: true, title: 'Arrive back at Thornhill', kind: 'travel', desc: 'Pick-up at school around 3:00 pm.', cal: true },
+      { t: '12:30', title: 'Lunch & Depart', kind: 'travel', desc: 'Load the cars and head home.', chap: 'Dress students for the outdoors even on the last day: closed-toed shoes and layers.', cal: true },
+      { t: '15:00', title: 'Arrive back at Thornhill', kind: 'travel', desc: 'Pick-up at school around 3:00 pm.', cal: true },
     ],
   },
 ];

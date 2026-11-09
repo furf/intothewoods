@@ -39,7 +39,7 @@ function ics() {
 function itemHTML(day, it, i) {
   const k = KIND[it.kind];
   return `<li class="ev ev-${it.kind}" data-i="${i}">
-    <div class="ev-time"><b>${fmtTime(it.t).replace(/ (am|pm)/, '<small>$1</small>')}</b>${it.approx ? '<em>approx</em>' : ''}</div>
+    <div class="ev-time"><b>${fmtTime(it.t).replace(/ (am|pm)/, '<small>$1</small>')}</b></div>
     <div class="ev-dot" aria-hidden="true"></div>
     ${COMPACT.has(it.kind) ? compactBody(it) : `<div class="ev-body">
       ${k ? `<span class="ev-kind">${k}</span>` : ''}
@@ -78,7 +78,7 @@ export default {
         <div id="dayView"></div>
         <div class="card actions-card">
           <button class="btn" type="button" id="icsBtn">${icon('calendar')} Add trip to my calendar</button>
-          <p class="muted small">Adds the main programs and travel times. Times are from Thornhill's Week 12 schedule; "approx" times may shift on site.</p>
+          <p class="muted small">Adds the main programs and travel times. Times are from Thornhill's Week 12 schedule.</p>
         </div>
       </div>`;
 
