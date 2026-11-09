@@ -80,8 +80,7 @@ function glanceSlide(i, now = new Date()) {
   }).join('');
   return `<h2>${isToday ? 'Today' : esc(day.day)} at a glance</h2>
     <p class="muted small glance-sub">${esc(dayLine(i))}</p>
-    <ol class="glance">${rows}</ol>
-    <a class="btn small" href="#/schedule?day=${i}">${icon('calendar')} Full schedule</a>`;
+    <ol class="glance">${rows}</ol>`;
 }
 
 function glance(now = new Date()) {
