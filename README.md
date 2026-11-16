@@ -101,7 +101,7 @@ To change content:
 3. Run the app and examine the changed page.
 4. Commit the change.
 
-> **Note:** Teacher and chaperone phone numbers are in `js/data/people.js`. Some numbers are not available yet. These contacts show "Number coming soon". You can write a number in any format. Contacts shows it as (###) ###-####.
+> **Note:** Teacher and chaperone phone numbers are in `js/data/people.js`. If a contact has no number, Contacts shows "Number coming soon". You can write a number in any format. Contacts shows it as (###) ###-####.
 
 ### Add a page
 
