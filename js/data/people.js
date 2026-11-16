@@ -13,8 +13,8 @@ export const ON_SITE = [
 ];
 
 export const TEACHERS = [
-  { name: 'Brenna Gustafson', role: 'Teacher · Trip lead', aka: 'Ms. Gustafson', phone: '', email: '' },
-  { name: 'Robert Wilkins', role: 'Teacher · Trip lead', aka: 'Mr. Wilkins', phone: '', email: '' },
+  { name: 'Brenna Gustafson', role: 'Teacher · Trip lead', aka: 'Ms. Gustafson', phone: '(510) 406-3401', email: 'brenna.gustafson@ousd.org' },
+  { name: 'Robert Wilkins', role: 'Teacher · Trip lead', aka: 'Mr. Wilkins', phone: '(510) 648-4364', email: 'robert.wilkins@ousd.org' },
 ];
 
 export const SCHOOL = {
