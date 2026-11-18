@@ -173,12 +173,13 @@ The service worker caches all files in the `SHELL` list when it installs. The ca
 
 - Pages, scripts, styles and images come from the cache first.
 - The YouTube video, the live Google map and Google Drive documents need a connection.
-- The weather forecast comes from [Open-Meteo](https://open-meteo.com/) (free, no API key). A page with weather shows the saved forecast first and asks for a fresh one (stale-while-revalidate). Offline, the strips show the last saved forecast.
+- The weather forecast comes from the [National Weather Service](https://www.weather.gov/) (`api.weather.gov`, free, no API key). A page with weather shows the saved forecast first and asks for a fresh one (stale-while-revalidate). Offline, the strips show the last saved forecast.
+- The service forecasts only coming hours. Each update merges new hours into the saved forecast, so hours from earlier updates stay. If an update fails, the strip says so and keeps the saved forecast.
 - When `VERSION` changes, the browser installs the new service worker. The new worker waits until the person taps **Reload**. Then it deletes the old cache.
 
 ### Data on the device
 
-Checklist progress is in `localStorage` with the prefix `intothewoods:`. Settings, contacts that people add and the last weather forecast (`itw:weather`) use the prefix `itw:`. The app asks the browser to keep this data (`navigator.storage.persist()`). The app does not send personal data to a server. Weather requests send only the camp location to Open-Meteo.
+Checklist progress is in `localStorage` with the prefix `intothewoods:`. Settings, contacts that people add and the last weather forecast (`itw:weather`) use the prefix `itw:`. The app asks the browser to keep this data (`navigator.storage.persist()`). The app does not send personal data to a server. Weather requests send only the camp location to the National Weather Service.
 
 ### Phone numbers
 
