@@ -17,6 +17,9 @@ export const PLACES = {
     phone: '(707) 874-2426',
     tel: '+17078742426',
     web: 'https://www.westminsterwoods.org',
+    // Occidental, CA. Camp is just outside town; a forecast grid cell is a few km wide.
+    lat: 38.4074,
+    lon: -122.9483,
   },
   school: {
     name: 'Thornhill Elementary School',
