@@ -6,6 +6,15 @@ export const $ = (sel, el = document) => el.querySelector(sel);
 export const $$ = (sel, el = document) => [...el.querySelectorAll(sel)];
 
 const P = {
+  // Weather (24 x 24, stroked like the other icons)
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4L6 18M18 6l1.4-1.4"/>',
+  cloud: '<path d="M7 18.5h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.1 10 4.25 4.25 0 0 0 7 18.5z"/>',
+  cloudsun: '<path d="M8 2.5V4M3.4 4.9l1 1M2 9.5h1.5M12.6 4.9l-1 1"/><path d="M5.2 11.6A3.5 3.5 0 1 1 11.3 8"/><path d="M9 20h8a3.6 3.6 0 0 0 .5-7.15 5.2 5.2 0 0 0-9.9 1.3A2.95 2.95 0 0 0 9 20z"/>',
+  cloudmoon: '<path d="M9.8 3.2a4.4 4.4 0 0 0 4.9 5.2 4.6 4.6 0 0 1-8.6 2.4"/><path d="M9 20h8a3.6 3.6 0 0 0 .5-7.15 5.2 5.2 0 0 0-9.9 1.3A2.95 2.95 0 0 0 9 20z"/>',
+  fog: '<path d="M7 13.5h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.1 5 4.25 4.25 0 0 0 7 13.5z"/><path d="M4 17.5h16M6.5 21h11"/>',
+  rain: '<path d="M7 14h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.1 5.5 4.25 4.25 0 0 0 7 14z"/><path d="M8.5 17l-1 3.5M12.5 17l-1 3.5M16.5 17l-1 3.5"/>',
+  snow: '<path d="M7 14h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.1 5.5 4.25 4.25 0 0 0 7 14z"/><path d="M8 18v.01M12 17.5v.01M16 18v.01M10 21v.01M14 21v.01"/>',
+  storm: '<path d="M7 14h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.1 5.5 4.25 4.25 0 0 0 7 14z"/><path d="M12.5 14l-2.5 4h3.5l-2 4"/>',
   pack: '<path d="M8 7V5a4 4 0 0 1 8 0v2"/><rect x="5" y="7" width="14" height="14" rx="3"/><path d="M9 14h6v3H9z"/>',
   shirt: '<path d="M8 3 4 6l2 4 2-1v12h8V9l2 1 2-4-4-3c-.5 1.5-2 2.5-4 2.5S8.5 4.5 8 3z"/>',
   med: '<rect x="3" y="8" width="18" height="8" rx="4" transform="rotate(-35 12 12)"/><path d="m9.2 8 5.6 8"/>',

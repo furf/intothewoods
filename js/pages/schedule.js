@@ -1,5 +1,6 @@
 import { esc, icon, at, fmtTime, download, store, today, $$ } from '../ui.js';
 import { SCHEDULE, PLACES } from '../data/trip.js';
+import { mountWeather, refreshWeather } from '../weather.js';
 
 const KIND = { travel: 'Travel', program: 'Program', meal: 'Meal', routine: '', chaperone: 'Chaperones', evening: 'Evening' };
 
@@ -99,7 +100,10 @@ export default {
       $$('.seg button', el).forEach((b, j) => b.setAttribute('aria-pressed', String(j === i)));
       dayView.innerHTML = `
         <h2 class="day-title">${esc(day.day)} <span>${esc(day.label)}</span></h2>
+        <div class="wx"></div>
         <ol class="timeline">${day.items.map((it, j) => itemHTML(day, it, j)).join('')}</ol>`;
+      unmountWx?.();
+      unmountWx = mountWeather(dayView.querySelector('.wx'), i);
       markNow();
     };
 
@@ -125,8 +129,10 @@ export default {
     });
     el.querySelector('#icsBtn').addEventListener('click', () => download('westminster-woods-trip.ics', ics(), 'text/calendar'));
 
+    let unmountWx = null;
     show(dayIdx);
+    refreshWeather(); // stale-while-revalidate: the saved forecast shows first, then this fresh one
     const t = setInterval(markNow, 60000);
-    return () => clearInterval(t);
+    return () => { clearInterval(t); unmountWx?.(); };
   },
 };
