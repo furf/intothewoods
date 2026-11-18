@@ -1,56 +1,88 @@
-// Hourly weather at camp from Open-Meteo (free, no API key), with stale-while-revalidate:
-// a page shows the last saved forecast at once, asks for a fresh one, and redraws when it arrives.
+// Hourly weather at camp from the National Weather Service (api.weather.gov, free, no key),
+// with stale-while-revalidate: a page shows the last saved forecast at once, asks for a fresh one,
+// and redraws when it arrives.
 import { esc, icon, store, today } from './ui.js';
 import { PLACES, SCHEDULE } from './data/trip.js';
 
 const KEY = 'itw:weather';
+const URL_KEY = 'itw:nwsHourlyUrl';
+const FORMAT = 2; // saved forecasts in an older format (Open-Meteo) are ignored
 const { lat, lon } = PLACES.camp;
-const API = 'https://api.open-meteo.com/v1/forecast'
-  + `?latitude=${lat}&longitude=${lon}`
-  + '&hourly=temperature_2m,precipitation_probability,weather_code,is_day'
-  + '&temperature_unit=fahrenheit&timezone=America%2FLos_Angeles'
-  + `&start_date=${SCHEDULE[0].date}&end_date=${SCHEDULE[SCHEDULE.length - 1].date}`;
+const POINTS = `https://api.weather.gov/points/${lat},${lon}`;
+const TRIP_DATES = new Set(SCHEDULE.map((d) => d.date));
 
-// WMO weather codes → [label, day icon, night icon]
-function sky(code) {
-  if (code === 0 || code === 1) return ['Clear', 'sun', 'moon'];
-  if (code === 2) return ['Partly cloudy', 'cloudsun', 'cloudmoon'];
-  if (code === 3) return ['Cloudy', 'cloud', 'cloud'];
-  if (code === 45 || code === 48) return ['Fog', 'fog', 'fog'];
-  if (code >= 95) return ['Thunderstorm', 'storm', 'storm'];
-  if ((code >= 71 && code <= 77) || code === 85 || code === 86) return ['Snow', 'snow', 'snow'];
-  if (code >= 51 && code <= 82) return [code <= 57 ? 'Drizzle' : 'Rain', 'rain', 'rain'];
-  return ['Cloudy', 'cloud', 'cloud'];
+// NWS describes the sky in words ("Mostly Cloudy", "Chance Light Rain") → [day icon, night icon]
+function sky(text = '') {
+  const t = text.toLowerCase();
+  if (/thunder/.test(t)) return ['storm', 'storm'];
+  if (/snow|sleet|flurr|ice/.test(t)) return ['snow', 'snow'];
+  if (/rain|shower|drizzle/.test(t)) return ['rain', 'rain'];
+  if (/fog|haze|smoke|mist/.test(t)) return ['fog', 'fog'];
+  if (/mostly cloudy|overcast|^cloudy/.test(t)) return ['cloud', 'cloud'];
+  if (/partly|mostly sunny|mostly clear|few clouds/.test(t)) return ['cloudsun', 'cloudmoon'];
+  if (/sunny|clear|fair/.test(t)) return ['sun', 'moon'];
+  return ['cloud', 'cloud'];
 }
 
 const listeners = new Set();
 let inflight = null;
+let failed = false; // the last refresh did not succeed
 
-export const cachedWeather = () => store.get(KEY, null);
+export function cachedWeather() {
+  const w = store.get(KEY, null);
+  return w && w.v === FORMAT ? w : null;
+}
 
-// Calls fn with every forecast that arrives. Returns an unsubscribe function.
+// Calls fn with the forecast after every refresh, also when a refresh fails. Returns an unsubscribe function.
 export function onWeather(fn) {
   listeners.add(fn);
   return () => listeners.delete(fn);
 }
 
+async function getJSON(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.json();
+}
+
+// The hourly forecast URL for camp comes from the /points lookup. It does not change, so it is saved.
+async function hourlyPeriods() {
+  let url = store.get(URL_KEY, null);
+  if (!url) {
+    url = (await getJSON(POINTS)).properties.forecastHourly;
+    store.set(URL_KEY, url);
+  }
+  try {
+    return (await getJSON(url)).properties.periods;
+  } catch (e) {
+    store.set(URL_KEY, null); // the saved URL may be out of date: look it up again next time
+    throw e;
+  }
+}
+
 // Fetches a fresh forecast (one request at a time) and saves it. Offline, it does nothing.
+// NWS gives only coming hours, so new hours are merged into the saved ones: hours seen earlier stay.
 export function refreshWeather() {
   if (!navigator.onLine) return Promise.resolve(null);
-  inflight ||= fetch(API)
-    .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
-    .then(({ hourly: h }) => {
-      const hours = {};
-      h.time.forEach((t, i) => {
-        hours[t] = { temp: Math.round(h.temperature_2m[i]), rain: h.precipitation_probability[i], code: h.weather_code[i], day: h.is_day[i] === 1 };
-      });
-      const w = { fetchedAt: Date.now(), hours };
+  inflight ||= hourlyPeriods()
+    .then((periods) => {
+      const hours = { ...(cachedWeather()?.hours || {}) };
+      for (const p of periods) {
+        const key = `${p.startTime.slice(0, 13)}:00`; // local camp time, e.g. 2026-11-18T14:00
+        if (!TRIP_DATES.has(key.slice(0, 10))) continue;
+        hours[key] = { temp: p.temperature, rain: p.probabilityOfPrecipitation?.value ?? null, sky: p.shortForecast, day: p.isDaytime };
+      }
+      const w = { v: FORMAT, fetchedAt: Date.now(), hours };
       store.set(KEY, w);
-      listeners.forEach((fn) => fn(w));
+      failed = false;
       return w;
     })
-    .catch(() => null)
-    .finally(() => { inflight = null; });
+    .catch(() => { failed = true; return null; })
+    .finally(() => {
+      inflight = null;
+      const w = cachedWeather();
+      listeners.forEach((fn) => fn(w));
+    });
   return inflight;
 }
 
@@ -76,26 +108,34 @@ function stripHTML(i, w) {
   const day = SCHEDULE[i];
   const now = new Date();
   const isToday = day.date === today(now);
-  const credit = '<a href="https://open-meteo.com/" target="_blank" rel="noopener">Weather: Open-Meteo</a>';
+  const credit = '<a href="https://www.weather.gov/" target="_blank" rel="noopener">Weather: National Weather Service</a>';
   if (!w) {
-    return `<p class="wx-status">${navigator.onLine ? 'Loading the forecast…' : 'The forecast loads the first time you are online.'} · ${credit}</p>`;
+    const msg = !navigator.onLine ? 'The forecast loads the first time you are online.'
+      : failed ? 'Could not load the forecast. It tries again each time you open this page.'
+        : 'Loading the forecast…';
+    return `<p class="wx-status">${msg} · ${credit}</p>`;
   }
   const chips = dayHours(i).map((h) => {
     const x = w.hours[`${day.date}T${String(h).padStart(2, '0')}:00`];
     if (!x) return '';
-    const [label, dayIcon, nightIcon] = sky(x.code);
+    const [dayIcon, nightIcon] = sky(x.sky);
     const state = !isToday ? '' : h === now.getHours() ? 'now' : h < now.getHours() ? 'past' : '';
     const rain = Number.isFinite(x.rain) ? `${x.rain}%` : '';
-    return `<li class="${state}" data-h="${h}" aria-label="${hourLabel(h)}: ${x.temp}°F, ${esc(label)}${rain ? `, ${rain} chance of rain` : ''}">
+    return `<li class="${state}" data-h="${h}" aria-label="${hourLabel(h)}: ${x.temp}°F, ${esc(x.sky)}${rain ? `, ${rain} chance of rain` : ''}">
       <time aria-hidden="true">${state === 'now' ? 'Now' : hourLabel(h)}</time>
       ${icon(x.day ? dayIcon : nightIcon, 'wx-ic')}
       <b aria-hidden="true">${x.temp}°</b>
       <small aria-hidden="true">${rain ? `${icon('drop', 'wx-drop')}${rain}` : ''}</small>
     </li>`;
   }).join('');
-  const offline = navigator.onLine ? '' : 'Offline · ';
-  return `<ol class="wx-hours" aria-label="Hourly weather, ${esc(day.day)}">${chips}</ol>
-    <p class="wx-status">${offline}Updated ${updatedLabel(w.fetchedAt)} · ${credit}</p>`;
+  const note = !navigator.onLine ? 'Offline · ' : failed ? 'Could not update · ' : '';
+  const status = `<p class="wx-status">${note}Updated ${updatedLabel(w.fetchedAt)} · ${credit}</p>`;
+  if (!chips) {
+    // NWS forecasts only coming hours: a past day shows what was saved, if anything.
+    const msg = day.date < today(now) ? 'No forecast was saved for this day.' : 'The forecast for this day is not out yet.';
+    return `<p class="wx-empty">${msg}</p>${status}`;
+  }
+  return `<ol class="wx-hours" aria-label="Hourly weather, ${esc(day.day)}">${chips}</ol>${status}`;
 }
 
 // Draws day i's strip into el from the saved forecast, then refreshes it from the network.
