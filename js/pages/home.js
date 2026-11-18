@@ -1,5 +1,6 @@
 import { esc, icon, at, fmtTime, today, isStandalone, shareOrCopy, toast } from '../ui.js';
 import { TRIP, EXPERIENCE, STAY, FAQ, SCHEDULE } from '../data/trip.js';
+import { mountWeather, refreshWeather } from '../weather.js';
 
 
 // Find what's happening now / next during the trip.
@@ -64,7 +65,7 @@ function dayLine(i) {
   return `Day ${i + 1} • ${day.day}, ${date} • ${name}`;
 }
 
-function glanceSlide(i, now = new Date()) {
+function glanceList(i, now = new Date()) {
   const day = SCHEDULE[i];
   const isToday = day.date === today(now);
   const items = day.items.filter((it) => it.cal);
@@ -78,10 +79,20 @@ function glanceSlide(i, now = new Date()) {
       <span><b>${esc(it.title)}</b>${state === 'now' ? '<em>Now</em>' : ''}</span>
     </li>`;
   }).join('');
-  return `<h2>${isToday ? 'Today' : esc(day.day)} at a glance</h2>
-    <p class="muted small glance-sub">${esc(dayLine(i))}</p>
-    <ol class="glance">${rows}</ol>`;
+  return rows;
 }
+
+function glanceHead(i, now = new Date()) {
+  const day = SCHEDULE[i];
+  return `<h2>${day.date === today(now) ? 'Today' : esc(day.day)} at a glance</h2>
+    <p class="muted small glance-sub">${esc(dayLine(i))}</p>`;
+}
+
+// Head, weather strip, list. The 30-second refresh redraws only the head and the list,
+// so the weather strip keeps its scroll position.
+const glanceSlide = (i, now = new Date()) => `<div class="glance-head">${glanceHead(i, now)}</div>
+    <div class="wx"></div>
+    <ol class="glance">${glanceList(i, now)}</ol>`;
 
 function glance(now = new Date()) {
   return `<section class="glance-carousel" id="glance" aria-roledescription="carousel" aria-label="Trip days at a glance">
@@ -196,6 +207,9 @@ export default {
     });
 
     initGlance(el);
+    // Weather: draw the saved forecast in each card, then ask for a fresh one (stale-while-revalidate).
+    const unmountWx = [...el.querySelectorAll('.glance-slide')].map((slide) => mountWeather(slide.querySelector('.wx'), Number(slide.dataset.i)));
+    refreshWeather();
 
     // Before the trip the countdown ticks every second; otherwise Now/Next and the glance refresh every 30 s.
     let n = 0;
@@ -208,8 +222,12 @@ export default {
       }
       if (n % 30) return;
       // Refresh the cards in place, so the day someone is looking at stays put.
-      el.querySelectorAll('.glance-slide').forEach((slide) => { slide.innerHTML = glanceSlide(Number(slide.dataset.i)); });
+      el.querySelectorAll('.glance-slide').forEach((slide) => {
+        const i = Number(slide.dataset.i);
+        slide.querySelector('.glance-head').innerHTML = glanceHead(i);
+        slide.querySelector('.glance').innerHTML = glanceList(i);
+      });
     }, 1000);
-    return () => clearInterval(tick);
+    return () => { clearInterval(tick); unmountWx.forEach((off) => off()); };
   },
 };
