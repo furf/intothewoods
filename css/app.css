@@ -634,3 +634,4 @@ input[type="text"], input[type="tel"], input:not([type]), .add-contact input, .a
 .wx-status a { color: inherit; }
 /* On the Schedule page the strip sits on the dark page background. */
 #dayView .wx { color: var(--on-bg); }
+.wx-empty { margin: 0; font-size: 14px; opacity: .8; }
