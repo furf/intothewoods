@@ -1,5 +1,5 @@
 // Offline-first service worker. Bump VERSION whenever any file below changes.
-const VERSION = 'itw-v24';
+const VERSION = 'itw-v25';
 const SHELL = [
   './',
   'index.html',
@@ -34,6 +34,7 @@ const SHELL = [
   'js/pages/night-light.js',
   'js/pages/schedule.js',
   'js/ui.js',
+  'js/weather.js',
 ];
 
 // A new version installs in the background, then waits. The page offers "Reload",
