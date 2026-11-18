@@ -606,7 +606,8 @@ input[type="text"], input[type="tel"], input:not([type]), .add-contact input, .a
    Cards share the tallest card's height, so the dots sit right under every card and the page does not jump. */
 .glance-track { display: flex; gap: 12px; margin: -16px -16px -32px; padding: 16px 16px 32px; scroll-padding: 0 16px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
 .glance-track::-webkit-scrollbar { display: none; }
-.glance-slide { flex: 0 0 100%; scroll-snap-align: start; scroll-snap-stop: always; margin-bottom: 0; padding-bottom: 48px; }
+.glance-slide { flex: 0 0 100%; min-width: 0; scroll-snap-align: start; scroll-snap-stop: always; margin-bottom: 0; padding-bottom: 48px; }
+/* min-width: 0 stops a wide child (the hour strip) from stretching the card past the screen. */
 /* Pagination: small circles like the schedule line dots, each in a 44 px tap area. */
 /* The dots sit over the bottom of the cards. The track's padding holds the card shadow,
    and its negative margins keep the layout and the 14 px gap below the same as other cards. */
