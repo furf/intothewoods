@@ -24,10 +24,10 @@ The app has five sections in the tab bar:
 
 | Section | Route | Purpose |
 | --- | --- | --- |
-| Home | `#/home` | Countdown to departure. During the trip, it shows what happens now and next. It also shows each trip day at a glance; swipe between the three days. Below that are an overview video, what students do, where they stay, the FAQ, and install and share buttons. |
+| Home | `#/home` | Countdown to departure. During the trip, it shows what happens now and next. It also shows each trip day at a glance, with an hourly weather forecast; swipe between the three days. Below that are an overview video, what students do, where they stay, the FAQ, and install and share buttons. |
 | Checklist | `#/checklist` | Packing checklists for students and chaperones. Progress is saved on the device. |
 | Directions | `#/directions` | Directions to camp, directions home, and the campus map. The campus map also shows on-campus emergency information. |
-| Schedule | `#/schedule` | The timeline for each day of the trip, with notes for chaperones. |
+| Schedule | `#/schedule` | The timeline for each day of the trip, with an hourly weather forecast and notes for chaperones. |
 | Guide | `#/guide` | The chaperone handbook, and links to the tools below. |
 
 The header has an online/offline badge and a phone button. The phone button opens Contacts (`#/contacts`): the emergency alarm, emergency numbers, and camp, school and chaperone contacts.
@@ -87,7 +87,7 @@ All trip content is in `js/data/`. Each file exports plain arrays and objects.
 
 | File | Content |
 | --- | --- |
-| `trip.js` | Dates, places, map links, schedule, FAQ, and what students do. |
+| `trip.js` | Dates, places, map links, schedule, FAQ, and what students do. The camp coordinates (`lat`, `lon`) set the weather location. |
 | `people.js` | Emergency numbers, on-campus emergency information, teachers, school and chaperones. |
 | `packing.js` | The student and chaperone packing checklists. |
 | `guide.js` | The chaperone handbook text. |
@@ -139,6 +139,7 @@ Installed copies of the app download the new version in the background. The app 
 - `js/pages/*.js` contains one module for each route.
 - `js/data/*.js` contains the trip content.
 - `js/ui.js` contains shared helpers: icons, storage, toasts, phone number format and downloads.
+- `js/weather.js` gets the hourly forecast and draws the weather strips.
 - `css/app.css` contains all styles.
 - `sw.js` is the service worker.
 
@@ -168,15 +169,16 @@ Some pages read query parameters:
 
 ### Offline support
 
-The service worker caches all files in the `SHELL` list when it installs. The cache has 32 files (538 KB). This total includes the fonts, images and icons.
+The service worker caches all files in the `SHELL` list when it installs. The cache has 33 files (552 KB). This total includes the fonts, images and icons.
 
 - Pages, scripts, styles and images come from the cache first.
 - The YouTube video, the live Google map and Google Drive documents need a connection.
+- The weather forecast comes from [Open-Meteo](https://open-meteo.com/) (free, no API key). A page with weather shows the saved forecast first and asks for a fresh one (stale-while-revalidate). Offline, the strips show the last saved forecast.
 - When `VERSION` changes, the browser installs the new service worker. The new worker waits until the person taps **Reload**. Then it deletes the old cache.
 
 ### Data on the device
 
-Checklist progress is in `localStorage` with the prefix `intothewoods:`. Settings and contacts that people add use the prefix `itw:`. The app asks the browser to keep this data (`navigator.storage.persist()`). The app does not send data to a server.
+Checklist progress is in `localStorage` with the prefix `intothewoods:`. Settings, contacts that people add and the last weather forecast (`itw:weather`) use the prefix `itw:`. The app asks the browser to keep this data (`navigator.storage.persist()`). The app does not send personal data to a server. Weather requests send only the camp location to Open-Meteo.
 
 ### Phone numbers
 
